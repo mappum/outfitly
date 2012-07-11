@@ -4,6 +4,11 @@ function longerThan(n) {
 	return function(s) { return s.length > n; };
 }
 
+var External = new Schema({
+	'token': String,
+	'id': {'type': String, 'sparse': true}
+});
+
 var User = module.exports = new Schema({
 	'name': String,
 	'username': {'type': String, 'index': {'unique': true}, 'validate': longerThan(3)},
@@ -33,7 +38,7 @@ var User = module.exports = new Schema({
 	'following': [Schema.ObjectId],
 	
 	'externals': {
-		'facebook': {'type': String, 'sparse': true},
-		'twitter': {'type': String, 'sparse': true}
+		'facebook': External,
+		'twitter': External
 	}
 });

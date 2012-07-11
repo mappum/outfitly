@@ -1,8 +1,7 @@
 var config = require(__dirname + '/../config.js'),
 	controllers = require(__dirname + '/../controllers'),
 	auth = controllers.auth,
-	items = controllers.items,
-	feeds = controllers.feeds,
+	outfits = controllers.outfits,
 	users = controllers.users;
 
 function requireLogin(req, res, next) {
@@ -34,75 +33,27 @@ module.exports = function(app) {
 	app.get('/logout', auth.logout);
 	
 	
-	// ********** routes for items **********
-	// create new item
-	app.post('/items', requireLogin, requireVerification, items.create);
+	// ********** routes for outfits **********
+	// create new outfit
+	app.post('/outfit', requireLogin, requireVerification, outfits.create);
 	// read full item
-	app.get('/items/:id', items.read);
-	// update existing item
-	app.put('/items/:id', requireLogin, requireVerification, items.update);
-	// delete item
-	app.delete('/items/:id', requireLogin, requireVerification, items.delete);
-	
-	// ********** routes for lists of items **********
-	// read items by feed
-	app.get('/items/feed/:id', items.readFeed);
-	// read items by feed, at specific page
-	app.get('/items/feed/:id/:page', items.readFeed);
-	// read items by tag
-	app.get('/items/tag/:id', items.readTag);
-	// read items by tag, at specific page
-	app.get('/items/tag/:id/:page', items.readTag);
-	
-	// ********** routes for item transactions **********
-	// create transaction on item
-	app.post('/items/:id/transactions', requireLogin,
-		requireVerification, items.getById, items.transactions.create);
-	// update transaction on item
-	app.put('/items/:id/transactions/:tx', requireLogin,
-		requireVerification, items.getById, items.transactions.update);
-	// delete transaction on item
-	app.delete('/items/:id/transactions/:tx', requireLogin,
-		requireVerification, items.getById, items.transactions.delete);
+	app.get('/outfits/:id', outfits.read);
+	// update existing outfit
+	app.put('/outfits/:id', requireLogin, requireVerification, outfits.update);
+	// delete outfit
+	app.delete('/outfits/:id', requireLogin, requireVerification, outfits.delete);
 	
 	// ********** routes for comments **********
-	// create level 1 comment
-	app.post('/items/:id/comments', requireLogin, requireVerification,
-		items.getById, items.comments.getById, items.comments.create);
-	// create level 2+ comment
-	app.post('/items/:id/comments/:comment', requireLogin, requireVerification,
-		items.getById, items.comments.getById, items.comments.create);
+	// create new comment
+	app.post('/outfits/:id/comments', requireLogin, requireVerification,
+		outfits.getById, outfits.comments.create);
 	// update comment
-	app.put('/items/:id/comments/:comment', requireLogin, requireVerification,
-		items.getById, items.comments.getById, items.comments.update);
+	app.put('/outfits/:id/comments/:comment', requireLogin, requireVerification,
+		outfits.getById, outfits.comments.getById, outfits.comments.update);
 	// delete comment
-	app.delete('/items/:id/comments/:comment', requireLogin,
-		requireVerification, items.getById, items.comments.getById,
-		items.comments.delete);
-		
-	// ********** routes for comment transactions **********
-	// create transaction on comment
-	app.post('/items/:id/comments/:comment/transactions', requireLogin,
-		items.getById, items.comments.getById,
-		requireVerification, items.transactions.create);
-	// update transaction on comment
-	app.put('/items/:id/comments/:comment/transactions/:tx', requireLogin,
-		items.getById, items.comments.getById,
-		requireVerification, items.transactions.update);
-	// delete transaction on comment
-	app.delete('/items/:id/comments/:comment/transactions/:tx', requireLogin,
-		items.getById, items.comments.getById,
-		requireVerification, items.transactions.delete);
-	
-	// ********** routes for feeds **********
-	// create a new feed
-	app.post('/feeds', requireLogin, requireVerification, feeds.create);
-	// read feed metadata
-	app.get('/feeds/:id', feeds.read);
-	// update feed metadata
-	app.put('/feeds/:id', requireLogin, requireVerification, feeds.update);
-	// delete feed
-	app.delete('/feeds/:id', requireLogin, requireVerification, feeds.delete);
+	app.delete('/outfits/:id/comments/:comment', requireLogin,
+		requireVerification, outfits.getById, outfits.comments.getById,
+		outfits.comments.delete);
 	
 	// ********** routes for users **********'
 	// create new user (register)

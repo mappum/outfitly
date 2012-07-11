@@ -1,6 +1,5 @@
 var User = require(__dirname + '/../models').User,
 	crypto = require('crypto'),
-	gravatar = require('gravatar'),
 	config = require(__dirname + '/../config.js'),
 	mail = require(__dirname + '/../app/mail.js');
 
@@ -18,29 +17,25 @@ module.exports = {
 		
 		var user = new User({
 			'account': {
-				'name': {
-					'first': req.body.fname,
-					'last': req.body.lname,
-					'display': req.body.fname + ' ' + req.body.lname
-				},
-				
+				'name': req.body.name,
+				'username': req.body.username,				
 				'email': req.body.email,
-				'verified': !config.requireVerification,
+				'verified': !config.auth.requireVerification,
 				
 				'password': {
 					'hash': hash.digest('hex'),
 					'salt': salt
 				},
 				
-				'date': new Date(),
+				'date': Date.now(),
 				'description': '',
-				'avatar': gravatar.url(req.body.email, {s: 128, d: 'mm'})
+				'avatar': ''
 			}
 		});
 		
 		// if we saved an external account link while logged out, add it to the new user profile
 		if(req.session.link) {
-			user.externals[req.session.link.service] = req.session.link.id;
+			user.externals[req.session.link.service] = req.session.link;
 			req.session.link = null;
 		}
 		
