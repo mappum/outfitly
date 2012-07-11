@@ -1,5 +1,4 @@
 module.exports = {
-	'User': require('./user.js'),
-	'Item': require('./item.js'),
-	'Feed': require('./feed.js')
+	'User': mongoose.model('User', require(__dirname + '/user.js')),
+	'Outfit': mongoose.model('Outfit', require(__dirname + '/outfit.js')),
 };
