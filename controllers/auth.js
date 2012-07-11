@@ -1,8 +1,13 @@
-var User = require('../models').User,
+var models = require(__dirname + '/../models'),
+	User = models.User,
 	crypto = require('crypto');
 
-var checkPassword = function(email, pass, success, failure) {
-	User.findOne({'account.email': email}, function(err, doc) {			
+var checkPassword = function(user, pass, success, failure) {
+	var query = {};
+	if(user.indexOf('@') !== -1) query.email = user;
+	else query.username = user;
+
+	User.findOne(query, function(err, doc) {			
 		// error or no user with requested id
 		if(err || !doc) failure();
 		
@@ -11,10 +16,10 @@ var checkPassword = function(email, pass, success, failure) {
 			// calculate hash of proposed pass + salt
 			var hash = crypto.createHash('sha256');
 			hash.update(pass);
-			hash.update(doc.account.password.salt);
+			hash.update(doc.password.salt);
 			
 			// calculated hash is equal to stored hash, yay!
-			if(hash.digest('hex') === doc.account.password.hash)
+			if(hash.digest('hex') === doc.password.hash)
 				success(doc); 
 			// password doesn't match :(
 			else failure();
@@ -44,14 +49,12 @@ var auth = module.exports = {
 				req.session.userId = user._id;
 				req.session.user = {
 					_id: user._id,
-					account: {
-						name: user.account.name,
-						email: user.account.email,
-						date: user.account.date,
-						description: user.account.description,
-						avatar: user.account.avatar,
-						verified: user.account.verified
-					},
+					name: user.name,
+					email: user.email,
+					date: user.date,
+					description: user.description,
+					avatar: user.avatar,
+					verified: user.verified,
 					scores: user.scores,
 					notifications: user.notifications
 				};
@@ -65,8 +68,7 @@ var auth = module.exports = {
 	
 	// login with normal POST login
 	'login': function(req, res) {
-		checkPassword(req.body.email, req.body.password, function(user) {
-			
+		checkPassword(req.body.user, req.body.password, function(user) {
 			// set session to be logged in as this user
 			req.setUser(user);
 			
@@ -90,12 +92,12 @@ var auth = module.exports = {
 	'callback': tryAuth,
 	
 	'logout': function(req, res) {
-		req.setUser();
+		req.setUser(null);
 		res.redirect('/');
 	},
 	
 	'info': function(req, res) {
-		res.json(req.session.user);
+		User.findById(req.session.userId, res.mongo);
 	},
 	
 	'checkPassword': checkPassword,
@@ -105,7 +107,7 @@ var auth = module.exports = {
 			id = req.getAuthDetails().user.id,
 			key = 'externals.' + service,
 			query = {};
-			query[key] = id;
+		query[key] = id;
 			
 		// check if a user is linked to this ID
 		User.findOne(query, function(err, linked) {
@@ -161,6 +163,7 @@ var auth = module.exports = {
 					
 				// we aren't logged in
 				} else {
+					console.log('link: ' + require('util').inspect(req.getAuthDetails()));
 					// save linked ID in session, add it on registration/login
 					req.session.link = {
 						service: service,

@@ -1,7 +1,8 @@
 var User = require(__dirname + '/../models').User,
 	crypto = require('crypto'),
 	config = require(__dirname + '/../config.js'),
-	mail = require(__dirname + '/../app/mail.js');
+	mail = require(__dirname + '/../app/mail.js'),
+	ObjectId = require('mongoose').ObjectId;
 
 module.exports = {
 	'create': function(req, res) {
@@ -16,26 +17,24 @@ module.exports = {
 		hash.update(salt);
 		
 		var user = new User({
-			'account': {
-				'name': req.body.name,
-				'username': req.body.username,				
-				'email': req.body.email,
-				'verified': !config.auth.requireVerification,
-				
-				'password': {
-					'hash': hash.digest('hex'),
-					'salt': salt
-				},
-				
-				'date': Date.now(),
-				'description': '',
-				'avatar': ''
-			}
+			'name': req.body.name,
+			'username': req.body.username,				
+			'email': req.body.email,
+			'verified': !config.auth.requireVerification,
+			
+			'password': {
+				'hash': hash.digest('hex'),
+				'salt': salt
+			},
+			
+			'date': Date.now(),
+			'description': '',
+			'avatar': ''
 		});
 		
 		// if we saved an external account link while logged out, add it to the new user profile
 		if(req.session.link) {
-			user.externals[req.session.link.service] = req.session.link;
+			user.externals.push(req.session.link);
 			req.session.link = null;
 		}
 		
@@ -61,23 +60,27 @@ module.exports = {
 		User.findById(req.param('id'),
 			[
 				'_id',
-				'account.name',
-				'account.date',
-				'account.description',
-				'account.avatar',
-				'scores'
+				'username',
+				'name',
+				'date',
+				'description',
+				'avatar',
+				'stats',
+				'followers',
+				'following'
 			],
 			res.mongo);
 	},
 	
 	'update': function(req, res) {
 		var id = req.param('id');
+
 		if(id === req.session.userId) {
-			User.update({'_id': id}, {
-					'name': req.param('name'),
-					'email': req.param('email'),
-					'description': req.param('description')
-				}, {}, function(err, doc) {
+			var obj = {};
+			if(typeof req.param('name') !== 'undefined') obj.name = req.param('name');
+			if(typeof req.param('description') !== 'undefined') obj.description = req.param('description');
+
+			User.update({'_id': id}, obj, {}, function(err, doc) {
 				if(err || !doc) {
 					res.error(500);
 					console.log('db error - ' + err);

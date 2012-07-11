@@ -5,6 +5,7 @@ function longerThan(n) {
 }
 
 var External = new Schema({
+	'service': {'type': String, 'index': {'unique': true}},
 	'token': String,
 	'id': {'type': String, 'sparse': true}
 });
@@ -37,8 +38,5 @@ var User = module.exports = new Schema({
 	'followers': [Schema.ObjectId],
 	'following': [Schema.ObjectId],
 	
-	'externals': {
-		'facebook': External,
-		'twitter': External
-	}
+	'externals': [External]
 });

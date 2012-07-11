@@ -24,7 +24,7 @@ module.exports = function(app) {
 	// login with normal POST method
 	app.post('/auth', requireLogout, auth.login);
 	// check our auth status
-	app.get('/auth/info', auth.info);
+	app.get('/auth/info', requireLogin, auth.info);
 	// login or link with external auth
 	app.get('/auth/:method', auth.auth);
 	// handle external auth callback
@@ -32,10 +32,11 @@ module.exports = function(app) {
 	// logout
 	app.get('/logout', auth.logout);
 	
-	
 	// ********** routes for outfits **********
 	// create new outfit
-	app.post('/outfit', requireLogin, requireVerification, outfits.create);
+	app.post('/outfits', requireLogin, requireVerification, outfits.create);
+	// repost outfit
+	app.get('/outfits/:id/repost', requireLogin, requireVerification, outfits.repost);
 	// read full item
 	app.get('/outfits/:id', outfits.read);
 	// update existing outfit
@@ -64,6 +65,9 @@ module.exports = function(app) {
 	app.put('/users/:id', requireLogin, users.update);
 	// delete profile
 	app.delete('/users/:id', requireLogin, users.delete);
+
+	// main feed
+	app.get('/feed', outfits.readFeed);
 	
 	// redirect get requests to hashpath
 	app.get('*', function(req, res) {
