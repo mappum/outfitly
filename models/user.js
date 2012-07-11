@@ -6,7 +6,7 @@ function longerThan(n) {
 
 var User = module.exports = new Schema({
 	'name': String,
-	'username': {'type': String, 'index': {'unique': true}, 'validate': longerThan(3),
+	'username': {'type': String, 'index': {'unique': true}, 'validate': longerThan(3)},
 	'email': {'type': String, 'index': {'unique': true}, 'validate': longerThan(4)},
 
 	'verified': Boolean,
