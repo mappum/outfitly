@@ -2,263 +2,44 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Aptt - Show the world what you know</title>
+		<title>Outfitly - Share your look</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<!-- Le styles -->
 		<link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
 		<link href="/css/bootstrap.css" rel="stylesheet">
 		<link href="/css/bootstrap-responsive.css" rel="stylesheet">
 		<link href="/css/glyphicons.css" rel="stylesheet">
-		<link href="/css/aptt.css" rel="stylesheet">
+		<link href="/css/outfitly.css" rel="stylesheet">
 	</head>
 	<body>
-		<header class="navbar navbar-fixed-top outset1">
+		<header class="navbar navbar-fixed-top">
 			<div class="navbar-inner">
-				<div class="container">
-					<a class="brand" href="/#/">Aptt</a>
+				<div class="container-fluid">
+					<a class="brand" href="/#/">Outfitly</a>
 					<ul id="navbar-left" class="nav"></ul>
 					<ul id="navbar-right" class="nav pull-right"></ul>
 				</div>
 			</div>
 		</header>
+
 		<div id="content" class="container-fluid">
-			<div class="row-fluid">
-				<div id="main" class="span9 inset1"></div>
-				<div id="secondary" class="span3 inset1"></div>
-			</div>
+			<div id="top" class="row-fluid"></div>
+			<div id="main" class="row-fluid"></div>
 		</div>
+
 		<div class="row-fluid">
 			<footer>
-				<span>&copy; Aptt 2012 - </span>
-				<a href="https://twitter.com/apttitude" class="twitter-follow-button" data-show-count="false">Follow @apttitude</a>
+				<span>&copy; Outfitly 2012 - </span>
+				<a href="https://twitter.com/outfitly" class="twitter-follow-button" data-show-count="false">Follow @outfitly</a>
 			</footer>
 		</div>
-		
-		<!-- layout templates -->
-		<script id="template-navbar-right" type="text/template">
-			<% if(!loggedIn()) { %>
-				<li class="divider-vertical"></li>
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						Sign in<b class="caret"></b>
-					</a>
-					<ul class="dropdown-menu">
-						<li><a href="/#/register">Create an account</a></li>
-						<li class="divider"></li>
-						<li>
-							<div id="login">
-								<fieldset class="control-group">
-									<label class="error"></label>
-									<input type="text" class="email input-medium" placeholder="Email address">
-									<input type="password" class="password input-medium" placeholder="Password">
-									<button class="btn">Sign in</button>
-								</fieldset>
-							</div>
-						</li>
-						<li class="divider"></li>
-						<li><a class="btn" href="/auth/facebook"><img src="http://facebook.com/favicon.ico"> Sign in with Facebook</a></li>
-					</ul>
-				</li>
-			<% } else { %>
-				<li class="divider-vertical"></li>
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						<img src="<%- (user.account.avatar || 'http://gravatar.com/avatar?d=mm&s=22') %>" class="thumbnail avatar">
-						<span><strong><%- user.account.name.display %></strong></span>
-						<b class="caret"></b>
-					</a>
-					<ul class="dropdown-menu">
-						<li><a href="/logout">Log out</a></li>
-					</ul>
-				</li>
-			<% } %>
-		</script>
-		<script id="template-main-login" type="text/template">
-			<h1>Log in to Aptt</h1>
-			<div class="inset2">
-				<div class="row-fluid">
-					<fieldset class="login control-group">
-						<label class="error"></label>
-						<fieldset>
-							<input type="text" placeholder="Email address" class="email">
-						</fieldset>
-						<fieldset>
-							<input type="password" placeholder="Password" class="password">
-						</fieldset>
-						<fieldset>
-							<button class="btn btn-success">Sign in</button>
-						</fieldset>
-					</fieldset>
-				</div>
-			</div>
-		</script>
-		<script id="template-main-register" type="text/template">
-			<h1>Create an Aptt account</h1>
-			<div class="inset2">
-				<div class="row-fluid">
-					<div class="span6">
-						<h2>Sign up</h2>
-						<fieldset class="register control-group">
-							<label class="error"></label>
-							<fieldset>
-								<input type="text" placeholder="First name" class="fname"><br>
-								<input type="text" placeholder="Last name" class="lname">
-							</fieldset>
-							<fieldset>
-								<input type="text" placeholder="Email address" class="email">
-							</fieldset>
-							<fieldset>
-								<input type="password" placeholder="New Password" class="password">
-							</fieldset>
-							<fieldset>
-								<button class="btn btn-success">Sign up</button>
-							</fieldset>
-						</fieldset>
-					</div>
-					<div class="span6"></div>
-				</div>
-				<hr>
-				<p>Already have an account? <a href="/#/login">Sign in.</a></p>
-			</div>
-		</script>
-		<script id="template-main-link" type="text/template">
-			<h1>We successfully connected to your <%= service.charAt(0).toUpperCase() + service.substr(1) %> account</h1>
-			<div class="inset2">
-				<div>
-					<h2>Create a new Aptt account</h2>
-					<fieldset class="register control-group">
-						<label class="error"></label>
-						<fieldset>
-							<input type="text" placeholder="First name" class="fname"><br>
-							<input type="text" placeholder="Last name" class="lname">
-						</fieldset>
-						<fieldset>
-							<input type="text" placeholder="Email address" class="email">
-						</fieldset>
-						<fieldset>
-							<input type="password" placeholder="New Password" class="password">
-						</fieldset>
-						<fieldset>
-							<button class="btn btn-success">Sign up</button>
-						</fieldset>
-					</fieldset>
-				</div>
-				<hr>
-				<div>
-					<h2>...or, link with your existing account</h2>
-					<fieldset class="login control-group">
-						<label class="error"></label>
-						<fieldset>
-							<input type="text" placeholder="Email address" class="email">
-						</fieldset>
-						<fieldset>
-							<input type="password" placeholder="Password" class="password">
-						</fieldset>
-						<fieldset>
-							<button class="btn btn-success">Sign in</button>
-						</fieldset>
-					</fieldset>
-				</div>
-			</div>
-		</script>
-		<script id="template-main-new" type="text/template">
-			<h1>New Discussion Topic</h1>
-			<div class="inset2">
-				<fieldset class="new control-group">
-					<fieldset>
-						<label for="title">Title or question to discuss</label>
-						<input type="text" placeholder="e.g. 'What is your programming language of choice, and why?'" name="title" class="title large span10">
-					</fieldset>
-					<fieldset>
-						<textarea class="body span6" placeholder="Elaborate on your main point or question" rows="5"></textarea>
-					</fieldset>
-					<fieldset>
-						<label for="title">Feed</label>
-						<input type="text" placeholder="Where to post to (e.g. 'computer science')" class="feed input-xlarge" value="<% if(typeof feed !== 'undefined') print(feed); %>">
-					</fieldset>
-					<fieldset>
-						<button class="post btn btn-primary">Post</button>
-					</fieldset>
-				</fieldset>
-			</div>
-		</script>
-		<script id="template-main-front" type="text/template">
-			<% if(loggedIn()) { // ********** User front page ********** %>
-				<h1>Welcome, <%- user.account.name.first %>!</h1>
-				
-			<% } else { // ********** Landing page ********** %>
-				
-			<% } %>
-		</script>
-		<script id="template-main-feed" type="text/template">
-			<div class="heading row-fluid">
-				<div class="span6"><h1><%- id.toLowerCase() %></h1></div>
-				<div class="span6 restricted">
-					<a class="new-discussion btn btn-primary pull-right" href="/#/<%- id %>/new"><i class="icon icon-conversation"></i> New Discussion Topic</a>
-				</div>
-			</div>
-			<ul class="items"></ul>
-		</script>
-		
-		<!-- user templates -->
-		<script id="template-user-card" type="text/template">
-			<a href="/#/user/<%- _id %>"><img src="<%- account.avatar || 'http://gravatar.com/avatar?d=mm&s=128' %>" class="thumbnail avatar"></a>
-			<h3 class="username"><a href="/#/user/<%- _id %>"><%- account.name.display %></a></h3>
-			<% if(typeof score !== 'undefined') { %>
-				<span class="scores"></span>
-			<% } %>
-			<hr>
-			<div class="meta">
-			<span>Member for <%= since(account.date) %></span>
-			</div>
-			<div class="clear"></div>
-		</script>
-		<script id="template-user-mini" type="text/template">
-			<a href="/#/user/<%- _id %>">
-				<img src="<%- account.avatar || 'http://gravatar.com/avatar?d=mm&s=32' %>" class="thumbnail avatar">
-			</a>
-			<h3 class="username"><a href="/#/user/<%- _id %>"><%- account.name.display %></a></h3>
-			<% if(typeof score !== 'undefined') { %>
-				<span class="separator"></span>
-				<span class="scores"></span>
-			<% } %>
-		</script>
-		<script id="template-user-score" type="text/template">
-			<a href="/#/<%- name %>" class="score" rel="tooltip" title="<strong><%- name %>:</strong> <%= score %>, <%= percentile %>>%">
-			<i class="icon icon-compass"></i><span class="value"><%= percentile %><span class="sub">%</span></span>
-			</a>
-		</script>
-		
-		<!-- item templates -->
-		<script id="template-item-text-summary" type="text/template">
-			<div class="row-fluid">
-				<div class="span body">
-					<h2><a href="/#/item/<%- _id %>"><%= title %></a></h2>
-					<p><%- body.length <= 200 ? body : (body.substr(0, 200) + '...') %></p>
-				</div>
-				<div class="meta"></div>
-				<hr>
-				<div class="row-fluid bottom">
-					<span class="tags">
-						<i class="icon icon-tags"></i>
-						<% for(var i in tags) { %>
-							<a href="/#/tag/<%- tags[i].toLowerCase() %>" class="label label-success"><%- tags[i] %></a>
-						<% } %>
-						<!-- <a href="" class="label"><i class="icon icon-add"></i></a> -->
-					</span>
-					<span class="separator"></span>
-					<span>Submitted <%= moment(date).fromNow() %></span>
-				</div>
-			</div>
-		</script>
 		
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 		<script src="/js/bootstrap.js"></script>
 		<script src="/js/underscore.js"></script>
 		<script src="/js/backbone.js"></script>
 		<script src="/js/moment.js"></script>
-		<script src="/js/aptt.js"></script>
+		<script src="/js/outfitly.js"></script>
 		<script>
 			! function(d, s, id) {
 				var js, fjs = d.getElementsByTagName(s)[0];
