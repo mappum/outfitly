@@ -164,3 +164,6 @@ pip-log.txt
 
 # Sublime SFTP
 sftp-config.json
+
+# project config
+config.js
