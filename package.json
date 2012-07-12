@@ -1,23 +1,21 @@
 {
   "name": "outfitly",
-  "version": "0.0.1",
+  "version": "0.0.1-8",
   "description": "The social network for clothes.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "app.js"
   },
-  "author": "Matt Bell",
+  "author": "Matt Bell <mappum@gmail.com>",
   "license": "BSD",
   "dependencies": {
-    "apac": "*",
-    "express": "*",
-    "connect-auth": "*",
-    "mongoose": "*",
-    "socket.io": "*",
-    "connect": "*",
     "connect-mongo": "*",
-    "gravatar": "*",
-    "nodemailer": "*"
+    "connect-auth": "*",
+    "express": "*",
+    "connect": "*",
+    "nodemailer": "*",
+    "mongoose": "*",
+    "socket.io": "*"
   },
   "engines": {
     "node": "0.8.x"
@@ -28,8 +26,5 @@
     "www.outfitly.com",
     "outfit.ly",
     "www.outfit.ly"
-  ],
-  "scripts": {
-    "start": "app.js"
-  }
+  ]
 }

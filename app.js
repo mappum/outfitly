@@ -21,7 +21,7 @@ app.use(express.session({
 	store: sessionStore,
 	secret: config.cookie.secret,
 	key: config.cookie.key,
-	maxAge: config.cookie.maxAge,
+	maxAge: config.cookie.maxAge
 }));
 
 // development mode specific configuration
@@ -60,6 +60,6 @@ require(__dirname + '/app/mongo.js')(app); // set up mongodb middleware
 app.use(require(__dirname + '/controllers/auth.js').middleware); // use auth controller middleware
 require(__dirname + '/app/auth.js')(app); // set up auth controllers
 require(__dirname + '/app/routes.js')(app); // set up routes
-require(__dirname + '/app/socket.js')(app, sessionStore); // handle Socket.IO connections
+//require(__dirname + '/app/socket.js')(app, sessionStore); // handle Socket.IO connections
 
 app.listen(process.env.PORT || config.meta.port);
