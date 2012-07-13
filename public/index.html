@@ -36,7 +36,7 @@
 			<a class="brand" href="/#/">Outfitly</a>
 			<ul class="navbar-left nav"></ul>
 			<ul class="navbar-right nav pull-right">
-				<% if(!this.model.loggedIn()) { %>
+				<% if(!this.session.loggedIn()) { %>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<span><strong>Sign in<b class="caret"></b></strong></span>
@@ -62,9 +62,8 @@
 				<% } else { %>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							<img src="<%- (this.model.get('user').get('avatar') || '') %>" class="thumbnail avatar">
-							<% console.log(this.model); %>
-							<span><strong><%- this.model.get('user').get('name') %></strong></span>
+							<img src="<%- (this.session.get('user').get('avatar') || '') %>" class="thumbnail avatar">
+							<span><strong><%- this.session.get('user').get('name') %></strong></span>
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu">
@@ -103,6 +102,7 @@
 		<script src="/js/bootstrap.js"></script>
 		<script src="/js/underscore.js"></script>
 		<script src="/js/backbone.js"></script>
+		<script src="/js/torso.js"></script>
 		<script src="/js/moment.js"></script>
 		<script src="/js/outfitly.js"></script>
 		<script>

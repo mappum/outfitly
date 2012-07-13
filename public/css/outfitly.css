@@ -109,7 +109,8 @@ footer.container-fluid {
 	}
 	.navbar-fixed-top,
 	.navbar-fixed-bottom {
-		position: static;
+		position: absolute;
+		top: 0;
 		margin-left: 0;
 		margin-right: 0;
 	}
