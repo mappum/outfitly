@@ -218,6 +218,7 @@
 			var outfit = new Outfit({
 				caption: 'Hello, world'
 			});
+			
 			var summaryView = new OutfitSummaryView({
 				model: outfit
 			});

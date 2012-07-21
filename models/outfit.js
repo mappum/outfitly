@@ -1,5 +1,5 @@
 var Schema = require('mongoose').Schema,
-	Comment = require(__dirname + '/comment.js');
+	Person = require(__dirname + '/person.js');
 
 var Item = new Schema({
 	'url': String,
@@ -7,9 +7,15 @@ var Item = new Schema({
 	'name': String
 });
 
+var Comment = new Schema({
+	'author': Person,
+	'body': String,
+	'date': Date
+});
+
 var Outfit = module.exports = new Schema({
-	'author': {'type': Schema.ObjectId, 'index': true},
-	'caption': {'type': String},
+	'author': Person,
+	'caption': String,
 	'images': [String],
 	'items': [Item],
 
@@ -18,7 +24,7 @@ var Outfit = module.exports = new Schema({
 	'date': {'type': Date, 'default': Date.now, 'index': true},
 	
 	'comments': [Comment],
-	'likes': [Schema.ObjectId],
+	'likes': [Person],
 
 	'stats': {
 		'likes': {'type': Number, 'default': 0},

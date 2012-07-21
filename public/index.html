@@ -22,8 +22,12 @@
 		</div>
 
 		<script id="template-outfit-summary" type="text/template">
-		<% console.log('!'); console.log(this.model); %>
-			<strong><%- this.model.get('caption') %></strong>
+			<div class="row-fluid">
+				<div class="user span3"></div>
+				<div class="body span9">
+					<strong><%- this.model.get('caption') %></strong>
+				</div>
+			</div>
 		</script>
 
 		<script id="template-navbar" type="text/template">
