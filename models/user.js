@@ -1,4 +1,5 @@
-var Schema = require('mongoose').Schema;
+var Schema = require('mongoose').Schema,
+	Person = require(__dirname + '/person.js');
 
 function longerThan(n) {
 	return function(s) { return s.length > n; };
@@ -35,8 +36,8 @@ var User = module.exports = new Schema({
 		'following': {'type': Number, 'default': 0}
 	},
 
-	'followers': [Schema.ObjectId],
-	'following': [Schema.ObjectId],
+	'followers': [Person],
+	'following': [Person],
 	
 	'externals': [External]
 });
