@@ -5,7 +5,6 @@ var models = require(__dirname + '/../models'),
 	
 var summary = [
 	'_id',
-	'title',
 	'caption',
 	'items',
 	'author',
@@ -16,7 +15,6 @@ var summary = [
 var outfits = module.exports = {
 	'create' : function(req, res) {
 		new Outfit({
-			'title': req.body.title,
 			'caption': req.body.caption,
 			'items': [],
 			'images': req.body.images ? req.body.images.split('@') : [],
@@ -38,7 +36,6 @@ var outfits = module.exports = {
 	'update' : function(req, res) {
 		var obj = {};
 
-		if(typeof req.body.title !== 'undefined') obj.title = req.body.title;
 		if(typeof req.body.caption !== 'undefined') obj.caption = req.body.caption;
 		if(typeof req.body.images !== 'undefined') obj.images = req.body.images.split('@');
 		if(typeof req.body.items !== 'undefined') {

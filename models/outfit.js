@@ -8,7 +8,6 @@ var Item = new Schema({
 });
 
 var Outfit = module.exports = new Schema({
-	'title': {'type': String},
 	'author': {'type': Schema.ObjectId, 'index': true},
 	'caption': {'type': String},
 	'images': [String],
