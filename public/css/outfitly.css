@@ -232,7 +232,7 @@ button {
 	border-bottom-color: black;
 }
 
-.control-group.error > label, .control-group.error .help-inline {
+label.error {
 	color: #B94A48;
 }
 
