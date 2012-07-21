@@ -4,9 +4,16 @@ window.Torso = {};
 		template: _.template(''),
 		_isScreen: true,
 
-		render: function() {
-			this.$el.html(this.template());
-			this.setup();
+		initialize: function(options) {
+			_.bindAll(this, 'setup', 'render');
+			this.session = options.session;
+
+			this.render(options);
+		},
+
+		render: function(options) {
+			this.$el.html(this.template(options));
+			this.setup(options);
 		},
 
 		setup: function() { }
@@ -66,7 +73,7 @@ window.Torso = {};
 				var screen = new Screen({session: this.session, args: args});
 				this.display(screen, container);
 			} else {
-				throw new Error('No Screen was defined for screen "' + name + '"');
+				throw new Error('No Screen was defined for id "' + name + '"');
 			}
 		}
 	});

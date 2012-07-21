@@ -42,7 +42,7 @@ app.configure('development', function() {
 app.configure('production', function() {
 	// if static server is enabled, serve static files
 	if(config.static.enabled) {
-		app.use(express.staticCache());
+		//app.use(express.staticCache());
 		app.use(express.static(config.static.path, {maxAge: config.static.age}));
 	}
 	
