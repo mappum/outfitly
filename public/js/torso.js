@@ -1,13 +1,10 @@
 window.Torso = {};
 (function(Torso) {
-	Torso.Screen = Backbone.View.extend({
+	Torso.View = Backbone.View.extend({
 		template: _.template(''),
-		_isScreen: true,
 
 		initialize: function(options) {
 			_.bindAll(this, 'setup', 'render');
-			this.session = options.session;
-
 			this.render(options);
 		},
 
@@ -16,7 +13,18 @@ window.Torso = {};
 			this.setup(options);
 		},
 
-		setup: function() { }
+		setup: function() {}
+	});
+
+	Torso.Screen = Torso.View.extend({
+		_isScreen: true,
+
+		initialize: function(options) {
+			_.bindAll(this, 'setup', 'render');
+			this.session = options.session;
+
+			this.render(options);
+		}
 	});
 
 	Torso.Router = Backbone.Router.extend({

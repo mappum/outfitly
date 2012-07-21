@@ -7,6 +7,7 @@
 
 	// #### FORM LOGIC ####
 	//TODO: work form logic into torso.js
+
 	var formSetups = {
 		'login': function($el, session) {
 			var login = function() {
@@ -69,8 +70,7 @@
 	var Outfit = Base.extend({
 		collection: 'outfits',
 		defaults: {
-			title: '',
-			body: ''
+			caption: ''
 		}
 	});
 
@@ -136,10 +136,22 @@
 		}
 	});
 
-	// ## VIEWS ##
+	// #### VIEWS ####
+
+	var OutfitSummaryView = Torso.View.extend({
+		className: 'box outfit',
+		template: _.template($('#template-outfit-summary').html()),
+
+		initialize: function() {
+			_.bindAll(this, 'setup', 'render');
+			this.model.on('change', this.render);
+			this.render();
+		}
+	});
+
+	// #### SCREENS #####
 
 	var LoginScreen = Torso.Screen.extend({
-		tagName: 'div',
 		className: 'box span5 centered',
 		template: _.template($('#template-login').html()),
 
@@ -147,7 +159,7 @@
 			_.bindAll(this, 'setup', 'render');
 			this.session = options.session;
 
-			this.render();
+			this.render(options);
 		},
 
 		setup: function() {
@@ -156,7 +168,6 @@
 	});
 
 	var NavbarScreen = Torso.Screen.extend({
-		tagName: 'div',
 		className: 'container-fluid',
 		template: _.template($('#template-navbar').html()),
 		
@@ -165,7 +176,7 @@
 			this.session = options.session;
 			this.session.on('change:user', this.render);
 
-			this.render();
+			this.render(options);
 		},
 		
 		setup: function() {
@@ -180,9 +191,38 @@
 	});
 
 	var RegisterScreen = Torso.Screen.extend({
-		tagName: 'div',
 		className: 'box span6 centered',
-		template: _.template($('#template-register').html())
+		template: _.template($('#template-register').html()),
+
+		setup: function() {
+			setupForms(this.$el, this.session);
+		}
+	});
+
+	var LinkScreen = Torso.Screen.extend({
+		className: 'box span6 centered',
+		template: _.template($('#template-link').html()),
+
+		setup: function() {
+			setupForms(this.$el, this.session);
+		}
+	});
+
+	var TestScreen = Torso.Screen.extend({
+		className: '',
+		template: _.template($('#template-test').html()),
+
+		setup: function() {
+			setupForms(this.$el, this.session);
+
+			var outfit = new Outfit({
+				caption: 'Hello, world'
+			});
+			var summaryView = new OutfitSummaryView({
+				model: outfit
+			});
+			this.$el.append(summaryView.$el);
+		}
 	});
 
 	$(function() {
@@ -195,7 +235,8 @@
 			screens: {
 				'login': LoginScreen,
 				'register': RegisterScreen,
-				//'link': LinkScreen,
+				'link': LinkScreen,
+				'test': TestScreen,
 
 				'front': LoginScreen // TODO: switch to FrontScreen
 			},
@@ -212,6 +253,8 @@
 				"link/:service": "link",
 				
 				"setup": "setup",
+
+				"test": "test",
 
 				"user/:id": "user",
 				"outfit/:id": "outfit",

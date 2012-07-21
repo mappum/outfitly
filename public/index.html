@@ -21,16 +21,10 @@
 			<div id="main" class="row-fluid"></div>
 		</div>
 
-		<div id="overlay">
-			<div id="modal" class="container-fluid" style="display:none"></div>
-		</div>
-
-		<div class="row-fluid">
-			<footer>
-				<span>&copy; Outfitly 2012 - </span>
-				<a href="https://twitter.com/outfitly" class="twitter-follow-button" data-show-count="false">Follow @outfitly</a>
-			</footer>
-		</div>
+		<script id="template-outfit-summary" type="text/template">
+		<% console.log('!'); console.log(this.model); %>
+			<strong><%- this.model.get('caption') %></strong>
+		</script>
 
 		<script id="template-navbar" type="text/template">
 			<a class="brand" href="/#/">Outfitly</a>
@@ -77,7 +71,7 @@
 			<h1>Log in to Outfitly</h1>
 			<div class="inset2">
 				<div class="row-fluid">
-					<fieldset class="form login control-group">
+					<fieldset class="form login">
 						<label class="error"></label>
 						<fieldset>
 							<input type="text" placeholder="Username or email" class="user">
@@ -102,7 +96,7 @@
 			<div class="row-fluid">
 				<div class="span6">
 					<h2>Sign up</h2>
-					<fieldset class="register control-group">
+					<fieldset class="form register">
 						<label class="error"></label>
 						<fieldset>
 							<input type="text" placeholder="Full name" class="fname">
@@ -124,44 +118,45 @@
 			<p>Already have an account? <a href="/#/login">Sign in.</a></p>
 		</script>
 		<script id="template-link" type="text/template">
-			<h1>We successfully connected to your <%= this.service.charAt(0).toUpperCase() + this.service.substr(1) %> account</h1>
+			<h1>We successfully connected to your <%= args[0] %> account</h1>
 			<div class="inset2">
 				<div>
-					<h2>Create a new Aptt account</h2>
-					<fieldset class="register control-group">
+					<h2>Create a new Outfitly account</h2>
+					<fieldset class="form register">
 						<label class="error"></label>
 						<fieldset>
-							<input type="text" placeholder="First name" class="fname"><br>
-							<input type="text" placeholder="Last name" class="lname">
+							<input type="text" placeholder="Full name" class="fname">
 						</fieldset>
 						<fieldset>
-							<input type="text" placeholder="Email address" class="email">
+							<input type="text" placeholder="Email" class="email">
 						</fieldset>
 						<fieldset>
-							<input type="password" placeholder="New Password" class="password">
+							<input type="password" placeholder="Password" class="password">
 						</fieldset>
 						<fieldset>
-							<button class="btn btn-success">Sign up</button>
+							<button class="btn btn-primary">Sign up</button>
 						</fieldset>
 					</fieldset>
 				</div>
 				<hr>
 				<div>
 					<h2>...or, link with your existing account</h2>
-					<fieldset class="login control-group">
+					<fieldset class="form login">
 						<label class="error"></label>
 						<fieldset>
-							<input type="text" placeholder="Email address" class="email">
+							<input type="text" placeholder="Username or email" class="user">
 						</fieldset>
 						<fieldset>
 							<input type="password" placeholder="Password" class="password">
 						</fieldset>
 						<fieldset>
-							<button class="btn btn-success">Sign in</button>
+							<button class="btn btn-primary">Sign in</button>
 						</fieldset>
 					</fieldset>
 				</div>
 			</div>
+		</script>
+		<script id="template-test" type="text/template">
 		</script>
 
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
