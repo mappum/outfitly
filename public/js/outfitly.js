@@ -1,9 +1,10 @@
+function since(date) {
+	return moment.duration(
+		moment(date).diff(Date.now())
+	).humanize();
+}
+
 (function(){
-	function since(date) {
-		return moment.duration(
-			moment(date).diff(Date.now())
-		).humanize();
-	}
 
 	// #### FORM LOGIC ####
 	//TODO: work form logic into torso.js
@@ -139,7 +140,8 @@
 	// #### VIEWS ####
 
 	var OutfitSummaryView = Torso.View.extend({
-		className: 'box outfit',
+		tagName: 'li',
+		className: 'box outfit summary hover-parent',
 		template: _.template($('#template-outfit-summary').html()),
 
 		initialize: function() {
@@ -215,14 +217,37 @@
 		setup: function() {
 			setupForms(this.$el, this.session);
 
-			var outfit = new Outfit({
-				caption: 'Hello, world'
-			});
-			
-			var summaryView = new OutfitSummaryView({
-				model: outfit
-			});
-			this.$el.append(summaryView.$el);
+			var date = Date.now();
+			for(var i = 0; i < 20; i++) {
+				var outfit = new Outfit({
+					caption: 'Hello, world',
+
+					original: Math.random() < 0.15 ? {
+						id: 0,
+						username: 'someone',
+						name: 'Someone Else'
+					} : undefined,
+
+					date: date -= Math.random() * 400000,
+
+					stats: {
+						likes: Math.floor(Math.random() * 5),
+						comments: Math.floor(Math.random() * 3),
+						reposts: Math.floor(Math.random() * 2)
+					},
+
+					author: {
+						name: 'Matt Bell',
+						username: 'mappum',
+						avatar: 'http://placehold.it/128x128'
+					}
+				});
+
+				var summaryView = new OutfitSummaryView({
+					model: outfit
+				});
+				this.$el.find('.outfits').append(summaryView.$el);
+			}
 		}
 	});
 

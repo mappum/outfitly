@@ -22,10 +22,55 @@
 		</div>
 
 		<script id="template-outfit-summary" type="text/template">
-			<div class="row-fluid">
-				<div class="user span3"></div>
-				<div class="body span9">
-					<strong><%- this.model.get('caption') %></strong>
+			<div class="actions hover">
+				<a href="">like</a>
+				<span class="dot"></span>
+				<a href="#">repost</a>
+				<span class="dot"></span>
+				<a href="#">comment</a>
+			</div>
+			
+			<a class="image" href="#">
+				<img src="<%- this.model.get('image') || 'http://placehold.it/250x180' %>">
+			</a>
+			<div class="body">
+				<div class="top">
+					<span class="caption"><%- this.model.get('caption') %></span>
+
+					<% if(typeof this.model.get('original') !== 'undefined') { %>
+						<br>
+						<span class="by"> by </span>
+						<a class="author" href="#"><%- this.model.get('original').name %></a>
+					<% } %>
+					
+					<span class="dot"></span>
+					<span class="by"> <%= typeof this.model.get('original') !== 'undefined' ? 'via' : 'by' %> </span>
+					<a class="author" href="#"><%- this.model.get('author').name %></a>
+				</div>
+				<div class="bottom">
+					<% var stats = this.model.get('stats'); %>
+					<% var separate = false; %>
+					<% if(stats.likes > 0) { %>
+						<% separate = true; %>
+						<span class="likes"><%- stats.likes %> like<%- stats.likes > 1 ? 's' : '' %></span>
+					<% } %>
+
+					<% if(stats.comments > 0) { %>
+						<%= separate ? '<span class="dot"></span>' : '' %>
+						<% separate = true; %>
+						<a class="comments" href="#"><%- stats.comments %> comment<%- stats.comments > 1 ? 's' : '' %></a>
+					<% } %>
+
+					<% if(stats.reposts > 0) { %>
+						<%= separate ? '<span class="dot"></span>' : '' %>
+						<% separate = true; %>
+						<span class="reposts"><%- stats.reposts %> repost<%- stats.reposts > 1 ? 's' : '' %></span>
+					<% } %>
+
+					<!-- <%= separate ? '<span class="dot"></span>' : '' %>
+					<span class="time"><%- since(this.model.get('date')) %> ago</span> -->
+
+					<br>
 				</div>
 			</div>
 		</script>
@@ -161,6 +206,7 @@
 			</div>
 		</script>
 		<script id="template-test" type="text/template">
+			<ul class="outfits collection centered"></ul>
 		</script>
 
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>

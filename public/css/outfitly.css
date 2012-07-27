@@ -1,16 +1,9 @@
-/******************** GENERAL STYLES ********************/
-hr {
-	margin: 8px 0;
-	border: 0;
-	border-top: 1px solid silver;
-	border-bottom: 1px solid white;
-	width: 97.5%;
-	margin-left: 1.25%;
-	clear: both;
-}
-
+/******************** GENERAL STYLE CLASSES ********************/
+.dot:before,
 .middot:before {
-	content: "\387"
+	content: "\387";
+	font-weight: bold;
+	vertical-align: text-top;
 }
 .clear {
 	clear: both;
@@ -24,12 +17,24 @@ hr {
 	background: #fff;
 	color: #000;
 }
+.centered {
+	margin-left: auto !important;
+	margin-right: auto !important;
+	float: none !important;
+}
 
-.mediaDebug:before {content: 'none'}
-@media (max-width: 480px) { .mediaDebug:before {content: 'phone (0 - 480)'} }
-@media (min-width: 481px) and (max-width: 767px) { .mediaDebug:before {content: 'tablet (481 - 767)'} }
-@media (min-width: 768px) and (max-width: 979px) { .mediaDebug:before {content: 'small desktop (768 - 979)'} }
-@media (min-width: 980px) { .mediaDebug:before {content: 'desktop (980+)'} }
+.hover-parent .hover {
+	display: none;
+}
+.hover-parent:hover .hover {
+	display: inherit;
+}
+
+.media-debug:before {content: 'none'}
+@media (max-width: 480px) { .media-debug:before {content: 'phone (0 - 480)'} }
+@media (min-width: 481px) and (max-width: 767px) { .media-debug:before {content: 'tablet (481 - 767)'} }
+@media (min-width: 768px) and (max-width: 979px) { .media-debug:before {content: 'small desktop (768 - 979)'} }
+@media (min-width: 980px) { .media-debug:before {content: 'desktop (980+)'} }
 
 /******************** LAYOUT ********************/
 .btn {
@@ -41,10 +46,49 @@ hr {
 	padding: 8px 12px;
 }
 
-.centered {
-	margin-left: auto !important;
-	margin-right: auto !important;
-	float: none !important;
+.collection {
+	margin: 0;
+	text-align: center;
+}
+
+.collection > li {
+	display: inline-block !important;
+	margin: 0 10px 10px 0 !important;
+}
+
+.outfit.summary {
+	width: 250px;
+	height: 228px;
+	text-align: center;
+	position: relative;
+}
+
+.outfit.summary .image {
+	height: 180px;
+	width: 100%;
+	overflow: hidden;
+}
+
+.outfit.summary .image img {
+	max-width: 100%;
+	margin-bottom: 6px;
+}
+
+.outfit.summary .actions {
+	position: absolute;
+	z-index: 100;
+	top: 12px;
+	left: 20px;
+}
+
+.outfit.summary .body {
+	position: absolute;
+	bottom: 0;
+	width: 250px;
+}
+
+.outfit > div {
+	text-align: left;
 }
 
 #login {
@@ -100,13 +144,6 @@ footer.container-fluid {
 
 /* phone */
 @media (max-width: 480px) {
-	#content {
-		min-height: 320px;
-	}
-	.container-fluid {
-		margin-left: 6px;
-		margin-right: 6px;
-	}
 	.navbar-fixed-top,
 	.navbar-fixed-bottom {
 		position: absolute;
@@ -118,33 +155,19 @@ footer.container-fluid {
 
 /* tablet */
 @media (min-width: 481px) and (max-width: 767px) {
-	#content {
-		min-height: 480px;
-	}
 	.navbar-fixed-top,
 	.navbar-fixed-bottom {
 		position: fixed;
 		margin-left: 0;
 		margin-right: 0;
 	}
-	.container-fluid {
-		margin-left: 32px;
-		margin-right: 32px;
-	}
 }
 
 /* desktop */
 @media (min-width: 768px) {
-	#content {
-		min-height: 768px;
-	}
 	.navbar-fixed-top,
 	.navbar-fixed-bottom {
 		position: fixed;
-	}
-	.container-fluid {
-		margin-left: 64px;
-		margin-right: 64px;
 	}
 	.navbar .brand {
 		padding-right: 20px;
@@ -161,6 +184,11 @@ footer.container-fluid {
 	.navbar .brand {
 		margin: 0;
 	}
+}
+
+.container-fluid {
+	margin-left: 6px;
+	margin-right: 6px;
 }
 
 /******************** STYLE ********************/
@@ -192,6 +220,16 @@ button {
 	margin-right: 12px;
 }
 
+hr {
+	margin: 8px 0;
+	border: 0;
+	border-top: 1px solid silver;
+	border-bottom: 1px solid white;
+	width: 97.5%;
+	margin-left: 1.25%;
+	clear: both;
+}
+
 .navbar .btn {
 	margin: 4px;
 }
@@ -214,11 +252,11 @@ button {
 	background: #dadada;
 }
 
-.navbar .thumbnail {
+.thumbnail {
 	display: inline-block;
 	margin-right: 6px;
-	width: 2em;
-	height: 2em;
+	width: 30px;
+	height: 30px;
 	position: relative;
 	bottom: 0.2em;
 	float: left;
@@ -261,24 +299,22 @@ input {
 }
 
 .box {
-	background: #F4F9F9;
+	background: #fff;
 	border: 1px solid #D8D8D8;
 	-webkit-box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
 	-moz-box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
 	box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+	border-radius: 2px;
 }
 
 .well {
 	color: #CEF2F0;
+	border-radius: 2px;
 }
 
 .well h1, .well h2, .well h3, .well h4, .well h5, .well h6,
 .well h1 a, .well h2 a, .well h3 a, .well h4 a, .well h5 a, .well h6 a {
 	color: #9AF4EF;
-}
-
-#content div {
-	border-radius: 2px;
 }
 
 .twitter-follow-button {
@@ -302,4 +338,21 @@ footer {
 
 #overlay {
 	background: rgba(255,255,255,0.8);
+}
+
+.outfit.summary .actions {
+	font-weight: bold;
+	text-shadow: 0 1px 0 white;
+}
+
+.outfit.summary .body .bottom,
+.outfit.summary .body .bottom a,
+.outfit.summary .body .by {
+	font-size: 12px;
+	color: #888;
+}
+
+.outfit.summary .body {
+	background: white;
+	padding: 6px 0;
 }
