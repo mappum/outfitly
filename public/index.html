@@ -4,11 +4,8 @@
 		<meta charset="utf-8">
 		<title>Outfitly - Share your look</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
-		<link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
 		<link href="/css/bootstrap.css" rel="stylesheet">
 		<link href="/css/bootstrap-responsive.css" rel="stylesheet">
-		<link href="/css/glyphicons.css" rel="stylesheet">
 		<link href="/css/outfitly.css" rel="stylesheet">
 	</head>
 	<body>
@@ -249,11 +246,10 @@
 				if(!d.getElementById(id)) {
 					js = d.createElement(s);
 					js.id = id;
-					js.src = "http://platform.twitter.com/widgets.js";
+					js.src = "//platform.twitter.com/widgets.js";
 					fjs.parentNode.insertBefore(js, fjs);
 				}
 			}(document, "script", "twitter-wjs");
-
 		</script>
 		<script type="text/javascript">
 			var _gaq = _gaq || [];
