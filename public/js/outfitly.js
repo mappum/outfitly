@@ -234,6 +234,24 @@ function truncate(string, length) {
 		}
 	});
 
+	var OutfitScreen = Torso.Screen.extend({
+		className: 'box centered',
+		template: _.template($('#template-outfit').html()),
+
+		initialize: function(options) {
+			_.bindAll(this, 'setup', 'render');
+			this.session = options.session;
+
+			this.model = new Outfit({'_id': options.args[0]});
+			this.model.bind('change', this.render);
+			this.model.fetch();
+		},
+
+		setup: function() {
+			setupForms(this.$el, this.session);
+		}
+	});
+
 	var TestScreen = Torso.Screen.extend({
 		className: '',
 		template: _.template($('#template-test').html()),
@@ -315,6 +333,7 @@ function truncate(string, length) {
 				'login': LoginScreen,
 				'register': RegisterScreen,
 				'link': LinkScreen,
+				'outfit': OutfitScreen,
 				'test': TestScreen,
 
 				'front': LoginScreen // TODO: switch to FrontScreen

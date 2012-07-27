@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Outfitly - Share your look</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 		<link href="/css/bootstrap.css" rel="stylesheet">
 		<link href="/css/bootstrap-responsive.css" rel="stylesheet">
 		<link href="/css/outfitly.css" rel="stylesheet">
@@ -226,6 +226,9 @@
 					</fieldset>
 				</div>
 			</div>
+		</script>
+		<script id="template-outfit" type="text/template">
+			<h1><%- this.model.get('caption') %></h1>
 		</script>
 		<script id="template-test" type="text/template">
 			<ul class="users collection centered"></ul>
