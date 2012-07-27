@@ -4,6 +4,18 @@ function since(date) {
 	).humanize();
 }
 
+function following(user) {
+	return Math.random() <= 0.5;
+}
+
+function truncate(string, length) {
+	if(string.length < length) return string;
+
+	var output = string.substr(0, length - 3);
+	output = output.substr(0, output.lastIndexOf(' '));
+	return output + '...';
+}
+
 (function(){
 
 	// #### FORM LOGIC ####
@@ -151,6 +163,18 @@ function since(date) {
 		}
 	});
 
+	var UserSummaryView = Torso.View.extend({
+		tagName: 'li',
+		className: 'box user summary hover-parent span4',
+		template: _.template($('#template-user-summary').html()),
+
+		initialize: function() {
+			_.bindAll(this, 'setup', 'render');
+			this.model.on('change', this.render);
+			this.render();
+		}
+	});
+
 	// #### SCREENS #####
 
 	var LoginScreen = Torso.Screen.extend({
@@ -217,8 +241,37 @@ function since(date) {
 		setup: function() {
 			setupForms(this.$el, this.session);
 
+			//users
+			var user = new User({
+				name: 'Matt Bell',
+				username: 'mappum',
+				email: 'mappum@gmail.com',
+
+				verified: true,
+
+				date: new Date(1993, 5, 16),
+				description: 'I\'m a web developer that makes cool websites about stuff. :D',
+				from: 'Seattle, WA',
+				avatar: 'http://placehold.it/256x256',
+
+				stats: {
+					posts: 5,
+					likes: 26,
+					reposts: 2,
+					followers: 1337,
+					following: 100
+				}
+			});
+			for(var i = 0; i < 24; i++) {
+				var summaryView = new UserSummaryView({
+					model: user
+				});
+				this.$el.find('.users').append(summaryView.$el);
+			}
+
+			// outfits
 			var date = Date.now();
-			for(var i = 0; i < 20; i++) {
+			for(var i = 0; i < 24; i++) {
 				var outfit = new Outfit({
 					caption: 'Hello, world',
 
@@ -239,7 +292,7 @@ function since(date) {
 					author: {
 						name: 'Matt Bell',
 						username: 'mappum',
-						avatar: 'http://placehold.it/128x128'
+						avatar: 'http://placehold.it/256x256'
 					}
 				});
 
@@ -283,6 +336,8 @@ function since(date) {
 				"test": "test",
 
 				"user/:id": "user",
+				"@:id": "user",
+
 				"outfit/:id": "outfit",
 				
 				"/": "front",

@@ -38,8 +38,8 @@
 
 /******************** LAYOUT ********************/
 .btn {
-	margin-bottom: 4px;
-	padding: 6px 10px;
+	margin: 0;
+	padding: 4px 10px;
 }
 
 .box {
@@ -54,41 +54,54 @@
 .collection > li {
 	display: inline-block !important;
 	margin: 0 10px 10px 0 !important;
+	position: relative;
+}
+
+.collection > li > div {
+	text-align: left;
 }
 
 .outfit.summary {
 	width: 250px;
 	height: 228px;
 	text-align: center;
-	position: relative;
 }
-
 .outfit.summary .image {
 	height: 180px;
 	width: 100%;
 	overflow: hidden;
 }
-
 .outfit.summary .image img {
 	max-width: 100%;
 	margin-bottom: 6px;
 }
-
 .outfit.summary .actions {
 	position: absolute;
 	z-index: 100;
 	top: 12px;
 	left: 20px;
 }
-
 .outfit.summary .body {
 	position: absolute;
 	bottom: 0;
 	width: 250px;
 }
 
-.outfit > div {
-	text-align: left;
+.user.summary {
+	min-width: 320px;
+}
+.user.summary .avatar {
+	float: left;
+}
+.user.summary .description {
+	height: 48px;
+}
+.user.summary .right > div {
+	float: right;
+}
+.user.summary .stats {
+	margin-top: 8px;
+	display: inline-block;
 }
 
 #login {
@@ -187,8 +200,8 @@ footer.container-fluid {
 }
 
 .container-fluid {
-	margin-left: 6px;
-	margin-right: 6px;
+	margin-left: 12px;
+	margin-right: 12px;
 }
 
 /******************** STYLE ********************/
@@ -255,12 +268,28 @@ hr {
 .thumbnail {
 	display: inline-block;
 	margin-right: 6px;
-	width: 30px;
-	height: 30px;
 	position: relative;
 	bottom: 0.2em;
 	float: left;
 	padding: 1px;
+}
+
+.thumbnail,
+.thumbnail-large {
+	width: 200px;
+	height: 200px;
+}
+.thumbnail-medium {
+	width: 100px;
+	height: 100px;
+}
+.thumbnail-small {
+	width: 64px;
+	height: 64px;
+}
+.thumbnail-tiny {
+	width: 32px;
+	height: 32px;
 }
 
 .navbar .nav li.dropdown .dropdown-toggle .caret,
@@ -355,4 +384,31 @@ footer {
 .outfit.summary .body {
 	background: white;
 	padding: 6px 0;
+}
+
+
+.user.summary a {
+	color: inherit;
+}
+.user.summary .name {
+	font-size: 20px;
+	font-weight: bold;
+}
+.user.summary .username {
+	font-size: 16px;
+	color: #666;
+}
+.user.summary .description {
+	font-size: 12px;
+	line-height: 14px;
+	color: #888;
+}
+.user.summary .stats > span {
+	font-size: 11px;
+	color: #666;
+}
+.user.summary .stats .value {
+	font-size: 14px;
+	font-weight: bold;
+	color: #000;
 }
