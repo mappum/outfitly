@@ -75,31 +75,28 @@
 			</div>
 		</script>
 		<script id="template-user-summary" type="text/template">
-			<div class="left span9">
-				<a class="thumbnail thumbnail-medium avatar" href="/#/@<%- this.model.get('username') %>">
-					<img src="<%- this.model.get('avatar') %>">
-				</a>
-				<div class="body>"
-					<div class="meta">
-						<a class="name" href="/#/@<%- this.model.get('username') %>"><%- this.model.get('name') %></a>
-						<a class="username" href="/#/@<%- this.model.get('username') %>">@<%- this.model.get('username') %></a>
+			<a class="thumbnail thumbnail-medium avatar" href="/#/@<%- this.model.get('username') %>">
+				<img src="<%- this.model.get('avatar') %>">
+			</a>
+			<div class="body">
+				<div class="meta">
+					<div class="actions">
+						<% if(following(this.model.get('username'))) { %>
+							<button class="btn">Unfollow</button>
+						<% } else { %>
+							<button class="btn btn-primary">Follow</button>
+						<% } %>
 					</div>
-					<div class="description"><%- truncate(this.model.get('description'), 96) %></div>
-					<div class="stats">
-						<span class="followers"><span class="value"><%- this.model.get('stats').followers %></span> followers</span>
-						<span class="dot"></span>
-						<span class="following"><span class="value"><%- this.model.get('stats').following %></span> following</span>
+
+					<a class="name" href="/#/@<%- this.model.get('username') %>"><%- this.model.get('name') %></a>
+					<br>
+					<a class="username" href="/#/@<%- this.model.get('username') %>">@<%- this.model.get('username') %></a>
 				</div>
-				</div>
-			</div>
-			<div class="right span3">
-				<div>
-					<% if(following(this.model.get('username'))) { %>
-						<button class="btn">Unfollow</button>
-					<% } else { %>
-						<button class="btn btn-primary">Follow</button>
-					<% } %>
-				</div>
+				<div class="description"><%- truncate(this.model.get('description'), 96) %></div>
+				<div class="stats">
+					<span class="followers"><span class="value"><%- this.model.get('stats').followers %></span> followers</span>
+					<span class="dot"></span>
+					<span class="following"><span class="value"><%- this.model.get('stats').following %></span> following</span>
 			</div>
 		</script>
 

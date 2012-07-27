@@ -88,19 +88,20 @@
 }
 
 .user.summary {
-	min-width: 320px;
+	min-width: 300px;
+	height: 116px;
 }
 .user.summary .avatar {
 	float: left;
 }
 .user.summary .description {
-	height: 48px;
+	height: 36px;
 }
-.user.summary .right > div {
+.user.summary .actions {
 	float: right;
 }
 .user.summary .stats {
-	margin-top: 8px;
+	margin-top: 4px;
 	display: inline-block;
 }
 
