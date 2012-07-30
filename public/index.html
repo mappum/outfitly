@@ -228,7 +228,89 @@
 			</div>
 		</script>
 		<script id="template-outfit" type="text/template">
-			<h1><%- this.model.get('caption') %></h1>
+			<div class="meta">
+				<% var author = typeof this.model.get('original') !== 'undefined' ? this.model.get('original') : this.model.get('author'); %>
+				<a class="thumbnail thumbnail-small" href="/#/@<%- author.username %>"><img src="<%- author.avatar %>"></a>
+				<a class="author" href="/#/@<%- author.username %>"><%- author.name %></a>
+				<% if(typeof this.model.get('original') !== 'undefined') { %>
+					<span class="by"> via </span>
+					<a class="author" href="/#/@<%- this.model.get('author').username %>"><%- this.model.get('author').name %></a>
+				<% } %>
+				<br>
+				<span class="time">Submitted <%- since(this.model.get('date')) %> ago</span>
+			</div>
+			<hr>
+
+			<div class="image">
+				<img src="<%- this.model.get('image') %>">
+			</div>
+			<div class="caption"><%- this.model.get('caption') %></div>
+			<hr>
+
+			<ul class="collection comments">
+				<% var comments = this.model.get('comments'); %>
+				<% for(var i = 0; i < comments.length; i++) { %>
+					<% var comment = comments[i]; %>
+
+					<li class="comment span12">
+						<a class="thumbnail thumbnail-tiny" href="/#/@<%- comment.author.username %>"><img src="<%- comment.author.avatar %>"></a>
+						<a class="author" href="/#/@<%- comment.author.username %>"><%- comment.author.name %></a>
+						<span class="body"><%- comment.body %></span>
+					</li>
+				<% } %>
+
+				<% if(this.session.loggedIn())  { %>
+					<li class="span12">
+						<textarea class="body span12" placeholder="Enter your comment here"></textarea>
+						<button class="btn btn-primary">Submit</button>
+					</li>
+				<% } %>
+			</ul>
+
+			<% if(this.model.get('stats').pieces > 0) { %>
+				<hr>
+				<div class="pieces">
+					<h2>Pieces</h2>
+					<ul class="collection">
+					</ul>
+				</div>
+			<% } %>
+
+			<% if(this.model.get('stats').likes > 0) { %>
+				<hr>
+				<div class="likes">
+					<h2><%= this.model.get('stats').likes %> Like<%= this.model.get('stats').likes > 1 ? 's' : '' %></h2>
+					<ul class="collection condensed">
+						<% var likes = this.model.get('likes'); %>
+						<% for(var i = 0; i < likes.length; i++) { %>
+							<% var like = likes[i]; %>
+
+							<li class="like pull-left">
+								<a class="thumbnail thumbnail-small" href="/#/@<%- like.username %>"><img src="<%- like.avatar %>"></a>
+							</li>
+						<% } %>
+					</ul>
+				</div>
+			<% } %>
+
+			<% if(this.model.get('stats').reposts > 0) { %>
+				<hr>
+				<div class="reposts">
+					<h2><%= this.model.get('stats').reposts %> Repost<%= this.model.get('stats').reposts > 1 ? 's' : '' %></h2>
+					<ul class="collection condensed">
+						<% var reposts = this.model.get('reposts'); %>
+						<% for(var i = 0; i < reposts.length; i++) { %>
+							<% var repost = reposts[i]; %>
+
+							<li class="repost pull-left">
+								<a class="thumbnail thumbnail-small" href="/#/@<%- repost.username %>"><img src="<%- repost.avatar %>"></a>
+							</li>
+						<% } %>
+					</ul>
+				</div>
+			<% } %>
+
+			<div class="clear"></div>
 		</script>
 		<script id="template-test" type="text/template">
 			<ul class="users collection centered"></ul>

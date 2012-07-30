@@ -235,7 +235,7 @@ function truncate(string, length) {
 	});
 
 	var OutfitScreen = Torso.Screen.extend({
-		className: 'box centered',
+		className: 'box centered outfit span6',
 		template: _.template($('#template-outfit').html()),
 
 		initialize: function(options) {
