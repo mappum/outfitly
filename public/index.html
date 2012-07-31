@@ -267,11 +267,24 @@
 				<% } %>
 			</ul>
 
-			<% if(this.model.get('stats').pieces > 0) { %>
+			<% if(this.model.get('pieces').length > 0) { %>
 				<hr>
 				<div class="pieces">
 					<h2>Pieces</h2>
-					<ul class="collection">
+					<ul class="collection condensed">
+						<% var pieces = this.model.get('pieces'); %>
+						<% for(var i = 0; i < pieces.length; i++) { %>
+							<% var piece = pieces[i]; %>
+
+							<li class="piece span6">
+								<a class="thumbnail thumbnail-medium" href="<%- piece.url %>"><img src="<%- piece.image %>"></a>
+								<div class="meta">
+									<a class="title" href="<%- piece.url %>"><%- piece.title %></a>
+									<br>
+									<a class="company" href="<%- piece.url %>"><%- piece.brand %></a>
+								</div>
+							</li>
+						<% } %>
 					</ul>
 				</div>
 			<% } %>
@@ -285,7 +298,7 @@
 						<% for(var i = 0; i < likes.length; i++) { %>
 							<% var like = likes[i]; %>
 
-							<li class="like pull-left">
+							<li class="like">
 								<a class="thumbnail thumbnail-small" href="/#/@<%- like.username %>"><img src="<%- like.avatar %>"></a>
 							</li>
 						<% } %>

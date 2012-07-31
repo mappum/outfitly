@@ -37,13 +37,17 @@
 @media (min-width: 980px) { .media-debug:before {content: 'desktop (980+)'} }
 
 /******************** LAYOUT ********************/
+li {
+	line-height: inherit;
+}
+
 .btn {
 	margin: 0;
 	padding: 4px 10px;
 }
 
 .box {
-	padding: 8px 12px;
+	padding: 12px 16px;
 }
 
 .collection {
@@ -61,12 +65,13 @@
 
 .collection.condensed > li {
 	margin: 0 2px 2px 0 !important;
+	float: left;
 }
 .collection.condensed > li .thumbnail {
 	margin: 0;
 }
 
-.outfit .meta {
+.outfit > .meta {
 	height: 50px;
 }
 .outfit .image {
@@ -84,7 +89,7 @@
 	margin-left: auto;
 	margin-right: auto;
 }
-.outfit .caption {
+.outfit > .caption {
 	text-align: center;
 }
 .outfit .comments > li {
@@ -95,6 +100,18 @@
 	width: 100%;
 }
 
+.piece > .meta {
+	padding: 6px;
+	float: left;
+}
+.piece > .meta .title {
+	font-size: 16px;
+	color: #000;
+}
+.piece > .meta .company {
+	color: #666;
+}
+
 .outfit .likes h2,
 .outfit .reposts h2 {
 	margin-bottom: 8px;
@@ -103,7 +120,6 @@
 .outfit.summary {
 	width: 250px;
 	height: 228px;
-	text-align: center;
 }
 .outfit.summary .image {
 	height: 180px;
@@ -117,8 +133,8 @@
 .outfit.summary .actions {
 	position: absolute;
 	z-index: 100;
-	top: 12px;
-	left: 20px;
+	top: 16px;
+	left: 24px;
 }
 .outfit.summary .body {
 	position: absolute;
@@ -128,13 +144,12 @@
 
 .user.summary {
 	min-width: 300px;
-	height: 116px;
 }
 .user.summary .avatar {
 	float: left;
 }
 .user.summary .description {
-	height: 36px;
+	height: 38px;
 }
 .user.summary .actions {
 	float: right;
@@ -376,6 +391,7 @@ input {
 	border-radius: 2px;
 }
 
+
 .well {
 	color: #CEF2F0;
 	border-radius: 2px;
@@ -433,6 +449,7 @@ footer {
 
 .outfit.summary .actions {
 	font-weight: bold;
+	font-size: 16px;
 	text-shadow: 0 1px 0 white;
 }
 

@@ -5,7 +5,8 @@ var Schema = require('mongoose').Schema,
 var Piece = new Schema({
 	'url': String,
 	'image': String,
-	'name': String
+	'title': String,
+	'brand': String
 });
 
 var Comment = new Schema({
