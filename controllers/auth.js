@@ -49,6 +49,7 @@ var auth = module.exports = {
 				req.session.userId = user._id;
 				req.session.user = {
 					_id: user._id,
+					username: user.username,
 					name: user.name,
 					email: user.email,
 					date: user.date,

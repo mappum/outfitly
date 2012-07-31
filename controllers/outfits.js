@@ -27,11 +27,6 @@ var outfits = module.exports = {
 	'read' : function(req, res) {
 		Outfit.findById(req.param('id'), res.mongo);
 	},
-
-	'readFeed' : function(req, res) {
-		//TODO: get feed
-		res.error(404);
-	},
 	
 	'update' : function(req, res) {
 		var obj = {};
@@ -41,26 +36,41 @@ var outfits = module.exports = {
 		if(typeof req.body.pieces !== 'undefined') {
 			obj.pieces = req.body.pieces.split('@');
 			for(var i = 0; i < obj.pieces; i++) {
-				if(obj.pieces[i]) obj.pieces[i] = obj.pieces[i].split('#');
+				if(obj.pieces[i]) {
+					obj.pieces[i] = obj.pieces[i].split('#');
+					obj.pieces[i] = {
+						url: obj.pieces[0],
+						image: obj.pieces[1],
+						title: obj.pieces[2],
+						brand: obj.pieces[3]
+					};
+				}
 			}
 		}
 
-		Outfit.update(
-			{
-				'_id': ObjectId(req.param('id')),
-				'author': req.session.userId
-			}, obj, {}, res.mongo);
+		Outfit.update({
+			'_id': ObjectId(req.param('id')),
+			'author': req.session.userId
+		}, obj, {}, res.mongo);
 	},
 	
 	'delete' : function(req, res) {
-		res.error(401);
+		Outfit.remove({
+			'_id': req.param('id'),
+			'author': req.session.userId
+		}, res.mongo);
 	},
 	
 	'comments': {
 		'create':  function(req, res) {			
 			res.doc.comments.push({
-				'author': req.session.userId,
-				'body': req.body.body,
+				'author': {
+					'id': req.session.userId,
+					'username': req.session.user.username,
+					'name': req.session.user.name,
+					'avatar': req.session.user.avatar
+				},
+				'body': req.body.body || "",
 				'date': Date.now()
 			});
 			res.doc.save(res.mongo);
