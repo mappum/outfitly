@@ -17,7 +17,6 @@ function truncate(string, length) {
 }
 
 (function(){
-
 	// #### FORM LOGIC ####
 	//TODO: work form logic into torso.js
 
@@ -252,6 +251,48 @@ function truncate(string, length) {
 		}
 	});
 
+	var FrontScreen = Torso.Screen.extend({
+		className: '',
+		template: _.template($('#template-front').html()),
+
+		setup: function() {
+			console.log('frontscreen');
+			setupForms(this.$el, this.session);
+
+			var date = Date.now();
+			for(var i = 0; i < 24; i++) {
+				var outfit = new Outfit({
+					caption: 'Hello, world',
+
+					original: Math.random() < 0.15 ? {
+						id: 0,
+						username: 'someone',
+						name: 'Someone Else'
+					} : undefined,
+
+					date: date -= Math.random() * 400000,
+
+					stats: {
+						likes: Math.floor(Math.random() * 5),
+						comments: Math.floor(Math.random() * 3),
+						reposts: Math.floor(Math.random() * 2)
+					},
+
+					author: {
+						name: 'Matt Bell',
+						username: 'mappum',
+						avatar: 'http://placehold.it/256x256'
+					}
+				});
+
+				var summaryView = new OutfitSummaryView({
+					model: outfit
+				});
+				this.$el.find('.outfits').append(summaryView.$el);
+			}
+		}
+	});
+
 	var TestScreen = Torso.Screen.extend({
 		className: '',
 		template: _.template($('#template-test').html()),
@@ -323,6 +364,24 @@ function truncate(string, length) {
 	});
 
 	$(function() {
+		var scrollBottomLock = false;
+		$(window).scroll(function(e) {
+			var target = $(window);
+
+			if(target.scrollTop() + target.innerHeight() + 100 > e.target.height) {
+				if(!scrollBottomLock) {
+					scrollBottomLock = true;
+					target.trigger('scrollBottom', e);
+				}
+			} else {
+				scrollBottomLock = false;
+			}
+		});
+
+		$(window).on('scrollBottom', function(e) {
+			console.log('hit bottom');
+		});
+
 		var app = new Torso.App({
 			session: new Session(),
 			containers: {
@@ -335,8 +394,7 @@ function truncate(string, length) {
 				'link': LinkScreen,
 				'outfit': OutfitScreen,
 				'test': TestScreen,
-
-				'front': LoginScreen // TODO: switch to FrontScreen
+				'front': FrontScreen
 			},
 			defaults: {
 				navbar: NavbarScreen
