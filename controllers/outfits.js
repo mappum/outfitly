@@ -62,7 +62,7 @@ var outfits = module.exports = {
 	},
 	
 	'comments': {
-		'create':  function(req, res) {			
+		'create':  function(req, res) {
 			res.doc.comments.push({
 				'author': {
 					'id': req.session.userId,
@@ -75,7 +75,7 @@ var outfits = module.exports = {
 			});
 			res.doc.save(res.mongo);
 		},
-		
+
 		'update':  function(req, res) {
 			if(res.comment.author === req.session.userId) {
 				res.comment.body = req.body.body;
