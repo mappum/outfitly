@@ -59,6 +59,12 @@ var auth = module.exports = {
 					scores: user.scores,
 					notifications: user.notifications
 				};
+
+				console.log(user);
+				req.session.user.following = [];
+				for(var i = 0; i < user.following.length; i++) {
+					req.session.user.following[i] = user.following[i].id;
+				}
 			} else {
 				req.session.destroy();
 			}

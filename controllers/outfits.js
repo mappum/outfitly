@@ -6,7 +6,6 @@ var models = require(__dirname + '/../models'),
 var summary = [
 	'_id',
 	'caption',
-	'pieces',
 	'author',
 	'date',
 	'stats'
@@ -26,6 +25,15 @@ var outfits = module.exports = {
 	
 	'read' : function(req, res) {
 		Outfit.findById(req.param('id'), res.mongo);
+	},
+	
+	'readFeed' : function(req, res) {
+		Outfit.find(null, summary)
+			.where('author.id').in(req.session.user.following)
+			.sort('date', -1)
+			.limit(Math.min(req.query.limit, 50) || 25)
+			.skip(req.query.skip || 0)
+			.exec(res.mongo);
 	},
 	
 	'update' : function(req, res) {
