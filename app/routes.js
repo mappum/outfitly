@@ -33,6 +33,8 @@ module.exports = function(app) {
 	app.get('/logout', auth.logout);
 	
 	// ********** routes for outfits **********
+	// main feed
+	app.get('/outfits', outfits.readFeed);
 	// create new outfit
 	app.post('/outfits', requireLogin, requireVerification, outfits.create);
 	// repost outfit
@@ -65,9 +67,6 @@ module.exports = function(app) {
 	app.put('/users/:id', requireLogin, users.update);
 	// delete profile
 	app.delete('/users/:id', requireLogin, users.delete);
-
-	// main feed
-	app.get('/feed', outfits.readFeed);
 	
 	// redirect get requests to hashpath
 	app.get('*', function(req, res) {
