@@ -243,6 +243,7 @@ function truncate(string, length) {
 	var OutfitScreen = Torso.Screen.extend({
 		className: 'box centered outfit span6',
 		template: _.template($('#template-outfit').html()),
+		modal: true,
 
 		initialize: function(options) {
 			_.bindAll(this, 'setup', 'render');
@@ -417,7 +418,8 @@ function truncate(string, length) {
 			session: new Session(),
 			containers: {
 				navbar: $('#navbar'),
-				main: $('#main')
+				main: $('#main'),
+				modal: $('#overlay')
 			},
 			screens: {
 				'login': LoginScreen,
@@ -430,6 +432,18 @@ function truncate(string, length) {
 			defaults: {
 				navbar: NavbarScreen
 			}
+		});
+
+		app.on('display:modal', function(e) {
+			$('#main').css('position', 'fixed');
+
+			$('#overlay').click(function(e) {
+				if(e.target == document.getElementById('overlay')) window.history.back();
+			});
+		});
+
+		app.on('display:main', function(e) {
+			$('#main').css('position', 'static');
 		});
 
 		var router = new Torso.Router({

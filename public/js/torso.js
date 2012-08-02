@@ -18,6 +18,7 @@ window.Torso = {};
 
 	Torso.Screen = Torso.View.extend({
 		_isScreen: true,
+		modal: false,
 
 		initialize: function(options) {
 			_.bindAll(this, 'setup', 'render');
@@ -45,13 +46,15 @@ window.Torso = {};
 
 	Torso.App = Backbone.View.extend({
 		initialize: function(options) {
-			_.bindAll(this, 'display', 'navigate');
+			_.bindAll(this, 'display', 'clear', 'navigate');
 
 			this.session = options.session || new Backbone.Model();
 
 			this.defaults = options.defaults || {};
 			this.containers = options.containers || {};
 			this.screens = options.screens || {};
+
+			this.initialized = false;
 
 			for(var container in this.defaults) {
 				this.navigate(this.defaults[container], null, container);
@@ -60,13 +63,48 @@ window.Torso = {};
 
 		// displays an instance of a ScreenView in the specified container
 		display: function(screen, container) {
-			container = container || 'main';
+			container = container || ((screen.modal && this.initialized) ? 'modal' : 'main');
 			var el = this.containers[container];
 
 			if(typeof el !== 'undefined') {
 				el.empty();
-				el.append(screen.$el);
+
+				if(screen) {
+					el.addClass('populated').append(screen.$el);
+
+					var modalEl = this.containers['modal'];
+					if(container === 'main' && typeof modalEl !== 'undefined') {
+						this.clear('modal');
+					}
+
+					var e = {
+						container: container,
+						el: el,
+						screen: screen
+					};
+					this.trigger('display', e);
+					this.trigger('display:' + container, e);
+				} else {
+					if(el.hasClass('populated')) {
+						el.removeClass('populated');
+
+						var e = {
+							container: container,
+							el: el
+						};
+						this.trigger('clear', e);
+						this.trigger('clear:' + container, e);
+					}
+				}
+
+				if(container === 'main') this.initialized = true;
+			} else {
+				throw new Error('Invalid container "' + container + '"');
 			}
+		},
+
+		clear: function(container) {
+			this.display(null, container);
 		},
 
 		// creates an instance of the specified screen with args, displays in container
