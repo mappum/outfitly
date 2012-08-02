@@ -21,18 +21,13 @@ var Outfit = module.exports = new Schema({
 	'image': String,
 	'pieces': [Piece],
 
-	'original': {
-		'id': {'type': ObjectId, 'sparse': true},
-		'username': String,
-		'name': String,
-		'avatar': String
-	},
+	'original': Person,
 
 	'date': {'type': Date, 'default': Date.now, 'index': true},
 	
 	'comments': [Comment],
-	'likes': [Person],
-	'reposts': [Person],
+	'likes': [new Schema(Person)],
+	'reposts': [new Schema(Person)],
 
 	'stats': {
 		'likes': {'type': Number, 'default': 0},

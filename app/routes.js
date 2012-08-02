@@ -45,6 +45,12 @@ module.exports = function(app) {
 	app.put('/outfits/:id', requireLogin, requireVerification, outfits.update);
 	// delete outfit
 	app.delete('/outfits/:id', requireLogin, requireVerification, outfits.delete);
+	// like outfit
+	app.post('/outfits/:id/likes', requireLogin, requireVerification, outfits.getById, outfits.like);
+	// unlike outfit
+	app.delete('/outfits/:id/likes', requireLogin, requireVerification, outfits.getById, outfits.unlike);
+	// repost outfit
+	app.post('/outfits/:id', requireLogin, requireVerification, outfits.getById, outfits.repost);
 	
 	// ********** routes for comments **********
 	// create new comment

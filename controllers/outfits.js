@@ -7,30 +7,31 @@ var summary = [
 	'_id',
 	'caption',
 	'author',
+	'original',
 	'date',
 	'stats'
 ];
 
 var outfits = module.exports = {
-	'create' : function(req, res) {
+	'create': function(req, res) {
 		new Outfit({
 			'caption': req.body.caption,
 			'pieces': [],
 			'images': req.body.images ? req.body.images.split('@') : [],
 			
-			'author': req.session.userId,
+			'author': req.session.user.person,
 			'date': Date.now()
 		}).save(res.mongo);
 	},
 	
-	'read' : function(req, res) {
+	'read': function(req, res) {
 		Outfit.findById(req.param('id'), res.mongo);
 	},
 	
-	'readFeed' : function(req, res) {
+	'readFeed': function(req, res) {
 		var query = Outfit.find(null, summary);
 
-		if(typeof req.session.user !== 'undefined') query.where('author.id').in(req.session.user.following);
+		if(typeof req.session.user !== 'undefined') query.where('author._id').in(req.session.user.following);
 		
 		query.sort('date', -1)
 			.limit(Math.min(req.query.limit, 48) || 24)
@@ -38,7 +39,7 @@ var outfits = module.exports = {
 			.exec(res.mongo);
 	},
 	
-	'update' : function(req, res) {
+	'update': function(req, res) {
 		var obj = {};
 
 		if(typeof req.body.caption !== 'undefined') obj.caption = req.body.caption;
@@ -64,25 +65,58 @@ var outfits = module.exports = {
 		}, obj, {}, res.mongo);
 	},
 	
-	'delete' : function(req, res) {
+	'delete': function(req, res) {
 		Outfit.remove({
 			'_id': req.param('id'),
-			'author': req.session.userId
+			'author._id': req.session.userId
 		}, res.mongo);
+	},
+
+	'like': function(req, res) {
+		var like = res.doc.likes.id(req.session.userId);
+
+		if(!like) {
+			res.doc.likes.push(req.session.user.person);
+			res.doc.stats.likes++;
+			res.doc.save(res.mongo);
+		} else {
+			res.error(401);
+		}
+	},
+
+	'unlike': function(req, res) {
+		var like = res.doc.likes.id(req.session.userId);
+
+		if(like) {
+			like.remove();
+			res.doc.stats.likes--;
+			res.doc.save(res.mongo);
+		} else {
+			res.error(404);
+		}
+	},
+
+	'repost': function(req, res) {
+		new Outfit({
+			'author': req.session.user.person,
+			'caption': res.doc.caption,
+			'image': res.doc.image,
+			'pieces': res.doc.pieces,
+			'original': res.doc.author
+		}).save(res.mongo);
+
+		res.doc.stats.reposts++;
+		res.doc.save();
 	},
 	
 	'comments': {
 		'create':  function(req, res) {
 			res.doc.comments.push({
-				'author': {
-					'id': req.session.userId,
-					'username': req.session.user.username,
-					'name': req.session.user.name,
-					'avatar': req.session.user.avatar
-				},
+				'author': req.session.user.person,
 				'body': req.body.body || "",
 				'date': Date.now()
 			});
+			res.doc.stats.comments++;
 			res.doc.save(res.mongo);
 		},
 
@@ -98,6 +132,7 @@ var outfits = module.exports = {
 		'delete': function(req, res) {
 			if(res.comment.author === req.session.userId) {
 				res.comment.remove();
+				res.doc.stats.comments--;
 				res.doc.save(res.mongo);
 			} else {
 				res.error(401);

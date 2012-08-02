@@ -67,8 +67,15 @@ var auth = module.exports = {
 					scores: user.scores,
 					notifications: user.notifications,
 
-					following: getArrayField(user.following, 'id'),
-					followers: getArrayField(user.followers, 'id')
+					person: {
+						_id: user._id,
+						username: user.username,
+						name: user.name,
+						avatar: user.avatar
+					},
+
+					following: getArrayField(user.following, '_id'),
+					followers: getArrayField(user.followers, '_id')
 				};
 			} else {
 				req.session.user = undefined;

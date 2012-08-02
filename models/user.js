@@ -36,8 +36,8 @@ var User = module.exports = new Schema({
 		'following': {'type': Number, 'default': 0}
 	},
 
-	'followers': [Person],
-	'following': [Person],
+	'followers': [new Schema(Person)],
+	'following': [new Schema(Person)],
 	
 	'externals': [External]
 });
