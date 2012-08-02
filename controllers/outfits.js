@@ -28,7 +28,6 @@ var outfits = module.exports = {
 	},
 	
 	'readFeed' : function(req, res) {
-		console.log(req.query);
 		Outfit.find(null, summary)
 			.where('author.id').in(req.session.user.following)
 			.sort('date', -1)

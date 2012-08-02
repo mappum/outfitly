@@ -271,7 +271,6 @@ function truncate(string, length) {
 			this.initialized = false;
 
 			this.collection = new OutfitCollection();
-			this.collection.bind('add', this.render);
 
 			this.loadNextPage();
 		},
@@ -290,6 +289,11 @@ function truncate(string, length) {
 				this.$el.find('.outfits').append(view.$el);
 			}.bind(this));
 
+			this.$el.find('div.more')
+				.removeClass('loading')
+				.find('span')
+				.html('Load more posts');
+
 			if(!this.initialized) {
 				this.initialized = true;
 				this.setup();
@@ -302,14 +306,25 @@ function truncate(string, length) {
 			$(window).on('scrollBottom', function(e) {
 				this.loadNextPage();
 			}.bind(this));
+
+			var more = this.$el.find('div.more');
+			more.click(function(e) {
+				if(!more.hasClass('loading')) this.loadNextPage();
+			}.bind(this));
 		},
 
 		loadNextPage: function() {
 			this.page++;
 			this.collection.fetch({
+				add: true,
 				success: this.render,
 				data: {limit: this.pageSize, skip: this.page * this.pageSize}
 			});
+
+			this.$el.find('div.more')
+				.addClass('loading')
+				.find('span')
+				.html('Loading more posts...');
 		}
 	});
 
@@ -396,10 +411,6 @@ function truncate(string, length) {
 			} else {
 				scrollBottomLock = false;
 			}
-		});
-
-		$(window).on('scrollBottom', function(e) {
-			console.log('hit bottom');
 		});
 
 		var app = new Torso.App({

@@ -41,6 +41,10 @@ li {
 	line-height: inherit;
 }
 
+body {
+	padding-bottom: 40px;
+}
+
 .btn {
 	margin: 0;
 	padding: 4px 10px;
@@ -195,19 +199,6 @@ li {
 
 #modal {
 	min-height: 100px;
-}
-
-footer {
-	width: auto;
-	height: 120px;
-	padding: 0;
-	padding-top: 10px;
-	
-	text-align: center;
-}
-
-footer.container-fluid {
-	margin: 20px 0 0 0;
 }
 
 /* phone */
@@ -406,21 +397,6 @@ input {
 	vertical-align: bottom;
 }
 
-footer {
-	font-size: 18px;
-	background: #721D2B;
-	
-	border-top: 2px solid #541520;
-	
-	color: white;
-	
-	text-shadow: 0 -1px 0 black;
-	
-	box-shadow: inset 0 4px 8px -4px rgba(0,0,0,0.65);
-	-webkit-box-shadow: inset 0 4px 8px -4px rgba(0,0,0,0.65);
-	-moz-box-shadow: inset 0 4px 8px -4px rgba(0,0,0,0.65);
-}
-
 #overlay {
 	background: rgba(255,255,255,0.8);
 }
@@ -489,4 +465,22 @@ footer {
 	font-size: 14px;
 	font-weight: bold;
 	color: #000;
+}
+
+.more {
+	font-size: 20px;
+	text-align: center;
+	cursor: pointer;
+	color: #E62938;
+}
+.more img {
+	display: none;
+}
+
+.more.loading {
+	cursor: default;
+	color: inherit;
+}
+.more.loading img {
+	display: inline;
 }
