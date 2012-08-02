@@ -148,6 +148,13 @@ function truncate(string, length) {
 		}
 	});
 
+	// #### COLLECTIONS ####
+
+	var OutfitCollection = Backbone.Collection.extend({
+		model: Outfit,
+		url: '/outfits'
+	});
+
 	// #### VIEWS ####
 
 	var OutfitSummaryView = Torso.View.extend({
@@ -255,41 +262,54 @@ function truncate(string, length) {
 		className: '',
 		template: _.template($('#template-front').html()),
 
-		setup: function() {
-			console.log('frontscreen');
-			setupForms(this.$el, this.session);
+		initialize: function(options) {
+			_.bindAll(this, 'setup', 'render', 'loadNextPage');
+			this.session = options.session;
 
-			var date = Date.now();
-			for(var i = 0; i < 24; i++) {
-				var outfit = new Outfit({
-					caption: 'Hello, world',
+			this.page = -1;
+			this.pageSize = 24;
+			this.initialized = false;
 
-					original: Math.random() < 0.15 ? {
-						id: 0,
-						username: 'someone',
-						name: 'Someone Else'
-					} : undefined,
+			this.collection = new OutfitCollection();
+			this.collection.bind('add', this.render);
 
-					date: date -= Math.random() * 400000,
+			this.loadNextPage();
+		},
 
-					stats: {
-						likes: Math.floor(Math.random() * 5),
-						comments: Math.floor(Math.random() * 3),
-						reposts: Math.floor(Math.random() * 2)
-					},
+		render: function() {
+			if(!this.initialized) {
+				this.$el.html(this.template());
+			}
 
-					author: {
-						name: 'Matt Bell',
-						username: 'mappum',
-						avatar: 'http://placehold.it/256x256'
-					}
-				});
+			this.collection.each(function(outfit, i) {
+				if(i < this.page * this.pageSize) return;
 
-				var summaryView = new OutfitSummaryView({
+				var view = new OutfitSummaryView({
 					model: outfit
 				});
-				this.$el.find('.outfits').append(summaryView.$el);
+				this.$el.find('.outfits').append(view.$el);
+			}.bind(this));
+
+			if(!this.initialized) {
+				this.initialized = true;
+				this.setup();
 			}
+		},
+
+		setup: function() {
+			setupForms(this.$el, this.session);
+
+			$(window).on('scrollBottom', function(e) {
+				this.loadNextPage();
+			}.bind(this));
+		},
+
+		loadNextPage: function() {
+			this.page++;
+			this.collection.fetch({
+				success: this.render,
+				data: {limit: this.pageSize, skip: this.page * this.pageSize}
+			});
 		}
 	});
 

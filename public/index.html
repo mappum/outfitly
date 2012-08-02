@@ -34,14 +34,14 @@
 				<div class="top">
 					<span class="caption"><%- this.model.get('caption') %></span>
 
-					<% if(typeof this.model.get('original') !== 'undefined') { %>
+					<% if(typeof this.model.get('original').id !== 'undefined') { %>
 						<br>
 						<span class="by"> by </span>
 						<a class="author" href="#"><%- this.model.get('original').name %></a>
 					<% } %>
 					
 					<span class="dot"></span>
-					<span class="by"> <%= typeof this.model.get('original') !== 'undefined' ? 'via' : 'by' %> </span>
+					<span class="by"> <%= typeof this.model.get('original').id !== 'undefined' ? 'via' : 'by' %> </span>
 					<a class="author" href="#"><%- this.model.get('author').name %></a>
 				</div>
 				<div class="bottom">
