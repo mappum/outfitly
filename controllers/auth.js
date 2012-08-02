@@ -2,17 +2,25 @@ var models = require(__dirname + '/../models'),
 	User = models.User,
 	crypto = require('crypto');
 
+var getArrayField = function(array, field) {
+	var output = [];
+	for(var i = 0; i < array.length; i++) {
+		output.push(array[i][field]);
+	}
+	return output;
+};
+
 var checkPassword = function(user, pass, success, failure) {
 	var query = {};
 	if(user.indexOf('@') !== -1) query.email = user;
 	else query.username = user;
 
-	User.findOne(query, function(err, doc) {			
+	User.findOne(query, function(err, doc) {
 		// error or no user with requested id
 		if(err || !doc) failure();
 		
 		// user is valid
-		else {			
+		else {
 			// calculate hash of proposed pass + salt
 			var hash = crypto.createHash('sha256');
 			hash.update(pass);
@@ -20,7 +28,7 @@ var checkPassword = function(user, pass, success, failure) {
 			
 			// calculated hash is equal to stored hash, yay!
 			if(hash.digest('hex') === doc.password.hash)
-				success(doc); 
+				success(doc);
 			// password doesn't match :(
 			else failure();
 		}
@@ -57,15 +65,14 @@ var auth = module.exports = {
 					avatar: user.avatar,
 					verified: user.verified,
 					scores: user.scores,
-					notifications: user.notifications
-				};
+					notifications: user.notifications,
 
-				console.log(user);
-				req.session.user.following = [];
-				for(var i = 0; i < user.following.length; i++) {
-					req.session.user.following[i] = user.following[i].id;
-				}
+					following: getArrayField(user.following, 'id'),
+					followers: getArrayField(user.followers, 'id')
+				};
 			} else {
+				req.session.user = undefined;
+				req.session.userId = undefined;
 				req.session.destroy();
 			}
 		};
@@ -95,11 +102,11 @@ var auth = module.exports = {
 	},
 	
 	// send auth and callback requests to connect-auth module
-	'auth': tryAuth,	
+	'auth': tryAuth,
 	'callback': tryAuth,
 	
 	'logout': function(req, res) {
-		req.setUser(null);
+		req.setUser(undefined);
 		res.redirect('/');
 	},
 	

@@ -28,9 +28,11 @@ var outfits = module.exports = {
 	},
 	
 	'readFeed' : function(req, res) {
-		Outfit.find(null, summary)
-			.where('author.id').in(req.session.user.following)
-			.sort('date', -1)
+		var query = Outfit.find(null, summary);
+
+		if(typeof req.session.user !== 'undefined') query.where('author.id').in(req.session.user.following);
+		
+		query.sort('date', -1)
 			.limit(Math.min(req.query.limit, 48) || 24)
 			.skip(req.query.skip || 0)
 			.exec(res.mongo);
