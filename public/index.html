@@ -26,14 +26,14 @@
 
 		<script id="template-outfit-summary" type="text/template">
 			<div class="actions hover">
-				<a href="">like</a>
+				<a href="#">like</a>
 				<span class="dot"></span>
 				<a href="#">repost</a>
 				<span class="dot"></span>
 				<a href="#">comment</a>
 			</div>
 			
-			<a class="image" href="#">
+			<a class="image" href="/#/outfit/<%- this.model.get('_id') %>">
 				<img src="<%- this.model.get('image') || 'http://placehold.it/250x180' %>">
 			</a>
 			<div class="body">
@@ -43,12 +43,14 @@
 					<% if(typeof this.model.get('original').id !== 'undefined') { %>
 						<br>
 						<span class="by"> by </span>
-						<a class="author" href="#"><%- this.model.get('original').name %></a>
+						<a class="author" href="/#/@<%- this.model.get('original').username %>">
+							<%- this.model.get('original').name %>
+						</a>
 					<% } %>
 					
 					<span class="dot"></span>
 					<span class="by"> <%= typeof this.model.get('original').id !== 'undefined' ? 'via' : 'by' %> </span>
-					<a class="author" href="#"><%- this.model.get('author').name %></a>
+					<a class="author" href="/#/@<%- this.model.get('author').username %>"><%- this.model.get('author').name %></a>
 				</div>
 				<div class="bottom">
 					<% var stats = this.model.get('stats'); %>
@@ -61,7 +63,7 @@
 					<% if(stats.comments > 0) { %>
 						<%= separate ? '<span class="dot"></span>' : '' %>
 						<% separate = true; %>
-						<a class="comments" href="#"><%- stats.comments %> comment<%- stats.comments > 1 ? 's' : '' %></a>
+						<a class="comments" href="/#/outfit/<%- this.model.get('_id') %>"><%- stats.comments %> comment<%- stats.comments > 1 ? 's' : '' %></a>
 					<% } %>
 
 					<% if(stats.reposts > 0) { %>
