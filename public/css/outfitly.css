@@ -260,6 +260,13 @@ body {
 }
 
 /******************** STYLE ********************/
+::selection,
+::-moz-selection,
+::-webkit-selection {
+	background: #99263A;
+	color: white;
+}
+
 body {
 	color: #283333;
 	background: #E6EDED;
