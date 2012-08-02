@@ -21,6 +21,8 @@ var Outfit = module.exports = new Schema({
 	'image': String,
 	'pieces': [Piece],
 
+	'private': {'type': Boolean, 'default': false},
+
 	'original': Person,
 
 	'date': {'type': Date, 'default': Date.now, 'index': true},

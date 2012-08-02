@@ -17,7 +17,9 @@ var outfits = module.exports = {
 		new Outfit({
 			'caption': req.body.caption,
 			'pieces': [],
-			'images': req.body.images ? req.body.images.split('@') : [],
+			'image': req.body.image,
+
+			'private': true,
 			
 			'author': req.session.user.person,
 			'date': Date.now()
@@ -33,7 +35,9 @@ var outfits = module.exports = {
 
 		if(typeof req.session.user !== 'undefined') query.where('author._id').in(req.session.user.following);
 		
-		query.sort('date', -1)
+		query
+			.where('private').ne(true)
+			.sort('date', -1)
 			.limit(Math.min(req.query.limit, 48) || 24)
 			.skip(req.query.skip || 0)
 			.exec(res.mongo);
@@ -42,8 +46,9 @@ var outfits = module.exports = {
 	'update': function(req, res) {
 		var obj = {};
 
+		if(typeof req.body.private !== 'undefined') obj.private = req.body.private;
 		if(typeof req.body.caption !== 'undefined') obj.caption = req.body.caption;
-		if(typeof req.body.images !== 'undefined') obj.images = req.body.images.split('@');
+		if(typeof req.body.image !== 'undefined') obj.image = req.body.image;
 		if(typeof req.body.pieces !== 'undefined') {
 			obj.pieces = req.body.pieces.split('@');
 			for(var i = 0; i < obj.pieces; i++) {
@@ -61,7 +66,7 @@ var outfits = module.exports = {
 
 		Outfit.update({
 			'_id': ObjectId(req.param('id')),
-			'author': req.session.userId
+			'author._id': req.session.userId
 		}, obj, {}, res.mongo);
 	},
 	
@@ -105,6 +110,7 @@ var outfits = module.exports = {
 			'original': res.doc.author
 		}).save(res.mongo);
 
+		res.doc.reposts.push(req.session.user.person);
 		res.doc.stats.reposts++;
 		res.doc.save();
 	},
