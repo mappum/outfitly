@@ -80,6 +80,12 @@ function truncate(string, length) {
 						url: '/users/' + session.get('userId'),
 						data: { username: $el.find('.username').val() },
 						success: function() {
+							var onLoadUser = function(user) {
+								if(typeof user.get('username') !== 'undefined') window.location = '/#/';
+								session.off('loaded', onLoadUser);
+							};
+							session.on('loaded', onLoadUser);
+
 							session.loadUser();
 						}
 					});
@@ -170,13 +176,13 @@ function truncate(string, length) {
 				success: function(data) {
 					that.set('userId', data._id);
 					that.set('user', new User(data));
-					that.trigger('loaded');
+					that.trigger('loaded', that.get('user'));
 					if(!data.username) window.location = '/#/register';
 				},
 				error: function() {
 					that.set('userId', null);
 					that.set('user', null);
-					that.trigger('loaded');
+					that.trigger('loaded', null);
 				}
 			});
 		},
@@ -565,7 +571,7 @@ function truncate(string, length) {
 			$('#main').css('position', 'static');
 		});
 
-		app.session.on('loaded', function() {
+		var createRouter = function() {
 			var router = new Torso.Router({
 				app: app,
 				routes: {
@@ -588,6 +594,8 @@ function truncate(string, length) {
 					"*_": "404"
 				}
 			});
-		});
+			app.session.off('loaded', createRouter);
+		};
+		app.session.on('loaded', createRouter);
 	});
 })();

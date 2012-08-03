@@ -77,6 +77,7 @@ module.exports = {
 
 		if(id === req.session.userId) {
 			var obj = {};
+			console.log(req.session.user);
 			if(typeof req.session.user.username === 'undefined' &&
 				typeof req.param('username') !== 'undefined') obj.username = req.param('username');
 			if(typeof req.param('name') !== 'undefined') obj.name = req.param('name');
@@ -87,10 +88,12 @@ module.exports = {
 					res.error(500);
 					console.log('db error - ' + err);
 				} else {
+					if(typeof obj.username !== 'undefined') req.session.user.username = obj.username;
+
 					res.json({ok: 1});
+
 					if(typeof obj.username !== 'undefined') {
 						User.update({'_id': id}, {'complete': true}, function(){});
-						req.session.user.username = obj.username;
 					}
 				}
 			});
