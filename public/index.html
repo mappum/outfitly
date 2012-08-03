@@ -112,7 +112,6 @@
 			<ul class="navbar-left nav"></ul>
 			<ul class="navbar-right nav pull-right">
 				<% if(!this.session.loggedIn()) { %>
-					<li class="post"><a href="/#/post">Add Outfit</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<span><strong>Sign in<b class="caret"></b></strong></span>
@@ -136,6 +135,7 @@
 						</ul>
 					</li>
 				<% } else { %>
+					<li class="post"><a href="/#/post">Add Outfit</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<img src="<%- (this.session.get('user').get('avatar') || '') %>" class="thumbnail thumbnail-tiny avatar">
@@ -174,30 +174,45 @@
 			</div>
 		</script>
 		<script id="template-register" type="text/template">
-			<h1>Create an Outfitly account</h1>
-			<div class="row-fluid">
-				<div class="span6">
-					<h2>Sign up</h2>
-					<fieldset class="form register">
+			<% window.session = this.session; if(!this.session.loggedIn()) { %>
+				<h1>Create an Outfitly account</h1>
+				<div class="row-fluid">
+					<div class="span6">
+						<h2>Sign up</h2>
+						<fieldset class="form register">
+							<label class="error"></label>
+							<fieldset>
+								<input type="text" placeholder="Full name" class="name">
+							</fieldset>
+							<fieldset>
+								<input type="text" placeholder="Email" class="email">
+							</fieldset>
+							<fieldset>
+								<input type="password" placeholder="Password" class="password">
+							</fieldset>
+							<fieldset>
+								<button class="btn btn-primary">Sign up</button>
+							</fieldset>
+						</fieldset>
+					</div>
+					<div class="span6"></div>
+				</div>
+				<hr>
+				<p>Already have an account? <a href="/#/login">Sign in.</a></p>
+			<% } else { %>
+				<h2>Pick a username</h2>
+				<div class="row-fluid">
+					<fieldset class="form register-2">
 						<label class="error"></label>
 						<fieldset>
-							<input type="text" placeholder="Full name" class="fname">
-						</fieldset>
-						<fieldset>
-							<input type="text" placeholder="Email" class="email">
-						</fieldset>
-						<fieldset>
-							<input type="password" placeholder="Password" class="password">
+							<input type="text" placeholder="Username" class="username">
 						</fieldset>
 						<fieldset>
 							<button class="btn btn-primary">Sign up</button>
 						</fieldset>
 					</fieldset>
 				</div>
-				<div class="span6"></div>
-			</div>
-			<hr>
-			<p>Already have an account? <a href="/#/login">Sign in.</a></p>
+			<% } %>
 		</script>
 		<script id="template-link" type="text/template">
 			<h1>We successfully connected to your <%= args[0] %> account</h1>

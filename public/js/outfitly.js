@@ -18,18 +18,18 @@ function truncate(string, length) {
 
 (function(){
 	// #### FORM LOGIC ####
-	//TODO: work form logic into torso.js
+	//TODO: work form logic into torso.js?
 
 	var formSetups = {
 		'login': function($el, session) {
 			var login = function() {
 				if(!$el.find('button').hasClass('disabled')) {
-					$el.find('button').addClass('disabled');
+					$el.find('button').addClass('disabled').text('Signing in...');
 					session.login($el.find('.user').val(),
 						$el.find('.password').val(),
 						null,
 						function() {
-							$el.find('button').removeClass('disabled');
+							$el.find('button').removeClass('disabled').text('Sign in');
 							$el.find('label').html('Invalid login or password.');
 						});
 				}
@@ -43,6 +43,32 @@ function truncate(string, length) {
 			});
 
 			$el.find('button').click(login);
+		},
+
+		'register': function($el, session) {
+			var register = function() {
+				if(!$el.find('button').hasClass('disabled')) {
+					$el.find('button').addClass('disabled').text('Signing up...');
+					session.register({
+							name: $el.find('.name').val(),
+							email: $el.find('.email').val(),
+							password: $el.find('.password').val()
+						},
+						null, function(e) {
+							$el.find('button').removeClass('disabled').text('Sign up');
+							$el.find('label').html('An error occurred.');
+						});
+				}
+			};
+
+			$el.keypress(function(e) {
+				if(e.which === 13) {
+					register();
+					return false;
+				}
+			});
+
+			$el.find('button').click(register);
 		}
 	};
 	var setupForms = function($el, session) {
@@ -98,31 +124,39 @@ function truncate(string, length) {
 		loadUser: function() {
 			var that = this;
 			
-			$.ajax('/auth/info')
-				.done(function(data) {
-					if(data._id) {
-						that.set('userId', data._id);
-						that.set('user', new User(data));
-					} else {
-						that.set('userId', null);
-						that.set('user', null);
-					}
-				});
+			$.ajax({
+				url: '/auth/info',
+				success: function(data) {
+					that.set('userId', data._id);
+					that.set('user', new User(data));
+					that.trigger('loaded');
+					if(!data.username) window.location = '/#/register';
+				},
+				error: function() {
+					that.set('userId', null);
+					that.set('user', null);
+					that.trigger('loaded');
+				}
+			});
 		},
 		login: function(user, password, success, error) {
 			var that = this;
 			$.ajax('/auth', {
-				type: 'POST', data: { user: user, password: password }
-			})
-				.success(function(data) {
+				type: 'POST',
+				data: { user: user, password: password },
+				success: function(data) {
 					that.set('userId', data._id);
 					that.set('user', new User(data));
+
+					
 					if(success) success(data);
-				})
-				.error(function(data) {
+				},
+				error: function(data) {
 					that.set('userId', null);
+					that.set('user', null);
 					if(error) error(data);
-				});
+				}
+			});
 		},
 		register: function(data, success, error) {
 			var that = this;
@@ -260,6 +294,14 @@ function truncate(string, length) {
 	var RegisterScreen = Torso.Screen.extend({
 		className: 'box span6 centered',
 		template: _.template($('#template-register').html()),
+
+		initialize: function(options) {
+			_.bindAll(this, 'setup', 'render');
+			this.session = options.session;
+			this.session.on('change:user', this.render);
+
+			this.render(options);
+		},
 
 		setup: function() {
 			setupForms(this.$el, this.session);
@@ -482,27 +524,29 @@ function truncate(string, length) {
 			$('#main').css('position', 'static');
 		});
 
-		var router = new Torso.Router({
-			app: app,
-			routes: {
-				"login": "login",
-				"register": "register",
-				"link/:service": "link",
-				
-				"setup": "setup",
+		app.session.on('loaded', function() {
+			var router = new Torso.Router({
+				app: app,
+				routes: {
+					"login": "login",
+					"register": "register",
+					"link/:service": "link",
+					
+					"setup": "setup",
 
-				"test": "test",
+					"test": "test",
 
-				"user/:id": "user",
-				"@:id": "user",
+					"user/:id": "user",
+					"@:id": "user",
 
-				"outfit/:id": "outfit",
-				
-				"/": "front",
-				"": "front",
+					"outfit/:id": "outfit",
+					
+					"/": "front",
+					"": "front",
 
-				"*_": "404"
-			}
+					"*_": "404"
+				}
+			});
 		});
 	});
 })();

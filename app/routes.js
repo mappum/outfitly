@@ -56,7 +56,7 @@ module.exports = function(app) {
 	// create new comment
 	app.post('/outfits/:id/comments', requireLogin, requireVerification,
 		outfits.getById, outfits.comments.create);
-	// update comment
+	// update commento
 	app.put('/outfits/:id/comments/:comment', requireLogin, requireVerification,
 		outfits.getById, outfits.comments.getById, outfits.comments.update);
 	// delete comment
