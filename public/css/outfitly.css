@@ -126,11 +126,13 @@ body {
 	height: 228px;
 }
 .outfit.summary .image {
+	display: block;
 	height: 180px;
 	width: 100%;
 	overflow: hidden;
 }
 .outfit.summary .image img {
+	max-height: none;
 	max-width: 100%;
 	margin-bottom: 6px;
 }

@@ -170,6 +170,10 @@ function truncate(string, length) {
 
 		setup: function() {
 			this.$el.find('.actions .like').click(function(e) {
+				var stats = _.clone(this.model.get('stats'));
+				stats.likes++;
+				this.model.set('stats', stats);
+
 				$.ajax({
 					url: '/outfits/' + this.model.get('_id') + '/likes',
 					success: function(e) {
@@ -183,6 +187,10 @@ function truncate(string, length) {
 			}.bind(this));
 
 			this.$el.find('.actions .repost').click(function(e) {
+				var stats = _.clone(this.model.get('stats'));
+				stats.reposts++;
+				this.model.set('stats', stats);
+
 				$.ajax({
 					url: '/outfits/' + this.model.get('_id'),
 					success: function(e) {
