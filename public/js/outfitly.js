@@ -136,7 +136,6 @@ function truncate(string, length) {
 					if(success) success(data);
 				})
 				.error(function(data) {
-					//TODO: show error
 					if(error) error(data);
 				});
 		},

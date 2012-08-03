@@ -77,6 +77,8 @@ module.exports = {
 
 		if(id === req.session.userId) {
 			var obj = {};
+			if(typeof req.session.user.username === 'undefined' &&
+				typeof req.param('username') !== 'undefined') obj.username = req.param('username');
 			if(typeof req.param('name') !== 'undefined') obj.name = req.param('name');
 			if(typeof req.param('description') !== 'undefined') obj.description = req.param('description');
 
@@ -96,5 +98,9 @@ module.exports = {
 	'delete': function(req, res) {
 		//TODO: allow account deletion
 		res.error(401);
+	},
+
+	'usernameAvailable': function(req, res) {
+		User.findOne({ username: req.param('username') }, ['_id'], res.mongo);
 	}
 };

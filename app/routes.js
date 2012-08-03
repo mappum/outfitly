@@ -64,7 +64,7 @@ module.exports = function(app) {
 		requireVerification, outfits.getById, outfits.comments.getById,
 		outfits.comments.delete);
 	
-	// ********** routes for users **********'
+	// ********** routes for users **********
 	// create new user (register)
 	app.post('/users', users.create);
 	// read user profile
@@ -73,6 +73,8 @@ module.exports = function(app) {
 	app.put('/users/:id', requireLogin, users.update);
 	// delete profile
 	app.delete('/users/:id', requireLogin, users.delete);
+	// check if username is available
+	app.get('/users/:username/exists', users.usernameAvailable);
 	
 	// redirect get requests to hashpath
 	app.get('*', function(req, res) {
