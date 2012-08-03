@@ -6,7 +6,7 @@ function longerThan(n) {
 }
 
 var External = new Schema({
-	'service': {'type': String, 'index': {'unique': true}},
+	'service': {'type': String, 'index': true},
 	'token': String,
 	'id': {'type': String, 'sparse': true}
 });
@@ -17,6 +17,7 @@ var User = module.exports = new Schema({
 	'email': {'type': String, 'index': {'unique': true}, 'validate': longerThan(4)},
 
 	'verified': Boolean,
+	'complete': Boolean,
 	
 	'password': {
 		'hash': String,

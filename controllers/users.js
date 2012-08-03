@@ -82,12 +82,16 @@ module.exports = {
 			if(typeof req.param('name') !== 'undefined') obj.name = req.param('name');
 			if(typeof req.param('description') !== 'undefined') obj.description = req.param('description');
 
-			User.update({'_id': id}, obj, {}, function(err, doc) {
+			User.update({'_id': id}, obj, function(err, doc) {
 				if(err || !doc) {
 					res.error(500);
 					console.log('db error - ' + err);
 				} else {
 					res.json({ok: 1});
+					if(typeof obj.username !== 'undefined') {
+						User.update({'_id': id}, {'complete': true}, function(){});
+						req.session.user.username = obj.username;
+					}
 				}
 			});
 		} else {

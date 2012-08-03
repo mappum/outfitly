@@ -19,9 +19,10 @@ app.use(express.bodyParser());
 app.use(express.cookieParser());
 app.use(express.session({
 	store: sessionStore,
-	secret: config.cookie.secret,
-	key: config.cookie.key,
-	maxAge: config.cookie.maxAge
+	secret: config.session.cookie.secret,
+	key: config.session.cookie.key,
+	maxAge: config.session.cookie.maxAge,
+	ignore: config.session.ignore
 }));
 
 // development mode specific configuration

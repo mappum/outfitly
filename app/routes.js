@@ -15,7 +15,8 @@ function requireLogout(req, res, next) {
 };
 
 function requireVerification(req, res, next) {
-	if(req.session.user.verified || !config.mail.requireVerification) next();
+	if((req.session.user.verified || !config.mail.requireVerification) &&
+		req.session.user.complete) next();
 	else res.error(401);
 }
 
@@ -65,6 +66,9 @@ module.exports = function(app) {
 		outfits.comments.delete);
 	
 	// ********** routes for users **********
+	// check if username is available
+	app.get('/users/exists/:username', users.usernameAvailable);
+	app.put('/users/exists', users.usernameAvailable);
 	// create new user (register)
 	app.post('/users', users.create);
 	// read user profile
@@ -73,8 +77,6 @@ module.exports = function(app) {
 	app.put('/users/:id', requireLogin, users.update);
 	// delete profile
 	app.delete('/users/:id', requireLogin, users.delete);
-	// check if username is available
-	app.get('/users/:username/exists', users.usernameAvailable);
 	
 	// redirect get requests to hashpath
 	app.get('*', function(req, res) {

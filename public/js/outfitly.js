@@ -69,6 +69,47 @@ function truncate(string, length) {
 			});
 
 			$el.find('button').click(register);
+		},
+
+		'register-2': function($el, session) {
+			var submit = function() {
+				if(!$el.find('button').hasClass('disabled')) {
+					$el.find('button').addClass('disabled').text('Submitting...');
+					$.ajax({
+						type: 'PUT',
+						url: '/users/' + session.get('userId'),
+						data: { username: $el.find('.username').val() },
+						success: function() {
+							session.loadUser();
+						}
+					});
+				}
+			};
+
+			$el.keypress(function(e) {
+				if(e.which === 13) {
+					submit();
+					return false;
+				}
+			});
+
+			$el.keyup(function(e) {
+				$.ajax({
+					url: '/users/exists',
+					data: { username: $el.find('.username').val() },
+					type: 'PUT',
+					error: function(data) {
+						$el.find('label').html('');
+						$el.find('button').removeClass('disabled');
+					},
+					success: function(data) {
+						$el.find('label').html('That username is not available.');
+						$el.find('button').addClass('disabled');
+					}
+				});
+			});
+
+			$el.find('button').click(submit);
 		}
 	};
 	var setupForms = function($el, session) {

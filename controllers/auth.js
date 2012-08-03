@@ -64,6 +64,7 @@ var auth = module.exports = {
 					description: user.description,
 					avatar: user.avatar,
 					verified: user.verified,
+					complete: user.complete,
 					scores: user.scores,
 					notifications: user.notifications,
 
