@@ -66,13 +66,13 @@ function truncate(string, length) {
 		},
 		
 		idAttribute: '_id',
-		collection: '',
+		collectionPath: '',
 		
-		url: function() { return '/' + this.collection + '/' + (this.id || ''); }
+		url: function() { return '/' + this.collectionPath + '/' + (this.id || ''); }
 	});
 
 	var User = Base.extend({
-		collection: 'users',
+		collectionPath: 'users',
 		defaults: {
 			_id: '',
 			date: Date.now()
@@ -80,7 +80,7 @@ function truncate(string, length) {
 	});
 
 	var Outfit = Base.extend({
-		collection: 'outfits',
+		collectionPath: 'outfits',
 		defaults: {
 			caption: ''
 		}
@@ -166,6 +166,34 @@ function truncate(string, length) {
 			_.bindAll(this, 'setup', 'render');
 			this.model.on('change', this.render);
 			this.render();
+		},
+
+		setup: function() {
+			this.$el.find('.actions .like').click(function(e) {
+				$.ajax({
+					url: '/outfits/' + this.model.get('_id') + '/likes',
+					success: function(e) {
+						this.model.fetch();
+					}.bind(this),
+					type: 'POST'
+				});
+
+				e.preventDefault();
+				return false;
+			}.bind(this));
+
+			this.$el.find('.actions .repost').click(function(e) {
+				$.ajax({
+					url: '/outfits/' + this.model.get('_id'),
+					success: function(e) {
+						this.model.fetch();
+					}.bind(this),
+					type: 'POST'
+				});
+
+				e.preventDefault();
+				return false;
+			}.bind(this));
 		}
 	});
 
@@ -285,7 +313,8 @@ function truncate(string, length) {
 				if(i < this.page * this.pageSize) return;
 
 				var view = new OutfitSummaryView({
-					model: outfit
+					model: outfit,
+					session: this.session
 				});
 				this.$el.find('.outfits').append(view.$el);
 			}.bind(this));

@@ -25,13 +25,15 @@
 		</div>
 
 		<script id="template-outfit-summary" type="text/template">
-			<div class="actions hover">
-				<a href="#">like</a>
-				<span class="dot"></span>
-				<a href="#">repost</a>
-				<span class="dot"></span>
-				<a href="#">comment</a>
-			</div>
+			<% if(this.options.session.loggedIn()) { %>
+				<div class="actions hover">
+					<a class="like" href="#">like</a>
+					<span class="dot"></span>
+					<a class="repost" href="#">repost</a>
+					<span class="dot"></span>
+					<a class="comment" href="/#/outfit/<%- this.model.get('_id') %>">comment</a>
+				</div>
+			<% } %>
 			
 			<a class="image" href="/#/outfit/<%- this.model.get('_id') %>">
 				<img src="<%- this.model.get('image') || 'http://placehold.it/250x180' %>">
@@ -109,6 +111,7 @@
 			<a class="brand" href="/#/">Outfitly</a>
 			<ul class="navbar-left nav"></ul>
 			<ul class="navbar-right nav pull-right">
+				<li class="post"><a href="/#/post">Add Outfit</a></li>
 				<% if(!this.session.loggedIn()) { %>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
