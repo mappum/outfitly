@@ -34,7 +34,11 @@ var outfits = module.exports = {
 	'readFeed': function(req, res) {
 		var query = Outfit.find(null, summary);
 
-		if(typeof req.session.user !== 'undefined') query.where('author._id').in(req.session.user.following);
+		if(typeof req.session.user !== 'undefined') {
+			query
+			.or([{'author._id': {$in: req.session.user.following}},
+				{'author._id': req.session.userId}]);
+		}
 		
 		query
 			.where('private').ne(true)
@@ -47,7 +51,7 @@ var outfits = module.exports = {
 	'update': function(req, res) {
 		var obj = {};
 
-		if(typeof req.body.private !== 'undefined') obj.private = req.body.private;
+		if(typeof req.body['private'] !== 'undefined') obj['private'] = Boolean(req.body['private']);
 		if(typeof req.body.caption !== 'undefined') obj.caption = req.body.caption;
 		if(typeof req.body.image !== 'undefined') obj.image = req.body.image;
 		if(typeof req.body.pieces !== 'undefined') {
@@ -64,6 +68,8 @@ var outfits = module.exports = {
 				}
 			}
 		}
+
+		console.log(obj);
 
 		Outfit.update({
 			'_id': ObjectId(req.param('id')),
