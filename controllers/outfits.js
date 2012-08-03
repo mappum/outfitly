@@ -6,6 +6,7 @@ var models = require(__dirname + '/../models'),
 var summary = [
 	'_id',
 	'caption',
+	'image',
 	'author',
 	'original',
 	'date',
