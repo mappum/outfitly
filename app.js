@@ -3,8 +3,8 @@ var express = require('express'),
 	auth = require('connect-auth'),
 	config = require(__dirname + '/config.js'),
 	mongoose = require('mongoose'),
-	MongoStore = require('connect-mongo')(express),
-	sessionStore = new MongoStore({url: config.mongo.uri});
+	RedisStore = require('connect-redis')(express),
+	sessionStore = new RedisStore(config.redis);
 	
 mongoose.connect(config.mongo.uri);
 

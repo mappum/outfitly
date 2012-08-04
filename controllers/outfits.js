@@ -85,7 +85,7 @@ var outfits = module.exports = {
 
 	'like': function(req, res) {
 		var like = res.doc.likes.id(req.session.userId);
-		
+
 		if(!like) {
 			res.doc.likes.push(req.session.user.person);
 			res.doc.stats.likes++;
@@ -99,7 +99,7 @@ var outfits = module.exports = {
 		var like = res.doc.likes.id(req.session.userId);
 
 		if(like) {
-			like.remove();
+			like.remove();	
 			res.doc.stats.likes--;
 			res.doc.save(res.mongo);
 		} else {

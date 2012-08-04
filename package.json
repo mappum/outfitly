@@ -9,7 +9,7 @@
   "author": "Matt Bell <mappum@gmail.com>",
   "license": "BSD",
   "dependencies": {
-    "connect-mongo": "*",
+    "connect-redis": "*",
     "connect-auth": "*",
     "express": "*",
     "connect": "*",
