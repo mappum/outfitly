@@ -20,7 +20,7 @@ var outfits = module.exports = {
 			'pieces': [],
 			'image': req.body.image,
 
-			'private': true,
+			'private': 'true',
 			
 			'author': req.session.user.person,
 			'date': Date.now()
@@ -32,6 +32,7 @@ var outfits = module.exports = {
 	},
 	
 	'readFeed': function(req, res) {
+		// TODO: cache feeds
 		var query = Outfit.find(null, summary);
 
 		if(typeof req.session.user !== 'undefined') {
@@ -41,7 +42,7 @@ var outfits = module.exports = {
 		}
 		
 		query
-			.where('private').ne(true)
+			.where('private').ne('true')
 			.sort('date', -1)
 			.limit(Math.min(req.query.limit, 48) || 24)
 			.skip(req.query.skip || 0)
@@ -51,7 +52,7 @@ var outfits = module.exports = {
 	'update': function(req, res) {
 		var obj = {};
 
-		if(typeof req.body['private'] !== 'undefined') obj['private'] = Boolean(req.body['private']);
+		if(typeof req.body['private'] !== 'undefined') obj['private'] = req.body['private'];
 		if(typeof req.body.caption !== 'undefined') obj.caption = req.body.caption;
 		if(typeof req.body.image !== 'undefined') obj.image = req.body.image;
 		if(typeof req.body.pieces !== 'undefined') {

@@ -8,7 +8,7 @@ var express = require('express'),
 	
 mongoose.connect(config.mongo.uri);
 
-var app = express.createServer();
+var app = express();
 
 // add body parser POST data
 app.use(express.bodyParser());
