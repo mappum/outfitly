@@ -88,7 +88,10 @@ module.exports = {
 					res.error(500);
 					console.log('db error - ' + err);
 				} else {
-					if(typeof obj.username !== 'undefined') req.session.user.username = obj.username;
+					if(typeof obj.username !== 'undefined') {
+						req.session.user.username = obj.username;
+						req.session.user.complete = obj.complete;
+					}
 
 					res.json({ok: 1});
 

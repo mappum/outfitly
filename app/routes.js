@@ -5,13 +5,13 @@ var config = require(__dirname + '/../config.js'),
 	users = controllers.users;
 
 function requireLogin(req, res, next) {
-	if(req.session.userId) next();
+	if(typeof req.session.userId !== 'undefined') next();
 	else res.error(401);
 };
 
 function requireLogout(req, res, next) {
-	if(req.session.userId) res.error(401);
-	else next();
+	if(typeof req.session.userId === 'undefined') next();
+	else res.error(401);
 };
 
 function requireVerification(req, res, next) {

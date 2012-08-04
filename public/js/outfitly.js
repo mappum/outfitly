@@ -456,76 +456,6 @@ function truncate(string, length) {
 		}
 	});
 
-	var TestScreen = Torso.Screen.extend({
-		className: '',
-		template: _.template($('#template-test').html()),
-
-		setup: function() {
-			setupForms(this.$el, this.session);
-
-			//users
-			var user = new User({
-				name: 'Matt Bell',
-				username: 'mappum',
-				email: 'mappum@gmail.com',
-
-				verified: true,
-
-				date: new Date(1993, 5, 16),
-				description: 'I\'m a web developer that makes cool websites about stuff. :D',
-				from: 'Seattle, WA',
-				avatar: 'http://placehold.it/256x256',
-
-				stats: {
-					posts: 5,
-					likes: 26,
-					reposts: 2,
-					followers: 1337,
-					following: 100
-				}
-			});
-			for(var i = 0; i < 24; i++) {
-				var summaryView = new UserSummaryView({
-					model: user
-				});
-				this.$el.find('.users').append(summaryView.$el);
-			}
-
-			// outfits
-			var date = Date.now();
-			for(var i = 0; i < 24; i++) {
-				var outfit = new Outfit({
-					caption: 'Hello, world',
-
-					original: Math.random() < 0.15 ? {
-						id: 0,
-						username: 'someone',
-						name: 'Someone Else'
-					} : undefined,
-
-					date: date -= Math.random() * 400000,
-
-					stats: {
-						likes: Math.floor(Math.random() * 5),
-						comments: Math.floor(Math.random() * 3),
-						reposts: Math.floor(Math.random() * 2)
-					},
-
-					author: {
-						name: 'Matt Bell',
-						username: 'mappum',
-						avatar: 'http://placehold.it/256x256'
-					}
-				});
-
-				var summaryView = new OutfitSummaryView({
-					model: outfit
-				});
-				this.$el.find('.outfits').append(summaryView.$el);
-			}
-		}
-	});
-
 	$(function() {
 		var scrollBottomLock = false;
 		$(window).scroll(function(e) {
@@ -553,7 +483,6 @@ function truncate(string, length) {
 				'register': RegisterScreen,
 				'link': LinkScreen,
 				'outfit': OutfitScreen,
-				'test': TestScreen,
 				'front': FrontScreen
 			},
 			defaults: {
@@ -580,10 +509,6 @@ function truncate(string, length) {
 					"login": "login",
 					"register": "register",
 					"link/:service": "link",
-					
-					"setup": "setup",
-
-					"test": "test",
 
 					"user/:id": "user",
 					"@:id": "user",
