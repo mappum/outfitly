@@ -70,8 +70,6 @@ var outfits = module.exports = {
 			}
 		}
 
-		console.log(obj);
-
 		Outfit.update({
 			'_id': ObjectId(req.param('id')),
 			'author._id': req.session.userId
