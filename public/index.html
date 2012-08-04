@@ -174,7 +174,7 @@
 			</div>
 		</script>
 		<script id="template-register" type="text/template">
-			<% window.session = this.session; if(!this.session.loggedIn()) { %>
+			<% if(!this.session.loggedIn()) { %>
 				<h1>Create an Outfitly account</h1>
 				<div class="row-fluid">
 					<div class="span6">
@@ -199,7 +199,7 @@
 				</div>
 				<hr>
 				<p>Already have an account? <a href="/#/login">Sign in.</a></p>
-			<% } else { %>
+			<% } else if(typeof this.session.get('user').username === 'undefined') { %>
 				<h2>Pick a username</h2>
 				<div class="row-fluid">
 					<fieldset class="form register-2">
