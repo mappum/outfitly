@@ -35,7 +35,7 @@ var outfits = module.exports = {
 		// TODO: cache feeds
 		var query = Outfit.find(null, summary);
 
-		if(typeof req.session.user !== 'undefined') {
+		if(!config.feed.global && typeof req.session.user !== 'undefined') {
 			query
 			.or([{'author._id': {$in: req.session.user.following}},
 				{'author._id': req.session.userId}]);
@@ -44,7 +44,7 @@ var outfits = module.exports = {
 		query
 			.where('private').ne('true')
 			.sort('date', -1)
-			.limit(Math.min(req.query.limit, 48) || 24)
+			.limit(Math.min(req.query.limit, 100) || 24)
 			.skip(req.query.skip || 0)
 			.exec(res.mongo);
 	},
