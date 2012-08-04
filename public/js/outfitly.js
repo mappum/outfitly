@@ -195,6 +195,8 @@ function truncate(string, length) {
 					that.set('userId', data._id);
 					that.set('user', new User(data));
 
+					if(typeof data.username !== 'undefined') window.location = '/#/';
+					else window.location = '/#/register';
 					
 					if(success) success(data);
 				},
