@@ -83,7 +83,6 @@ module.exports = {
 			if(typeof req.session.user.username === 'undefined' &&
 				typeof req.param('username') !== 'undefined') {
 				obj.username = req.param('username');
-				obj['person.username'] = req.param('username');
 			}
 			if(typeof req.param('name') !== 'undefined') obj.name = req.param('name');
 			if(typeof req.param('description') !== 'undefined') obj.description = req.param('description');

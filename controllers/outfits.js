@@ -124,6 +124,11 @@ var outfits = module.exports = {
 	
 	'comments': {
 		'create':  function(req, res) {
+			console.log('new comment:', {
+				'author': req.session.user.person,
+				'body': req.body.body || "",
+				'date': Date.now()
+			})
 			res.doc.comments.push({
 				'author': req.session.user.person,
 				'body': req.body.body || "",
@@ -134,7 +139,7 @@ var outfits = module.exports = {
 		},
 
 		'update':  function(req, res) {
-			if(res.comment.author === req.session.userId) {
+			if(res.comment.author._id === req.session.userId) {
 				res.comment.body = req.body.body;
 				res.doc.save(res.mongo);
 			} else {
@@ -143,7 +148,7 @@ var outfits = module.exports = {
 		},
 		
 		'delete': function(req, res) {
-			if(res.comment.author === req.session.userId) {
+			if(res.comment.author._id === req.session.userId) {
 				res.comment.remove();
 				res.doc.stats.comments--;
 				res.doc.save(res.mongo);

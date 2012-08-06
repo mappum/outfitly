@@ -158,6 +158,22 @@ function truncate(string, length) {
 			$el.click(function() {
 				$('html, body').animate({scrollTop: '0'});
 			});
+		},
+
+		'comment': function($el, options) {
+			$el.find('button').click(function() {
+				console.log('commenting')
+				$.ajax({
+					url: '/outfits/' + options.model.get('_id') + '/comments',
+					data: {
+						body: $el.find('.body').val()
+					},
+					success: function(e) {
+						options.model.fetch();
+					}.bind(this),
+					type: 'POST'
+				});
+			});
 		}
 	};
 	var setupForms = function($el, options) {
