@@ -161,8 +161,7 @@ function truncate(string, length) {
 		},
 
 		'comment': function($el, options) {
-			$el.find('button').click(function() {
-				console.log('commenting')
+			var comment = function() {
 				$.ajax({
 					url: '/outfits/' + options.model.get('_id') + '/comments',
 					data: {
@@ -173,6 +172,14 @@ function truncate(string, length) {
 					}.bind(this),
 					type: 'POST'
 				});
+				$el.find('.body').val('');
+			};
+			$el.find('button').click(comment);
+			$el.keypress(function(e) {
+				if(e.which === 13 && !e.shiftKey) {
+					comment();
+					return false;
+				}
 			});
 		}
 	};
