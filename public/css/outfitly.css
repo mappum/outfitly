@@ -556,3 +556,12 @@ input {
 .more.loading img {
 	display: inline;
 }
+
+.tooltip {
+	font-size: 15px;
+	padding: 4px 8px;
+}
+.tooltip.in {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}

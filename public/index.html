@@ -338,7 +338,7 @@
 							<% var like = likes[i]; %>
 
 							<li class="like">
-								<a class="thumbnail thumbnail-small" href="/#/@<%- like.username %>"><img src="<%- like.avatar %>"></a>
+								<a class="thumbnail thumbnail-small" href="/#/@<%- like.username %>" rel="tooltip" title="<%- like.name %>"><img src="<%- like.avatar %>"></a>
 							</li>
 						<% } %>
 					</ul>
@@ -355,7 +355,7 @@
 							<% var repost = reposts[i]; %>
 
 							<li class="repost pull-left">
-								<a class="thumbnail thumbnail-small" href="/#/@<%- repost.username %>"><img src="<%- repost.avatar %>"></a>
+								<a class="thumbnail thumbnail-small" href="/#/@<%- repost.username %>" rel="tooltip" title="<%- repost.name %>"><img src="<%- repost.avatar %>"></a>
 							</li>
 						<% } %>
 					</ul>
@@ -381,6 +381,7 @@
 		<!-- <script src="//cdn.outfitly.com/js/all.min.js"></script> -->
 
 		<script src="/js/bootstrap.js"></script>
+		<script src="/js/bootstrap-tooltip.js"></script>
 		<script src="/js/underscore.js"></script>
 		<script src="/js/backbone.js"></script>
 		<script src="/js/torso.js"></script>

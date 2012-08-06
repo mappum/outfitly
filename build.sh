@@ -7,6 +7,7 @@ cat ./public/css/outfitly.css >> ./public/css/all.css
 
 echo "Concatenating JS..."
 cat ./public/js/bootstrap.js > ./public/js/all.js
+cat ./public/js/bootstrap-tooltip.js >> ./public/js/all.js
 cat ./public/js/underscore.js >> ./public/js/all.js
 cat ./public/js/backbone.js >> ./public/js/all.js
 cat ./public/js/torso.js >> ./public/js/all.js

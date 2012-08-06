@@ -431,6 +431,8 @@ function truncate(string, length) {
 
 		setup: function() {
 			setupForms(this.$el, {session: this.session, model: this.model});
+
+			this.$el.find('[rel="tooltip"]').tooltip();
 		}
 	});
 
