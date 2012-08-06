@@ -359,7 +359,7 @@ hr {
 	display: inline-block;
 	margin-right: 6px;
 	position: relative;
-	bottom: 0.2em;
+	bottom: 0.3em;
 	float: left;
 	padding: 1px;
 	background: #c5c5c5;
@@ -479,6 +479,10 @@ input {
 }
 .outfit .comment .author {
 	font-weight: bold;
+}
+.outfit .comment .time {
+	color: #666;
+	font-size: 12px;
 }
 .outfit .comments textarea {
 	border: 1px solid #aaa;
