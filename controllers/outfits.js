@@ -92,7 +92,6 @@ var outfits = module.exports = {
 			res.doc.save(res.mongo);
 		} else {
 			res.error(401);
-			console.log('dupe in outfits/' + res.doc._id + '/likes');
 		}
 	},
 
@@ -124,11 +123,6 @@ var outfits = module.exports = {
 	
 	'comments': {
 		'create':  function(req, res) {
-			console.log('new comment:', {
-				'author': req.session.user.person,
-				'body': req.body.body || "",
-				'date': Date.now()
-			})
 			res.doc.comments.push({
 				'author': req.session.user.person,
 				'body': req.body.body || "",

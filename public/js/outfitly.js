@@ -434,16 +434,16 @@ function truncate(string, length) {
 		}
 	});
 
-	var FrontScreen = Torso.Screen.extend({
+	var FeedScreen = Torso.Screen.extend({
 		className: '',
-		template: _.template($('#template-front').html()),
+		template: _.template($('#template-feed').html()),
 
 		initialize: function(options) {
 			_.bindAll(this, 'setup', 'render', 'loadNextPage');
 			this.session = options.session;
 
 			this.page = -1;
-			this.pageSize = 24;
+			this.pageSize = 12;
 			this.initialized = false;
 
 			this.collection = new OutfitCollection();
@@ -523,7 +523,7 @@ function truncate(string, length) {
 		$(window).scroll(function(e) {
 			var target = $(window);
 
-			if(target.scrollTop() + target.innerHeight() + 100 > e.target.height) {
+			if(target.scrollTop() + target.innerHeight() + 200 > e.target.height) {
 				if(!scrollBottomLock) {
 					scrollBottomLock = true;
 					target.trigger('scrollBottom', e);
@@ -563,7 +563,7 @@ function truncate(string, length) {
 				'register': RegisterScreen,
 				'link': LinkScreen,
 				'outfit': OutfitScreen,
-				'front': FrontScreen
+				'feed': FeedScreen
 			},
 			defaults: {
 				navbar: NavbarScreen
@@ -595,8 +595,8 @@ function truncate(string, length) {
 
 					"outfit/:id": "outfit",
 					
-					"/": "front",
-					"": "front",
+					"/": "feed",
+					"": "feed",
 
 					"*_": "404"
 				}

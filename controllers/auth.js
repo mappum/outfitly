@@ -185,7 +185,6 @@ var auth = module.exports = {
 					
 				// we aren't logged in
 				} else {
-					console.log('link: ' + require('util').inspect(req.getAuthDetails()));
 					// save linked ID in session, add it on registration/login
 					req.session.link = {
 						service: service,

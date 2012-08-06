@@ -17,7 +17,7 @@ function requireLogout(req, res, next) {
 function requireVerification(req, res, next) {
 	if((req.session.user.verified || !config.mail.requireVerification) &&
 		req.session.user.complete) next();
-	else console.log('verification failed:', req.session.user) && res.error(401);
+	else res.error(401);
 }
 
 module.exports = function(app) {
