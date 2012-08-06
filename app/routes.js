@@ -77,6 +77,23 @@ module.exports = function(app) {
 	app.put('/users/:id', requireLogin, users.update);
 	// delete profile
 	app.delete('/users/:id', requireLogin, users.delete);
+
+	app.get('/info', function(req, res) {
+		var os = require('os');
+		res.json({
+			hostname: os.hostname(),
+			type: os.type(),
+			platform: os.platform(),
+			arch: os.arch(),
+			release: os.release(),
+			uptime: os.uptime(),
+			loadavg: os.loadavg(),
+			totalmem: os.totalmem(),
+			freemem: os.freemem(),
+			cpus: os.cpus(),
+			networkInterfaces: os.networkInterfaces()
+		});
+	});
 	
 	// redirect get requests to hashpath
 	app.get('*', function(req, res) {
