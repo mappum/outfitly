@@ -222,7 +222,7 @@ body {
 
 	background: rgba(255,255,255,0.8);
 
-	padding: 40px 10px;
+	padding: 40px 0;
 
 	position: absolute;
 	top: 0;
@@ -560,6 +560,7 @@ input {
 .tooltip {
 	font-size: 15px;
 	padding: 4px 8px;
+	z-index: 3000;
 }
 .tooltip.in {
   opacity: 1;
