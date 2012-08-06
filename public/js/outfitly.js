@@ -116,16 +116,52 @@ function truncate(string, length) {
 			});
 
 			$el.find('button').click(submit);
+		},
+
+		'actions': function($el, options) {
+			$el.find('.like').click(function(e) {
+				var stats = _.clone(options.model.get('stats'));
+				stats.likes++;
+				options.model.set('stats', stats);
+
+				$.ajax({
+					url: '/outfits/' + options.model.get('_id') + '/likes',
+					success: function(e) {
+						options.model.fetch();
+					}.bind(this),
+					type: 'POST'
+				});
+
+				e.preventDefault();
+				return false;
+			}.bind(this));
+
+			$el.find('.repost').click(function(e) {
+				var stats = _.clone(options.model.get('stats'));
+				stats.reposts++;
+				options.model.set('stats', stats);
+
+				$.ajax({
+					url: '/outfits/' + options.model.get('_id'),
+					success: function(e) {
+						options.model.fetch();
+					}.bind(this),
+					type: 'POST'
+				});
+
+				e.preventDefault();
+				return false;
+			});
 		}
 	};
-	var setupForms = function($el, session) {
+	var setupForms = function($el, options) {
 		var forms = $el.find('.form');
 
 		forms.each(function(i, el) {
 			var $el = $(el);
 			for(var form in formSetups) {
 				if($el.hasClass(form)) {
-					formSetups[form]($el, session);
+					formSetups[form]($el, options);
 				}
 			}
 		});
@@ -251,39 +287,7 @@ function truncate(string, length) {
 		},
 
 		setup: function() {
-			this.$el.find('.actions .like').click(function(e) {
-				var stats = _.clone(this.model.get('stats'));
-				stats.likes++;
-				this.model.set('stats', stats);
-
-				$.ajax({
-					url: '/outfits/' + this.model.get('_id') + '/likes',
-					success: function(e) {
-						this.model.fetch();
-					}.bind(this),
-					type: 'POST'
-				});
-
-				e.preventDefault();
-				return false;
-			}.bind(this));
-
-			this.$el.find('.actions .repost').click(function(e) {
-				var stats = _.clone(this.model.get('stats'));
-				stats.reposts++;
-				this.model.set('stats', stats);
-
-				$.ajax({
-					url: '/outfits/' + this.model.get('_id'),
-					success: function(e) {
-						this.model.fetch();
-					}.bind(this),
-					type: 'POST'
-				});
-
-				e.preventDefault();
-				return false;
-			}.bind(this));
+			setupForms(this.$el, {model: this.model});
 		}
 	});
 
@@ -381,7 +385,7 @@ function truncate(string, length) {
 		},
 
 		setup: function() {
-			setupForms(this.$el, this.session);
+			setupForms(this.$el, {session: this.session, model: this.model});
 		}
 	});
 

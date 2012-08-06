@@ -29,7 +29,7 @@
 
 		<script id="template-outfit-summary" type="text/template">
 			<% if(this.options.session.loggedIn()) { %>
-				<div class="actions hover">
+				<div class="actions hover form">
 					<a class="like" href="#">like</a>
 					<span class="dot"></span>
 					<a class="repost" href="#">repost</a>
@@ -273,7 +273,17 @@
 			<div class="image">
 				<img src="<%- this.model.get('image') %>">
 			</div>
-			<div class="caption"><%- this.model.get('caption') %></div>
+			<div class="body form actions">
+				<span class="caption"><%- this.model.get('caption') %></span>
+				<% if(this.options.session.loggedIn()) { %>
+					<span class="dot"></span>
+					<a class="like" href="#">like</a>
+					<span class="dot"></span>
+					<a class="repost" href="#">repost</a>
+					<span class="dot"></span>
+					<a class="comment" href="/#/outfit/<%- this.model.get('_id') %>">comment</a>
+				<% } %>
+			</div>
 			<hr>
 
 			<ul class="collection comments row-fluid">
