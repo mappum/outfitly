@@ -276,7 +276,7 @@
 			<div class="caption"><%- this.model.get('caption') %></div>
 			<hr>
 
-			<ul class="collection comments">
+			<ul class="collection comments row-fluid">
 				<% var comments = this.model.get('comments'); %>
 				<% for(var i = 0; i < comments.length; i++) { %>
 					<% var comment = comments[i]; %>
@@ -289,7 +289,7 @@
 				<% } %>
 
 				<% if(this.session.loggedIn())  { %>
-					<li class="span12">
+					<li class="span12 row-fluid">
 						<textarea class="body span12" placeholder="Enter your comment here"></textarea>
 						<button class="btn btn-primary">Submit</button>
 					</li>
