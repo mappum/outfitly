@@ -13,7 +13,7 @@ module.exports = {
 		}
 		
 		var hash = crypto.createHash('sha256');
-		var salt = crypto.randomBytes(32).toString('hex');
+		var salt = crypto.randomBytes(32);
 		hash.update(req.body.password);
 		hash.update(salt);
 		
@@ -25,7 +25,7 @@ module.exports = {
 			
 			'password': {
 				'hash': hash.digest('hex'),
-				'salt': salt
+				'salt': salt.toString('hex')
 			},
 			
 			'date': Date.now(),

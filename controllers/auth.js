@@ -24,7 +24,7 @@ var checkPassword = function(user, pass, success, failure) {
 			// calculate hash of proposed pass + salt
 			var hash = crypto.createHash('sha256');
 			hash.update(pass);
-			hash.update(doc.password.salt);
+			hash.update(new Buffer(doc.password.salt), 'hex');
 			
 			// calculated hash is equal to stored hash, yay!
 			if(hash.digest('hex') === doc.password.hash)
