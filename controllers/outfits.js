@@ -100,7 +100,7 @@ var outfits = module.exports = {
 		var like = res.doc.likes.id(req.session.userId);
 
 		if(like) {
-			like.remove();	
+			like.remove();
 			res.doc.stats.likes--;
 			res.doc.save(res.mongo);
 		} else {
