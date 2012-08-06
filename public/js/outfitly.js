@@ -155,12 +155,12 @@ function truncate(string, length) {
 		}
 	};
 	var setupForms = function($el, options) {
-		var forms = $el.find('.form');
+		var forms = $el.find('[class^="form-"], [class*=" form-"]');
 
 		forms.each(function(i, el) {
 			var $el = $(el);
 			for(var form in formSetups) {
-				if($el.hasClass(form)) {
+				if($el.hasClass('form-' + form)) {
 					formSetups[form]($el, options);
 				}
 			}

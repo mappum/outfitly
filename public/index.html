@@ -29,7 +29,7 @@
 
 		<script id="template-outfit-summary" type="text/template">
 			<% if(this.options.session.loggedIn()) { %>
-				<div class="actions hover form">
+				<div class="actions hover form-actions">
 					<a class="like" href="#">like</a>
 					<span class="dot"></span>
 					<a class="repost" href="#">repost</a>
@@ -123,7 +123,7 @@
 							<li><a href="/#/register">Create an account</a></li>
 							<li class="divider"></li>
 							<li>
-								<div class="form login">
+								<div class="form-login login">
 									<fieldset class="control-group">
 										<label class="error"></label>
 										<input type="text" class="user input-medium" placeholder="Username or email">
@@ -156,7 +156,7 @@
 			<h1>Log in to Outfitly</h1>
 			<div class="inset2">
 				<div class="row-fluid">
-					<fieldset class="form login">
+					<fieldset class="form-login login">
 						<label class="error"></label>
 						<fieldset>
 							<input type="text" placeholder="Username or email" class="user">
@@ -182,7 +182,7 @@
 				<div class="row-fluid">
 					<div class="span6">
 						<h2>Sign up</h2>
-						<fieldset class="form register">
+						<fieldset class="form-register register">
 							<label class="error"></label>
 							<fieldset>
 								<input type="text" placeholder="Full name" class="name">
@@ -205,7 +205,7 @@
 			<% } else if(typeof this.session.get('user').username === 'undefined') { %>
 				<h2>Pick a username</h2>
 				<div class="row-fluid">
-					<fieldset class="form register-2">
+					<fieldset class="form-register-2 register-2">
 						<label class="error"></label>
 						<fieldset>
 							<input type="text" placeholder="Username" class="username">
@@ -222,7 +222,7 @@
 			<div class="inset2">
 				<div>
 					<h2>Create a new Outfitly account</h2>
-					<fieldset class="form register">
+					<fieldset class="form-register register">
 						<label class="error"></label>
 						<fieldset>
 							<input type="text" placeholder="Full name" class="fname">
@@ -241,7 +241,7 @@
 				<hr>
 				<div>
 					<h2>...or, link with your existing account</h2>
-					<fieldset class="form login">
+					<fieldset class="form-login login">
 						<label class="error"></label>
 						<fieldset>
 							<input type="text" placeholder="Username or email" class="user">
@@ -273,7 +273,7 @@
 			<div class="image">
 				<img src="<%- this.model.get('image') %>">
 			</div>
-			<div class="body form actions">
+			<div class="body form-actions actions">
 				<span class="caption"><%- this.model.get('caption') %></span>
 				<% if(this.options.session.loggedIn()) { %>
 					<span class="dot"></span>
@@ -299,7 +299,7 @@
 				<% } %>
 
 				<% if(this.session.loggedIn())  { %>
-					<li class="span12 row-fluid">
+					<li class="span12 row-fluid form-comment">
 						<textarea class="body span12" placeholder="Enter your comment here"></textarea>
 						<button class="btn btn-primary">Submit</button>
 					</li>
