@@ -70,6 +70,10 @@ body {
 	display: inline-block;
 }
 
+.more {
+	height: 125px;
+}
+
 .collection {
 	margin: 0;
 	text-align: center;
@@ -447,6 +451,7 @@ input {
 	width: 128px;
 	-webkit-transition: width 500ms;
 	white-space: nowrap;
+	text-shadow: 0 -1px 0 #330D13;
 }
 
 .twitter-follow-button {
