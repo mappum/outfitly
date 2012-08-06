@@ -152,6 +152,12 @@ function truncate(string, length) {
 				e.preventDefault();
 				return false;
 			});
+		},
+
+		'scroll-up': function($el) {
+			$el.click(function() {
+				$('html, body').animate({scrollTop: '0'});
+			});
 		}
 	};
 	var setupForms = function($el, options) {
@@ -435,9 +441,18 @@ function truncate(string, length) {
 		setup: function() {
 			setupForms(this.$el, this.session);
 
-			$(window).on('scrollBottom', function(e) {
-				this.loadNextPage();
-			}.bind(this));
+			$(window)
+				.on('scrollBottom', function(e) {
+					this.loadNextPage();
+				}.bind(this))
+
+				.on('scrollDown', function(e) {
+					this.$el.find('.scroll-up').removeClass('collapsed-horizontal');
+				}.bind(this))
+
+				.on('scrollTop', function(e) {
+					this.$el.find('.scroll-up').addClass('collapsed-horizontal');
+				}.bind(this));
 
 			var more = this.$el.find('div.more');
 			more.click(function(e) {
@@ -461,7 +476,10 @@ function truncate(string, length) {
 	});
 
 	$(function() {
-		var scrollBottomLock = false;
+		var scrollBottomLock = false,
+			scrollTopLock = false,
+			scrollDownLock = false;
+
 		$(window).scroll(function(e) {
 			var target = $(window);
 
@@ -472,6 +490,24 @@ function truncate(string, length) {
 				}
 			} else {
 				scrollBottomLock = false;
+			}
+
+			if(target.scrollTop() > 120) {
+				if(!scrollDownLock) {
+					scrollDownLock = true;
+					target.trigger('scrollDown', e);
+				}
+			} else {
+				scrollDownLock = false;
+			}
+
+			if(target.scrollTop() < 120) {
+				if(!scrollTopLock) {
+					scrollTopLock = true;
+					target.trigger('scrollTop', e);
+				}
+			} else {
+				scrollTopLock = false;
 			}
 		});
 
