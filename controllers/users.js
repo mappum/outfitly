@@ -1,5 +1,6 @@
 var User = require(__dirname + '/../models').User,
 	crypto = require('crypto'),
+	gravatar = require('gravatar'),
 	config = require(__dirname + '/../config.js'),
 	mail = require(__dirname + '/../app/mail.js'),
 	ObjectId = require('mongoose').ObjectId;
@@ -29,7 +30,8 @@ module.exports = {
 			
 			'date': Date.now(),
 			'description': '',
-			'avatar': ''
+
+			'avatar': gravatar.url(req.body.email, {s: 256, d: 'mm'})
 		});
 		
 		// if we saved an external account link while logged out, add it to the new user profile
@@ -79,7 +81,10 @@ module.exports = {
 			var obj = {};
 			console.log(req.session.user);
 			if(typeof req.session.user.username === 'undefined' &&
-				typeof req.param('username') !== 'undefined') obj.username = req.param('username');
+				typeof req.param('username') !== 'undefined') {
+				obj.username = req.param('username');
+				obj['person.username'] = req.param('username');
+			}
 			if(typeof req.param('name') !== 'undefined') obj.name = req.param('name');
 			if(typeof req.param('description') !== 'undefined') obj.description = req.param('description');
 
@@ -90,7 +95,8 @@ module.exports = {
 				} else {
 					if(typeof obj.username !== 'undefined') {
 						req.session.user.username = obj.username;
-						req.session.user.complete = obj.complete;
+						req.session.user.person.username = obj.username;
+						req.session.user.complete = true;
 					}
 
 					res.json({ok: 1});
@@ -98,6 +104,8 @@ module.exports = {
 					if(typeof obj.username !== 'undefined') {
 						User.update({'_id': id}, {'complete': true}, function(){});
 					}
+
+					req.session.save();
 				}
 			});
 		} else {

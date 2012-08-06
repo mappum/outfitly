@@ -1,6 +1,6 @@
 {
   "name": "outfitly",
-  "version": "0.0.2-5",
+  "version": "0.0.2-6",
   "description": "The social network for clothes.",
   "main": "app.js",
   "scripts": {
@@ -15,7 +15,8 @@
     "connect": "*",
     "nodemailer": "*",
     "mongoose": "*",
-    "socket.io": "*"
+    "socket.io": "*",
+    "gravatar": "*"
   },
   "engines": {
     "node": ">= 0.6.x"

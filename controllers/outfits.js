@@ -92,6 +92,7 @@ var outfits = module.exports = {
 			res.doc.save(res.mongo);
 		} else {
 			res.error(401);
+			console.log('dupe in outfits/' + res.doc._id + '/likes');
 		}
 	},
 

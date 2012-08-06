@@ -7,17 +7,17 @@ var config = require(__dirname + '/../config.js'),
 function requireLogin(req, res, next) {
 	if(typeof req.session.userId !== 'undefined') next();
 	else res.error(401);
-};
+}
 
 function requireLogout(req, res, next) {
 	if(typeof req.session.userId === 'undefined') next();
 	else res.error(401);
-};
+}
 
 function requireVerification(req, res, next) {
 	if((req.session.user.verified || !config.mail.requireVerification) &&
 		req.session.user.complete) next();
-	else res.error(401);
+	else console.log('verification failed:', req.session.user) && res.error(401);
 }
 
 module.exports = function(app) {
