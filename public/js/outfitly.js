@@ -162,17 +162,33 @@ function truncate(string, length) {
 
 		'comment': function($el, options) {
 			var comment = function() {
-				$.ajax({
-					url: '/outfits/' + options.model.get('_id') + '/comments',
-					data: {
-						body: $el.find('.body').val()
-					},
-					success: function(e) {
-						options.model.fetch();
-					}.bind(this),
-					type: 'POST'
-				});
-				$el.find('.body').val('');
+				var body = $el.find('.body').val();
+				if(body.length > 0) {
+					var comments = _.clone(options.model.get('comments'));
+					comments.push({
+						author: {
+							_id: options.session.get('userId'),
+							name: options.session.get('user').get('name'),
+							username: options.session.get('user').get('username'),
+							avatar: options.session.get('user').get('avatar')
+						},
+						date: Date.now(),
+						body: body
+					});
+					options.model.set('comments', comments);
+
+					$.ajax({
+						url: '/outfits/' + options.model.get('_id') + '/comments',
+						data: {
+							body: body
+						},
+						success: function(e) {
+							options.model.fetch();
+						}.bind(this),
+						type: 'POST'
+					});
+					$el.find('.body').val('');
+				}
 			};
 			$el.find('button').click(comment);
 			$el.keypress(function(e) {
