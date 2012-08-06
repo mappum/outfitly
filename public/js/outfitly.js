@@ -478,7 +478,8 @@ function truncate(string, length) {
 	$(function() {
 		var scrollBottomLock = false,
 			scrollTopLock = false,
-			scrollDownLock = false;
+			scrollDownLock = false,
+			scrollThreshold = 250;
 
 		$(window).scroll(function(e) {
 			var target = $(window);
@@ -492,7 +493,7 @@ function truncate(string, length) {
 				scrollBottomLock = false;
 			}
 
-			if(target.scrollTop() > 120) {
+			if(target.scrollTop() > scrollThreshold) {
 				if(!scrollDownLock) {
 					scrollDownLock = true;
 					target.trigger('scrollDown', e);
@@ -501,7 +502,7 @@ function truncate(string, length) {
 				scrollDownLock = false;
 			}
 
-			if(target.scrollTop() < 120) {
+			if(target.scrollTop() < scrollThreshold) {
 				if(!scrollTopLock) {
 					scrollTopLock = true;
 					target.trigger('scrollTop', e);
