@@ -31,7 +31,7 @@ module.exports = {
 			'date': Date.now(),
 			'description': '',
 
-			'avatar': gravatar.url(req.body.email, {s: 256, d: 'mm'})
+			'avatar': gravatar.url(req.body.email, {s: 200, d: 'mm'})
 		});
 		
 		// if we saved an external account link while logged out, add it to the new user profile
