@@ -4,10 +4,6 @@ function since(date) {
 	).humanize();
 }
 
-function following(user) {
-	return Math.random() <= 0.5;
-}
-
 function truncate(string, length) {
 	if(string.length < length) return string;
 
@@ -119,11 +115,16 @@ function truncate(string, length) {
 		},
 
 		'actions': function($el, options) {
-			//TODO: add like/repost objects to model arrays
 			$el.find('.like').click(function(e) {
 				var stats = _.clone(options.model.get('stats'));
 				stats.likes++;
-				options.model.set('stats', stats);
+
+				console.log(options.session.get('user'))
+
+				var likes = _.clone(options.model.get('likes'));
+				likes.push(options.session.get('user').get('person'));
+
+				options.model.set({'stats': stats, 'likes': likes});
 
 				$.ajax({
 					url: '/outfits/' + options.model.get('_id') + '/likes',
@@ -140,7 +141,13 @@ function truncate(string, length) {
 			$el.find('.unlike').click(function(e) {
 				var stats = _.clone(options.model.get('stats'));
 				stats.likes--;
-				options.model.set('stats', stats);
+
+				var likes = _.reject(_.clone(options.model.get('likes')),
+					function(like) { return like._id === options.session.get('userId'); }
+				);
+				
+				options.model.set({'stats': stats, 'likes': likes});
+
 
 				$.ajax({
 					url: '/outfits/' + options.model.get('_id') + '/likes',
@@ -157,7 +164,11 @@ function truncate(string, length) {
 			$el.find('.repost').click(function(e) {
 				var stats = _.clone(options.model.get('stats'));
 				stats.reposts++;
-				options.model.set('stats', stats);
+
+				var reposts = _.clone(options.model.get('reposts'));
+				reposts.push(options.session.get('user').get('person'));
+
+				options.model.set({'stats': stats, 'reposts': reposts});
 
 				$.ajax({
 					url: '/outfits/' + options.model.get('_id'),
@@ -184,12 +195,7 @@ function truncate(string, length) {
 				if(body.length > 0) {
 					var comments = _.clone(options.model.get('comments'));
 					comments.push({
-						author: {
-							_id: options.session.get('userId'),
-							name: options.session.get('user').get('name'),
-							username: options.session.get('user').get('username'),
-							avatar: options.session.get('user').get('avatar')
-						},
+						author: options.session.get('user').get('person'),
 						date: Date.now(),
 						body: body
 					});
@@ -289,6 +295,12 @@ function truncate(string, length) {
 			$.ajax({
 				url: '/auth/info',
 				success: function(data) {
+					data.person = {
+						_id: data._id,
+						name: data.name,
+						username: data.username,
+						avatar: data.avatar
+					};
 					that.set('userId', data._id);
 					that.set('user', new User(data));
 					that.trigger('loaded', that.get('user'));
@@ -307,6 +319,13 @@ function truncate(string, length) {
 				type: 'POST',
 				data: { user: user, password: password },
 				success: function(data) {
+					data.person = {
+						_id: data._id,
+						name: data.name,
+						username: data.username,
+						avatar: data.avatar
+					};
+
 					that.set('userId', data._id);
 					that.set('user', new User(data));
 
@@ -329,6 +348,12 @@ function truncate(string, length) {
 				data: data
 			})
 				.success(function(data) {
+					data.person = {
+						_id: data._id,
+						name: data.name,
+						username: data.username,
+						avatar: data.avatar
+					};
 					that.set('userId', data._id);
 					that.set('user', new User(data));
 					if(success) success(data);
@@ -362,11 +387,12 @@ function truncate(string, length) {
 		initialize: function(options) {
 			_.bindAll(this, 'setup', 'render');
 			this.model.on('change', this.render);
+			this.session = options.session;
 			this.render();
 		},
 
 		setup: function() {
-			setupForms(this.$el, {model: this.model});
+			setupForms(this.$el, {model: this.model, session: this.session});
 		}
 	});
 
