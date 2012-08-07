@@ -282,29 +282,31 @@
 					<a class="repost" href="#">repost</a>
 				<% } %>
 			</div>
-			<hr>
 
-			<ul class="collection comments row-fluid">
-				<% var comments = this.model.get('comments'); %>
-				<% for(var i = 0; i < comments.length; i++) { %>
-					<% var comment = comments[i]; %>
+			<% if(this.model.get('comments').length > 0 || this.session.loggedIn()) { %>
+				<hr>
+				<ul class="collection comments row-fluid">
+					<% var comments = this.model.get('comments'); %>
+					<% for(var i = 0; i < comments.length; i++) { %>
+						<% var comment = comments[i]; %>
 
-					<li class="comment span12">
-						<a class="thumbnail thumbnail-tiny" href="/#/@<%- comment.author.username %>"><img src="<%- comment.author.avatar %>"></a>
-						<a class="author" href="/#/@<%- comment.author.username %>"><%- comment.author.name %></a>
-						<span class="body"><%- comment.body %></span>
-						<span class="dot"></span>
-						<span class="time"><%- since(comment.date) %> ago</span>
-					</li>
-				<% } %>
+						<li class="comment span12">
+							<a class="thumbnail thumbnail-tiny" href="/#/@<%- comment.author.username %>"><img src="<%- comment.author.avatar %>"></a>
+							<a class="author" href="/#/@<%- comment.author.username %>"><%- comment.author.name %></a>
+							<span class="body"><%- comment.body %></span>
+							<span class="dot"></span>
+							<span class="time"><%- since(comment.date) %> ago</span>
+						</li>
+					<% } %>
 
-				<% if(this.session.loggedIn())  { %>
-					<li class="span12 row-fluid form-comment">
-						<textarea class="body span12" placeholder="Enter your comment here"></textarea>
-						<button class="btn btn-primary">Submit</button>
-					</li>
-				<% } %>
-			</ul>
+					<% if(this.session.loggedIn())  { %>
+						<li class="span12 row-fluid form-comment">
+							<textarea class="body span12" placeholder="Enter your comment here"></textarea>
+							<button class="btn btn-primary">Submit</button>
+						</li>
+					<% } %>
+				</ul>
+			<% } %>
 
 			<% if(this.model.get('pieces').length > 0) { %>
 				<hr>
