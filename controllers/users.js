@@ -91,19 +91,18 @@ module.exports = {
 					res.error(500);
 					console.log('db error - ' + err);
 				} else {
+					res.json({ok: 1});
+
 					if(typeof obj.username !== 'undefined') {
 						req.session.user.username = obj.username;
 						req.session.user.person.username = obj.username;
 						req.session.user.complete = true;
-					}
+						req.session.save(function(err) {
+							console.log('saving session.', err);
+						});
 
-					res.json({ok: 1});
-
-					if(typeof obj.username !== 'undefined') {
 						User.update({'_id': id}, {'complete': true}, function(){});
 					}
-
-					req.session.save();
 				}
 			});
 		} else {

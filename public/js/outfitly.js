@@ -119,6 +119,7 @@ function truncate(string, length) {
 		},
 
 		'actions': function($el, options) {
+			//TODO: add like/repost objects to model arrays
 			$el.find('.like').click(function(e) {
 				var stats = _.clone(options.model.get('stats'));
 				stats.likes++;
@@ -130,6 +131,23 @@ function truncate(string, length) {
 						options.model.fetch();
 					}.bind(this),
 					type: 'POST'
+				});
+
+				e.preventDefault();
+				return false;
+			}.bind(this));
+
+			$el.find('.unlike').click(function(e) {
+				var stats = _.clone(options.model.get('stats'));
+				stats.likes--;
+				options.model.set('stats', stats);
+
+				$.ajax({
+					url: '/outfits/' + options.model.get('_id') + '/likes',
+					success: function(e) {
+						options.model.fetch();
+					}.bind(this),
+					type: 'DELETE'
 				});
 
 				e.preventDefault();
@@ -237,6 +255,22 @@ function truncate(string, length) {
 		collectionPath: 'outfits',
 		defaults: {
 			caption: ''
+		},
+
+		likedBy: function(id) {
+			var likes = this.get('likes');
+			return !likes.every(function(like) {
+				if(like._id === id) return false;
+				return true;
+			});
+		},
+
+		repostedBy: function(id) {
+			var reposts = this.get('reposts');
+			return !reposts.every(function(repost) {
+				if(repost._id === id) return false;
+				return true;
+			});
 		}
 	});
 
@@ -325,7 +359,7 @@ function truncate(string, length) {
 		className: 'box outfit summary hover-parent',
 		template: _.template($('#template-outfit-summary').html()),
 
-		initialize: function() {
+		initialize: function(options) {
 			_.bindAll(this, 'setup', 'render');
 			this.model.on('change', this.render);
 			this.render();
@@ -577,6 +611,10 @@ function truncate(string, length) {
 
 			$('#overlay').click(function(e) {
 				if(e.target == document.getElementById('overlay')) window.history.back();
+			});
+
+			$(window).keydown(function(e) {
+				if(e.which === 27) window.history.back();
 			});
 		});
 

@@ -29,10 +29,16 @@
 
 		<script id="template-outfit-summary" type="text/template">
 			<% if(this.options.session.loggedIn()) { %>
+				<% var liked = this.model.likedBy(this.options.session.get('userId')); %>
+				<% var reposted = this.model.repostedBy(this.options.session.get('userId')); %>
 				<div class="actions hover form-actions">
-					<a class="like" href="#">like</a>
+					<a class="<%= liked ? 'un' : '' %>like" href="#"><%= liked ? 'un' : '' %>like</a>
 					<span class="dot"></span>
-					<a class="repost" href="#">repost</a>
+					<% if(!reposted) { %>
+						<a class="repost" href="#">repost</a>
+					<% } else { %>
+						<span class="reposted">reposted</span>
+					<% } %>
 					<span class="dot"></span>
 					<a class="comment" href="/#/outfit/<%- this.model.get('_id') %>">comment</a>
 				</div>
@@ -274,12 +280,18 @@
 				<img src="<%- this.model.get('image') %>">
 			</div>
 			<div class="body form-actions actions">
+				<% var liked = this.model.likedBy(this.options.session.get('userId')); %>
+				<% var reposted = this.model.repostedBy(this.options.session.get('userId')); %>
 				<span class="caption"><%- this.model.get('caption') %></span>
 				<% if(this.options.session.loggedIn()) { %>
 					<span class="dot"></span>
-					<a class="like" href="#">like</a>
+					<a class="<%= liked ? 'un' : '' %>like" href="#"><%= liked ? 'un' : '' %>like</a>
 					<span class="dot"></span>
-					<a class="repost" href="#">repost</a>
+					<% if(!reposted) { %>
+						<a class="repost" href="#">repost</a>
+					<% } else { %>
+						<span class="reposted">reposted</span>
+					<% } %>
 				<% } %>
 			</div>
 

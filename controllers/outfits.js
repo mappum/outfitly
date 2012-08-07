@@ -10,7 +10,9 @@ var summary = [
 	'author',
 	'original',
 	'date',
-	'stats'
+	'stats',
+	'likes._id',
+	'reposts._id'
 ];
 
 var outfits = module.exports = {
