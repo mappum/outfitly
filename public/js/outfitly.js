@@ -174,7 +174,7 @@ function truncate(string, length) {
 
 		'scroll-up': function($el) {
 			$el.click(function() {
-				$('html, body').animate({scrollTop: '0'});
+				$('html, body').animate({scrollTop: '0'}, 800);
 			});
 		},
 
