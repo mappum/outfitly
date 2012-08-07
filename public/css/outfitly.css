@@ -497,8 +497,11 @@ input {
 	font-weight: bold;
 	font-size: 16px;
 	text-shadow: 0 1px 0 white;
-	background: rgba(255, 255, 255, 0.65);
+	background: #f0f0f0;
 	padding: 8px 10px;
+	border-radius: 4px;
+	-webkit-box-shadow: 0 1px 10px -1px rgba(0, 0, 0, 0.4);
+	box-shadow: 0 1px 10px -1px rgba(0, 0, 0, 0.4);
 }
 
 .outfit.summary .body .bottom,
