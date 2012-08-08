@@ -267,11 +267,11 @@ function truncate(string, length) {
 		},
 
 		'post-1': function($el, options) {
-			var next = $el.find('button.next');
-
-			next.click(function() {
+			$el.find('button.next, button.back').click(function() {
 				options.model.set('caption', $el.find('textarea').val());
 			});
+
+			var next = $el.find('button.next');
 
 			$el.find('textarea').keyup(function(e) {
 				if($(this).val().length > 0) next.removeClass('disabled');

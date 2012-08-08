@@ -171,8 +171,6 @@ textarea {
 	max-height: none;
 	max-width: 100%;
 	margin-bottom: 6px;
-	position: relative;
-	top: -26px;
 }
 .outfit.summary .actions {
 	position: absolute;
@@ -604,4 +602,8 @@ input {
 		height: 300px;
 		top: 0;
 	}
+}
+
+.form-post .outfit-image {
+	margin: 8px;
 }
