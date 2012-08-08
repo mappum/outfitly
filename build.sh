@@ -12,7 +12,6 @@ cat ./public/js/underscore.js >> ./public/js/all.js
 cat ./public/js/backbone.js >> ./public/js/all.js
 cat ./public/js/torso.js >> ./public/js/all.js
 cat ./public/js/moment.js >> ./public/js/all.js
-cat ./public/js/filepicker.js >> ./public/js/all.js
 cat ./public/js/outfitly.js >> ./public/js/all.js
 
 echo "Minifying CSS..."

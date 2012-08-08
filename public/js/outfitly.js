@@ -255,7 +255,8 @@ function truncate(string, length) {
 					'services': [
 						filepicker.SERVICES.COMPUTER,
 						filepicker.SERVICES.WEBCAM,
-						filepicker.SERVICES.FACEBOOK
+						filepicker.SERVICES.FACEBOOK,
+						filepicker.SERVICES.INSTAGRAM
 					],
 					'persist': true
 				}, function(response){
