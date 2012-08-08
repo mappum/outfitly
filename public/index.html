@@ -378,6 +378,33 @@
 
 			<div class="clear"></div>
 		</script>
+		<script id="template-post" type="text/template">
+			<div class="form-post">
+				<% if(this.page === 0) { %>
+					<div class="form-post-0 row-fluid">
+						<h1 class="cover">Show me your outfit!</h1>
+						<iframe class="filepicker-iframe span12" id="filepicker-iframe" src="about:blank"></iframe>
+						<hr>
+						<button class="btn btn-primary pull-right disabled next">Next</button>
+					</div>
+				<% } else if(this.page === 1) { %>
+					<div class="form-post-1 row-fluid">
+						<h1>Give your outfit a caption</h1>
+						<textarea type="text" class="span6 caption" placeholder="Caption"></textarea>
+						<hr>
+						<button class="btn btn-primary pull-left back">Back</button>
+						<button class="btn btn-primary pull-right disabled next">Next</button>
+					</div>
+				<% } else if(this.page === 2) { %>
+					<div class="form-post-2 row-fluid">
+						<h1 class="cover">What<%= "'" %>s in this outfit?</h1>
+						<hr>
+						<button class="btn btn-primary pull-left back">Back</button>
+						<button class="btn btn-primary pull-right submit">Post outfit</button>
+					</div>
+				<% } %>
+			</div>
+		</script>
 		<script id="template-feed" type="text/template">
 			<div class="info"></div>
 			<ul class="outfits collection centered"></ul>
@@ -400,6 +427,7 @@
 		<script src="/js/backbone.js"></script>
 		<script src="/js/torso.js"></script>
 		<script src="/js/moment.js"></script>
+		<script src="/js/filepicker.js"></script>
 		<script src="/js/outfitly.js"></script>
 
 		<script>
@@ -426,7 +454,6 @@
 				var s = document.getElementsByTagName('script')[0];
 				s.parentNode.insertBefore(ga, s);
 			})();
-
 		</script>
 	</body>
 </html>

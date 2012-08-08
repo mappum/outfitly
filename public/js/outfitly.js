@@ -119,8 +119,6 @@ function truncate(string, length) {
 				var stats = _.clone(options.model.get('stats'));
 				stats.likes++;
 
-				console.log(options.session.get('user'))
-
 				var likes = _.clone(options.model.get('likes'));
 				likes.push(options.session.get('user').get('person'));
 
@@ -221,10 +219,71 @@ function truncate(string, length) {
 					return false;
 				}
 			});
+		},
+
+		'post': function($el, options) {
+			$el.find('button.next').click(function() {
+				if(!$(this).hasClass('disabled')) {
+					$(this).addClass('disabled');
+					options.view.forward();
+				}
+			});
+
+			$el.find('button.back').click(function() {
+				if(!$(this).hasClass('disabled')) {
+					$(this).addClass('disabled');
+					options.view.back();
+				}
+			});
+
+			$el.find('button.submit').click(function() {
+				if(!$(this).hasClass('disabled')) {
+					$(this).addClass('disabled').text('Posting outfit...');
+
+					options.model.save(null, {success: function() {
+						window.location = '/#/';
+					}});
+				}
+			});
+		},
+
+		'post-0': function($el, options) {
+			setTimeout(function(){
+				filepicker.getFile('image/*', {
+					'multiple': false,
+					'container': 'filepicker-iframe',
+					'services': [
+						filepicker.SERVICES.COMPUTER,
+						filepicker.SERVICES.WEBCAM,
+						filepicker.SERVICES.FACEBOOK
+					],
+					'persist': true
+				}, function(response){
+					options.model.set('image', response);
+					$el.find('button.next').removeClass('disabled');
+				});
+			}, 0);
+		},
+
+		'post-1': function($el, options) {
+			var next = $el.find('button.next');
+
+			next.click(function() {
+				options.model.set('caption', $el.find('textarea').val());
+			});
+
+			$el.find('textarea').keyup(function(e) {
+				if($(this).val().length > 0) next.removeClass('disabled');
+				else next.addClass('disabled');
+			});
+		},
+
+		'post-2': function($el, options) {
+
 		}
 	};
 	var setupForms = function($el, options) {
-		var forms = $el.find('[class^="form-"], [class*=" form-"]');
+		var forms = $el.find('[class^="form-"], [class*="form-"]');
 
 		forms.each(function(i, el) {
 			var $el = $(el);
@@ -576,7 +635,41 @@ function truncate(string, length) {
 		}
 	});
 
+	var PostScreen = Torso.Screen.extend({
+		className: 'box centered span10 post',
+		template: _.template($('#template-post').html()),
+
+		initialize: function(options) {
+			_.bindAll(this, 'setup', 'render', 'back', 'forward');
+			this.session = options.session;
+
+			this.page = -1;
+
+			this.model = new Outfit({
+				author: this.session.get('user').get('person')
+			});
+
+			this.forward();
+		},
+
+		setup: function() {
+			setupForms(this.$el, {session: this.session, model: this.model, view: this});
+		},
+
+		back: function() {
+			this.page--;
+			this.render();
+		},
+
+		forward: function() {
+			this.page++;
+			this.render();
+		}
+	});
+
 	$(function() {
+		filepicker.setKey('A6D_8Iy0zQe2YTFBlSOA5z');
+
 		var scrollBottomLock = false,
 			scrollTopLock = false,
 			scrollDownLock = false,
@@ -625,7 +718,8 @@ function truncate(string, length) {
 				'register': RegisterScreen,
 				'link': LinkScreen,
 				'outfit': OutfitScreen,
-				'feed': FeedScreen
+				'feed': FeedScreen,
+				'post': PostScreen
 			},
 			defaults: {
 				navbar: NavbarScreen
@@ -663,6 +757,8 @@ function truncate(string, length) {
 					
 					"/": "feed",
 					"": "feed",
+
+					"post": "post",
 
 					"*_": "404"
 				}

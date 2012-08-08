@@ -21,8 +21,6 @@ var outfits = module.exports = {
 			'caption': req.body.caption,
 			'pieces': [],
 			'image': req.body.image,
-
-			'private': 'true',
 			
 			'author': req.session.user.person,
 			'date': Date.now()

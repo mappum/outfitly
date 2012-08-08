@@ -5491,6 +5491,23 @@ blockquote small {
 	display: inherit;
 }
 
+.invisible {
+	display: none;
+}
+
+.collapsed-horizontal {
+	width: 0 !important;
+	overflow: hidden;
+}
+
+.cover {
+	background: white;
+	padding: 8px;
+	z-index: 10;
+	position: relative;
+	display: inline-block;
+}
+
 .media-debug:before {content: 'none'}
 @media (max-width: 480px) { .media-debug:before {content: 'phone (0 - 480)'} }
 @media (min-width: 481px) and (max-width: 767px) { .media-debug:before {content: 'tablet (481 - 767)'} }
@@ -5506,6 +5523,10 @@ body {
 	padding-bottom: 80px;
 }
 
+textarea {
+	border: 1px solid #aaa;
+}
+
 .btn {
 	margin: 0;
 	padding: 4px 10px;
@@ -5513,6 +5534,17 @@ body {
 
 .box {
 	padding: 12px 16px;
+}
+
+.scroll-up {
+	position: fixed;
+	right: -32px;
+	bottom: 30px;
+	display: inline-block;
+}
+
+.more {
+	height: 125px;
 }
 
 .collection {
@@ -5536,6 +5568,10 @@ body {
 	margin: 0;
 }
 
+.form-actions {
+	padding: 0;
+}
+
 .outfit > .meta {
 	height: 50px;
 }
@@ -5554,7 +5590,7 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 }
-.outfit > .caption {
+.outfit > .body {
 	text-align: center;
 }
 .outfit .comments > li {
@@ -5596,6 +5632,8 @@ body {
 	max-height: none;
 	max-width: 100%;
 	margin-bottom: 6px;
+	position: relative;
+	top: -26px;
 }
 .outfit.summary .actions {
 	position: absolute;
@@ -5603,10 +5641,14 @@ body {
 	top: 19px;
 	left: 24px;
 }
+.outfit.summary .form-actions {
+	margin: 0;
+}
 .outfit.summary .body {
 	position: absolute;
 	bottom: 0;
 	width: 250px;
+	text-align: left;
 }
 
 .user.summary {
@@ -5653,7 +5695,7 @@ body {
 
 	background: rgba(255,255,255,0.8);
 
-	padding: 40px 10px;
+	padding: 40px 0;
 
 	position: absolute;
 	top: 0;
@@ -5794,9 +5836,10 @@ hr {
 	display: inline-block;
 	margin-right: 6px;
 	position: relative;
-	bottom: 0.2em;
+	bottom: 0.3em;
 	float: left;
 	padding: 1px;
+	background: #c5c5c5;
 }
 
 .thumbnail,
@@ -5838,6 +5881,7 @@ h1, h2, h3, h4, h5, h6,
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
 	color: #0E1414;
 	text-decoration: none;
+	padding: 8px;
 }
 h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
 	color: #0E1414;
@@ -5849,7 +5893,7 @@ a, a:hover {
 }
 
 input {
-	border: 1px solid #dbdbdb !important;
+	border: 1px solid #ccc !important;
 }
 
 .box {
@@ -5859,6 +5903,7 @@ input {
 	-moz-box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
 	box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
 	border-radius: 2px;
+	overflow: hidden;
 }
 
 .well {
@@ -5869,6 +5914,19 @@ input {
 .well h1, .well h2, .well h3, .well h4, .well h5, .well h6,
 .well h1 a, .well h2 a, .well h3 a, .well h4 a, .well h5 a, .well h6 a {
 	color: #9AF4EF;
+}
+
+.scroll-up {
+	background: #99263A;
+	color: white;
+	padding: 10px 16px;
+	font-size: 18px;
+	border-radius: 4px;
+	cursor: pointer;
+	width: 128px;
+	-webkit-transition: width 500ms;
+	white-space: nowrap;
+	text-shadow: 0 -1px 0 #330D13;
 }
 
 .twitter-follow-button {
@@ -5892,6 +5950,9 @@ input {
 .outfit .meta .time {
 	color: #666;
 }
+.outfit .body .caption {
+	font-weight: bold;
+}
 .outfit .comment:nth-child(even) {
 	background: #E0E0E0;
 }
@@ -5902,16 +5963,22 @@ input {
 .outfit .comment .author {
 	font-weight: bold;
 }
-.outfit .comments textarea {
-	border: 1px solid #aaa;
+.outfit .comment .time {
+	color: #666;
+	font-size: 12px;
 }
 
 .outfit.summary .actions {
-	font-weight: bold;
 	font-size: 16px;
 	text-shadow: 0 1px 0 white;
-	background: rgba(255, 255, 255, 0.5);
+	background: #f0f0f0;
 	padding: 8px 10px;
+	border-radius: 4px;
+	-webkit-box-shadow: 0 1px 10px -1px rgba(0, 0, 0, 0.4);
+	box-shadow: 0 1px 10px -1px rgba(0, 0, 0, 0.4);
+}
+.outfit.summary .actions .unlike {
+	font-weight: bold;
 }
 
 .outfit.summary .body .bottom,
@@ -5968,4 +6035,34 @@ input {
 }
 .more.loading img {
 	display: inline;
+}
+
+.tooltip {
+	font-size: 15px;
+	padding: 4px 8px;
+	z-index: 3000;
+}
+.tooltip.in {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+
+.filepicker-iframe {
+	border: none;
+	height: 420px;
+	position: relative;
+	top: -50px;
+	margin-left: 0 !important;
+}
+
+@media (max-width: 350px) {
+	.filepicker-iframe {
+		left: -50px;
+	}
+}
+@media (max-width: 767px) {
+	.filepicker-iframe {
+		height: 300px;
+		top: 0;
+	}
 }

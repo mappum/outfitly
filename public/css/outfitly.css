@@ -39,6 +39,14 @@
 	overflow: hidden;
 }
 
+.cover {
+	background: white;
+	padding: 8px;
+	z-index: 10;
+	position: relative;
+	display: inline-block;
+}
+
 .media-debug:before {content: 'none'}
 @media (max-width: 480px) { .media-debug:before {content: 'phone (0 - 480)'} }
 @media (min-width: 481px) and (max-width: 767px) { .media-debug:before {content: 'tablet (481 - 767)'} }
@@ -52,6 +60,10 @@ li {
 
 body {
 	padding-bottom: 80px;
+}
+
+textarea {
+	border: 1px solid #aaa;
 }
 
 .btn {
@@ -408,6 +420,7 @@ h1, h2, h3, h4, h5, h6,
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
 	color: #0E1414;
 	text-decoration: none;
+	padding: 8px;
 }
 h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
 	color: #0E1414;
@@ -419,7 +432,7 @@ a, a:hover {
 }
 
 input {
-	border: 1px solid #dbdbdb !important;
+	border: 1px solid #ccc !important;
 }
 
 .box {
@@ -429,6 +442,7 @@ input {
 	-moz-box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
 	box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
 	border-radius: 2px;
+	overflow: hidden;
 }
 
 .well {
@@ -491,9 +505,6 @@ input {
 .outfit .comment .time {
 	color: #666;
 	font-size: 12px;
-}
-.outfit .comments textarea {
-	border: 1px solid #aaa;
 }
 
 .outfit.summary .actions {
@@ -573,4 +584,24 @@ input {
 .tooltip.in {
   opacity: 1;
   filter: alpha(opacity=100);
+}
+
+.filepicker-iframe {
+	border: none;
+	height: 420px;
+	position: relative;
+	top: -50px;
+	margin-left: 0 !important;
+}
+
+@media (max-width: 350px) {
+	.filepicker-iframe {
+		left: -50px;
+	}
+}
+@media (max-width: 767px) {
+	.filepicker-iframe {
+		height: 300px;
+		top: 0;
+	}
 }
