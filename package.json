@@ -16,7 +16,8 @@
     "nodemailer": "*",
     "mongoose": "*",
     "socket.io": "*",
-    "gravatar": "*"
+    "gravatar": "*",
+    "apa": "*"
   },
   "engines": {
     "node": ">= 0.6.x"

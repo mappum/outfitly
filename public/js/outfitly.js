@@ -264,6 +264,11 @@ function truncate(string, length) {
 					$el.find('button.next').removeClass('disabled');
 				});
 			}, 0);
+
+			$el.find('button.reset').click(function() {
+				options.model.set('image', null);
+				options.view.render();
+			});
 		},
 
 		'post-1': function($el, options) {

@@ -384,13 +384,13 @@
 					<div class="form-post-0 row-fluid">
 						<h1 class="cover">Show me your outfit!</h1>
 						<div>
-							<% var hasImage = typeof this.model.get('image') !== 'undefined'; %>
+							<% var hasImage = Boolean(this.model.get('image')) %>
 							<% if(!hasImage) { %>
 								<iframe class="filepicker-iframe span12" id="filepicker-iframe" src="about:blank"></iframe>
 							<% } else { %>
 								<img class="outfit-image" src="<%- this.model.get('image') %>">
 								<br>
-								<button class="btn remove">Use a different image</button>
+								<button class="btn reset">Use a different image</button>
 							<% } %>
 						</div>
 						<hr>
@@ -402,7 +402,7 @@
 						<textarea type="text" class="span6 caption" placeholder="Caption"><%- this.model.get('caption') || '' %></textarea>
 						<hr>
 						<button class="btn btn-primary pull-left back">Back</button>
-						<button class="btn btn-primary pull-right<%= this.model.get('caption') ? '' : ' disabled' %> next">Next</button>
+						<button class="btn btn-primary pull-right<%= Boolean(this.model.get('caption')) ? '' : ' disabled' %> next">Next</button>
 					</div>
 				<% } else if(this.page === 2) { %>
 					<div class="form-post-2 row-fluid">

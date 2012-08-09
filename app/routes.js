@@ -2,7 +2,8 @@ var config = require(__dirname + '/../config.js'),
 	controllers = require(__dirname + '/../controllers'),
 	auth = controllers.auth,
 	outfits = controllers.outfits,
-	users = controllers.users;
+	users = controllers.users,
+	products = controllers.products;
 
 function requireLogin(req, res, next) {
 	if(typeof req.session.userId !== 'undefined') next();
@@ -94,6 +95,10 @@ module.exports = function(app) {
 			networkInterfaces: os.networkInterfaces()
 		});
 	});
+
+	// route for item search
+	app.get('/products/:query', products.read);
+	app.post('/products', products.read);
 	
 	// redirect get requests to hashpath
 	app.get('*', function(req, res) {

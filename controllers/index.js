@@ -1,5 +1,6 @@
 var controllers = module.exports = {
-	'auth': require('./auth.js'),
-	'users': require('./users.js'),
-	'outfits': require('./outfits.js')
+	'auth': require(__dirname + '/auth.js'),
+	'users': require(__dirname + '/users.js'),
+	'outfits': require(__dirname + '/outfits.js'),
+	'products': require(__dirname + '/products.js')
 };
