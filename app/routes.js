@@ -98,6 +98,7 @@ module.exports = function(app) {
 
 	// route for item search
 	app.get('/products/:query', products.read);
+	app.get('/products/:query/:page', products.read);
 	app.post('/products', products.read);
 	
 	// redirect get requests to hashpath

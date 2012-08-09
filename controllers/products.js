@@ -7,7 +7,8 @@ var outfits = module.exports = {
 		apa.get('ItemSearch', {
 			'SearchIndex': 'Apparel',
 			'ResponseGroup': 'ItemAttributes,Images',
-			'Keywords': req.param('query')
+			'Keywords': req.param('query'),
+			'ItemPage': req.param('page') || 1
 		}, function(err, data) {
 			if(err) res.error(500);
 			else res.json(data);

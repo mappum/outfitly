@@ -285,7 +285,26 @@ function truncate(string, length) {
 		},
 
 		'post-2': function($el, options) {
+			$el.find('input.item').keyup(function(e) {
+				setTimeout(function(query) {
+					console.log(query, $(this).val());
+					if($(this).val() === query) {
+						$.ajax({
+							url: '/products',
+							data: {'query': query},
+							type: 'POST'
+						}).success(function(data) {
+							var itemList = $el.find('.item-list');
+							itemList.empty();
 
+							var items = data.Items.Item;
+							for(var i = 0; i < items.length; i++) {
+								itemList.append($('<li><img src="' + items[i].SmallImage.URL + '"></li>'));
+							}
+						});
+					}
+				}.bind(this), 500, $(this).val());
+			});
 		}
 	};
 	var setupForms = function($el, options) {
