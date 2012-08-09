@@ -3,7 +3,7 @@ var Schema = require('mongoose').Schema,
 	Person = require(__dirname + '/person.js');
 
 var Piece = new Schema({
-	'url': String,
+	'url': {'type': String, 'match': /^http:\/\/www.amazon.com\/.+$/},
 	'image': String,
 	'title': String,
 	'brand': String
