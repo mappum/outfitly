@@ -115,6 +115,14 @@
 					<span class="following"><span class="value"><%- this.model.get('stats').following %></span> following</span>
 			</div>
 		</script>
+		<script id="template-piece" type="text/template">
+			<a class="thumbnail thumbnail-medium" href="<%- this.model.get('url') %>"><img src="<%- this.model.get('image') %>"></a>
+			<div class="meta">
+				<a class="title" href="<%- this.model.get('url') %>"><%- this.model.get('title') %></a>
+				<br>
+				<a class="company" href="<%- this.model.get('url') %>"><%- this.model.get('brand') %></a>
+			</div>
+		</script>
 
 		<script id="template-navbar" type="text/template">
 			<a class="brand" href="/#/">Outfitly</a>
@@ -409,7 +417,7 @@
 						<h1 class="cover">What<%= "'" %>s in this outfit?</h1>
 						<div>
 							<input class="item span3" type="text">
-							<ul class="item-list collection condensed"></ul>
+							<ul class="item-list collection"></ul>
 						<div>
 						<hr>
 						<button class="btn btn-primary pull-left back">Back</button>

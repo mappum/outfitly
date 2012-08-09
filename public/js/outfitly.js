@@ -287,7 +287,6 @@ function truncate(string, length) {
 		'post-2': function($el, options) {
 			$el.find('input.item').keyup(function(e) {
 				setTimeout(function(query) {
-					console.log(query, $(this).val());
 					if($(this).val() === query) {
 						$.ajax({
 							url: '/products',
@@ -299,7 +298,14 @@ function truncate(string, length) {
 
 							var items = data.Items.Item;
 							for(var i = 0; i < items.length; i++) {
-								itemList.append($('<li><img src="' + items[i].SmallImage.URL + '"></li>'));
+								var piece = new Piece({
+									'url': items[i].DetailPageURL,
+									'image': items[i].MediumImage.URL,
+									'title': items[i].ItemAttributes.Title,
+									'brand': items[i].ItemAttributes.Brand
+								});
+								var pieceView = new PieceView({model: piece});
+								itemList.append(pieceView.$el);
 							}
 						});
 					}
@@ -340,6 +346,8 @@ function truncate(string, length) {
 			date: Date.now()
 		}
 	});
+
+	var Piece = Backbone.Model.extend({});
 
 	var Outfit = Base.extend({
 		collectionPath: 'outfits',
@@ -484,6 +492,18 @@ function truncate(string, length) {
 		tagName: 'li',
 		className: 'box user summary hover-parent span4',
 		template: _.template($('#template-user-summary').html()),
+
+		initialize: function() {
+			_.bindAll(this, 'setup', 'render');
+			this.model.on('change', this.render);
+			this.render();
+		}
+	});
+
+	var PieceView = Torso.View.extend({
+		tagName: 'li',
+		className: 'piece span3',
+		template: _.template($('#template-piece').html()),
 
 		initialize: function() {
 			_.bindAll(this, 'setup', 'render');

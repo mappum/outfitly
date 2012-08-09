@@ -607,3 +607,13 @@ input {
 .form-post .outfit-image {
 	margin: 8px;
 }
+
+.piece {
+	margin-bottom: 32px;
+}
+.piece .thumbnail {
+	padding: 0;
+	border: 1px solid #c5c5c5;
+	overflow: hidden;
+	background: none;
+}
