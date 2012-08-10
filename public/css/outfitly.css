@@ -377,6 +377,7 @@ hr {
 	float: left;
 	padding: 1px;
 	background: #c5c5c5;
+	overflow: hidden;
 }
 
 .thumbnail,
@@ -574,6 +575,10 @@ input {
 	display: inline;
 }
 
+.loading {
+	padding: 8px;
+}
+
 .tooltip {
 	font-size: 15px;
 	padding: 4px 8px;
@@ -610,11 +615,35 @@ input {
 
 .form-post .piece {
 	margin-bottom: 32px;
-	height: 200px;
 }
 .form-post .piece .thumbnail {
 	padding: 0;
 	border: 1px solid #c5c5c5;
 	overflow: hidden;
 	background: none;
+}
+
+.btn-info {
+	background-color: #1C9992;
+}
+.btn-info:hover {
+	background-color: #08867F;
+}
+.btn-info:active {
+	background-color: #05766F;
+}
+
+.piece-list .piece {
+	margin-left: 0;
+}
+.piece-list .piece .thumbnail {
+	width: 50px;
+	height: 50px;
+}
+
+.item-list .piece {
+	cursor: pointer;
+}
+.item-list .piece:hover {
+	background: #ddd;
 }

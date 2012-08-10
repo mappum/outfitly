@@ -415,13 +415,17 @@
 				<% } else if(this.page === 2) { %>
 					<div class="form-post-2 row-fluid">
 						<h1 class="cover">What<%= "'" %>s in this outfit?</h1>
-						<div>
+						<div class="items"></div>
+						<hr>
+						<div class="item-search">
+							<h3>Search for the pieces of this outfit:</h3>
 							<input class="item span3" type="text">
+							<div class="loading invisible"><img src="//cdn.outfitly.com/img/loading.gif"> Loading clothes...</div>
 							<ul class="item-list collection"></ul>
 						<div>
 						<hr>
 						<button class="btn btn-primary pull-left back">Back</button>
-						<button class="btn btn-primary pull-right submit">Post outfit</button>
+						<button class="btn btn-info pull-right submit">Post outfit</button>
 					</div>
 				<% } %>
 			</div>
@@ -429,7 +433,7 @@
 		<script id="template-feed" type="text/template">
 			<div class="info"></div>
 			<ul class="outfits collection centered"></ul>
-			<div class="more"><img src="/img/loading.gif"> <span></span></div>
+			<div class="more"><img src="//cdn.outfitly.com/img/loading.gif"> <span></span></div>
 			<div class="scroll-up collapsed-horizontal form-scroll-up">Scroll to top</div>
 		</script>
 		<script id="template-test" type="text/template">

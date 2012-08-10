@@ -262,6 +262,7 @@ function truncate(string, length) {
 				}, function(response){
 					options.model.set('image', response);
 					$el.find('button.next').removeClass('disabled');
+					options.view.forward();
 				});
 			}, 0);
 
@@ -285,7 +286,22 @@ function truncate(string, length) {
 		},
 
 		'post-2': function($el, options) {
+			var pieces = new PieceCollection(options.model.get('pieces'));
+			var pieceListView = new PieceListView({collection: pieces});
+			$el.find('.items').append(pieceListView.$el);
+
+			var updatePieces = function() {
+				options.model.set('pieces', pieces.toJSON());
+			};
+			pieces.bind('add', updatePieces);
+			pieces.bind('remove', updatePieces);
+
 			$el.find('input.item').keyup(function(e) {
+				var itemList = $el.find('.item-list');
+				itemList.empty();
+
+				$el.find('.item-search .loading').removeClass('invisible');
+
 				setTimeout(function(query) {
 					if($(this).val() === query) {
 						$.ajax({
@@ -293,20 +309,26 @@ function truncate(string, length) {
 							data: {'query': query},
 							type: 'POST'
 						}).success(function(data) {
-							var itemList = $el.find('.item-list');
-							itemList.empty();
+							$el.find('.item-search .loading').addClass('invisible');
 
 							var items = data.Items.Item;
-							for(var i = 0; i < items.length; i++) {
+							_.each(items, function(item) {
 								var piece = new Piece({
-									'url': items[i].DetailPageURL,
-									'image': items[i].MediumImage.URL,
-									'title': items[i].ItemAttributes.Title,
-									'brand': items[i].ItemAttributes.Brand
+									'url': item.DetailPageURL,
+									'image': item.MediumImage.URL,
+									'title': item.ItemAttributes.Title,
+									'brand': item.ItemAttributes.Brand
 								});
 								var pieceView = new PieceView({model: piece});
 								itemList.append(pieceView.$el);
-							}
+
+								pieceView.$el.click(function(e) {
+									pieces.add(piece);
+									itemList.empty();
+									e.preventDefault();
+									return false;
+								});
+							});
 						});
 					}
 				}.bind(this), 500, $(this).val());
@@ -459,6 +481,10 @@ function truncate(string, length) {
 		url: '/outfits'
 	});
 
+	var PieceCollection = Backbone.Collection.extend({
+		model: Piece
+	});
+
 	// #### VIEWS ####
 
 	var OutfitSummaryView = Torso.View.extend({
@@ -499,6 +525,28 @@ function truncate(string, length) {
 			_.bindAll(this, 'setup', 'render');
 			this.model.on('change', this.render);
 			this.render();
+		}
+	});
+
+	var PieceListView = Torso.View.extend({
+		tagName: 'ul',
+		className: 'piece-list',
+
+		initialize: function() {
+			_.bindAll(this, 'setup', 'render');
+			this.collection.on('change', this.render);
+			this.collection.on('add', this.render);
+			this.collection.on('remove', this.render);
+			this.render();
+		},
+
+		render: function() {
+			this.$el.empty();
+			this.collection.each(function(piece) {
+				var pieceView = new PieceView({model: piece});
+				pieceView.$el.removeClass('span3').addClass('span12');
+				this.$el.append(pieceView.$el);
+			}.bind(this));
 		}
 	});
 
@@ -678,7 +726,7 @@ function truncate(string, length) {
 			_.bindAll(this, 'setup', 'render', 'back', 'forward');
 			this.session = options.session;
 
-			this.page = -1;
+			this.page = 1;
 
 			this.model = new Outfit({
 				author: this.session.get('user').get('person')
