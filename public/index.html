@@ -29,18 +29,25 @@
 
 		<script id="template-outfit-summary" type="text/template">
 			<% if(this.options.session.loggedIn()) { %>
+				<% var myPost = this.model.get('author')._id === this.options.session.get('userId'); %>
 				<% var liked = this.model.likedBy(this.options.session.get('userId')); %>
 				<% var reposted = this.model.repostedBy(this.options.session.get('userId')); %>
 				<div class="actions hover form-actions">
 					<a class="<%= liked ? 'un' : '' %>like" href="#"><%= liked ? 'un' : '' %>like</a>
-					<span class="dot"></span>
-					<% if(!reposted) { %>
-						<a class="repost" href="#">repost</a>
-					<% } else { %>
-						<span class="reposted">reposted</span>
+					<% if(!myPost) { %>
+						<span class="dot"></span>
+						<% if(!reposted) { %>
+							<a class="repost" href="#">repost</a>
+						<% } else { %>
+							<span class="reposted">reposted</span>
+						<% } %>
 					<% } %>
 					<span class="dot"></span>
 					<a class="comment" href="/#/outfit/<%- this.model.get('_id') %>">comment</a>
+					<% if(myPost) { %>
+						<span class="dot"></span>
+						<a class="delete" href="#">delete</a>
+					<% } %>
 				</div>
 			<% } %>
 			

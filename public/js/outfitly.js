@@ -179,6 +179,20 @@ function truncate(string, length) {
 				e.preventDefault();
 				return false;
 			});
+
+			$el.find('.delete').click(function(e) {
+				options.model.destroy();
+
+				$.ajax({
+					url: '/outfits/' + options.model.get('_id'),
+					success: function(e) {
+					}.bind(this),
+					type: 'DELETE'
+				});
+
+				e.preventDefault();
+				return false;
+			});
 		},
 
 		'scroll-up': function($el) {
@@ -493,8 +507,9 @@ function truncate(string, length) {
 		template: _.template($('#template-outfit-summary').html()),
 
 		initialize: function(options) {
-			_.bindAll(this, 'setup', 'render');
+			_.bindAll(this, 'setup', 'render', 'remove');
 			this.model.on('change', this.render);
+			this.model.on('destroy', this.remove);
 			this.session = options.session;
 			this.render();
 		},
@@ -628,6 +643,7 @@ function truncate(string, length) {
 
 			this.model = new Outfit({'_id': options.args[0]});
 			this.model.bind('change', this.render);
+			this.model.on('destroy', this.remove);
 			this.model.fetch();
 		},
 
