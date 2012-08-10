@@ -377,7 +377,7 @@
 				</div>
 			<% } %>
 
-			<% if(this.model.get('stats').reposts > 0) { %>
+			<% console.log(this.model.get('stats')); if(this.model.get('stats').reposts > 0) { %>
 				<hr>
 				<div class="reposts">
 					<h2><%= this.model.get('stats').reposts %> Repost<%= this.model.get('stats').reposts > 1 ? 's' : '' %></h2>

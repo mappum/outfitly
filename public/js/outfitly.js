@@ -146,7 +146,6 @@ function truncate(string, length) {
 				
 				options.model.set({'stats': stats, 'likes': likes});
 
-
 				$.ajax({
 					url: '/outfits/' + options.model.get('_id') + '/likes',
 					success: function(e) {

@@ -505,6 +505,9 @@ input {
 	color: #666;
 	font-size: 12px;
 }
+.outfit .actions .active {
+	font-weight: bold;
+}
 
 .outfit.summary .actions {
 	font-size: 16px;
