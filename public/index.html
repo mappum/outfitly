@@ -295,17 +295,24 @@
 				<img src="<%- this.model.get('image') %>">
 			</div>
 			<div class="body form-actions actions">
+				<% var myPost = this.model.get('author')._id === this.options.session.get('userId'); %>
 				<% var liked = this.model.likedBy(this.options.session.get('userId')); %>
 				<% var reposted = this.model.repostedBy(this.options.session.get('userId')); %>
 				<span class="caption"><%- this.model.get('caption') %></span>
 				<% if(this.options.session.loggedIn()) { %>
 					<span class="dot"></span>
 					<a class="<%= liked ? 'un' : '' %>like" href="#"><%= liked ? 'un' : '' %>like</a>
-					<span class="dot"></span>
-					<% if(!reposted) { %>
-						<a class="repost" href="#">repost</a>
-					<% } else { %>
-						<span class="reposted">reposted</span>
+					<% if(!myPost) { %>
+						<span class="dot"></span>
+						<% if(!reposted) { %>
+							<a class="repost" href="#">repost</a>
+						<% } else { %>
+							<span class="reposted">reposted</span>
+						<% } %>
+					<% } %>
+					<% if(myPost) { %>
+						<span class="dot"></span>
+						<a class="delete" href="#">delete</a>
 					<% } %>
 				<% } %>
 			</div>
