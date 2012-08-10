@@ -180,13 +180,33 @@ function truncate(string, length) {
 				return false;
 			});
 
+			$el.find('.reposted').click(function(e) {
+				var stats = _.clone(options.model.get('stats'));
+				stats.reposts--;
+
+				var reposts = _.reject(_.clone(options.model.get('reposts')),
+					function(repost) { return repost._id === options.session.get('userId'); }
+				);
+
+				options.model.set({'stats': stats, 'reposts': reposts});
+
+				$.ajax({
+					url: '/outfits/' + options.model.get('_id') + '/reposts',
+					success: function(e) {
+						options.model.fetch();
+					}.bind(this),
+					type: 'DELETE'
+				});
+
+				e.preventDefault();
+				return false;
+			});
+
 			$el.find('.delete').click(function(e) {
 				options.model.destroy();
 
 				$.ajax({
 					url: '/outfits/' + options.model.get('_id'),
-					success: function(e) {
-					}.bind(this),
 					type: 'DELETE'
 				});
 

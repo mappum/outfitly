@@ -108,6 +108,23 @@ var outfits = module.exports = {
 		res.doc.stats.reposts++;
 		res.doc.save();
 	},
+
+	'unrepost': function(req, res) {
+		var repost = res.doc.reposts.id(req.session.userId);
+		
+		if(repost) {
+			Outfit.remove()
+				.where('author._id', req.session.userId)
+				.where('original._id', res.doc.author._id)
+				.exec();
+
+			repost.remove();
+			res.doc.stats.reposts--;
+			res.doc.save(res.mongo);
+		} else {
+			res.error(404);
+		}
+	},
 	
 	'comments': {
 		'create':  function(req, res) {

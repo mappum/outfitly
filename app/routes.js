@@ -39,8 +39,6 @@ module.exports = function(app) {
 	app.get('/outfits', outfits.readFeed);
 	// create new outfit
 	app.post('/outfits', requireLogin, requireVerification, outfits.create);
-	// repost outfit
-	app.get('/outfits/:id/repost', requireLogin, requireVerification, outfits.repost);
 	// read full item
 	app.get('/outfits/:id', outfits.read);
 	// update existing outfit
@@ -53,6 +51,8 @@ module.exports = function(app) {
 	app.delete('/outfits/:id/likes', requireLogin, requireVerification, outfits.getById, outfits.unlike);
 	// repost outfit
 	app.post('/outfits/:id', requireLogin, requireVerification, outfits.getById, outfits.repost);
+	// unrepost outfit
+	app.delete('/outfits/:id/reposts', requireLogin, requireVerification, outfits.getById, outfits.unrepost);
 	
 	// ********** routes for comments **********
 	// create new comment

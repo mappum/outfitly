@@ -515,7 +515,7 @@ input {
 	-webkit-box-shadow: 0 1px 10px -1px rgba(0, 0, 0, 0.4);
 	box-shadow: 0 1px 10px -1px rgba(0, 0, 0, 0.4);
 }
-.outfit.summary .actions .unlike {
+.outfit.summary .actions .active {
 	font-weight: bold;
 }
 
