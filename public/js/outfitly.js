@@ -844,8 +844,17 @@ function truncate(string, length) {
 			}
 		});
 
+		var mainScrollTop = 0;
+		$(window).scroll(function(e) {
+			if(app.container === 'main') {
+				mainScrollTop = $(window).scrollTop();
+			}
+		});
+
 		app.on('display:modal', function(e) {
-			$('#main').css('position', 'fixed');
+			$('#main').css({
+				'position': 'fixed'
+			});
 
 			$('#overlay').click(function(e) {
 				if(e.target == document.getElementById('overlay')) window.history.back();
@@ -857,7 +866,8 @@ function truncate(string, length) {
 		});
 
 		app.on('display:main', function(e) {
-			$('#main').css('position', 'static');
+			$('#main').css({'position': 'static'});
+			$(window).scrollTop(mainScrollTop);
 		});
 
 		var createRouter = function() {

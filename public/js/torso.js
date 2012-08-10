@@ -55,6 +55,7 @@ window.Torso = {};
 			this.screens = options.screens || {};
 
 			this.initialized = false;
+			this.lastContainer = undefined;
 
 			for(var container in this.defaults) {
 				this.navigate(this.defaults[container], null, container);
@@ -67,34 +68,44 @@ window.Torso = {};
 			var el = this.containers[container];
 
 			if(typeof el !== 'undefined') {
-				el.empty();
-
 				if(screen) {
-					el.addClass('populated').append(screen.$el);
-
-					var modalEl = this.containers['modal'];
-					if(container === 'main' && typeof modalEl !== 'undefined') {
-						this.clear('modal');
-					}
-
 					var e = {
 						container: container,
 						el: el,
 						screen: screen
 					};
+
+					this.trigger('predisplay', e);
+					this.trigger('predisplay:' + container, e);
+
+					if(container === 'main' && this.container === 'modal') {
+						this.clear('modal');
+					} else {
+						if(el.hasClass('populated')) this.clear(container);
+						el.addClass('populated')
+							.append(screen.$el);
+					}
+
+					this.container = container;
+
 					this.trigger('display', e);
 					this.trigger('display:' + container, e);
 				} else {
+					var e = {
+						container: container,
+						el: el
+					};
+					this.trigger('preclear', e);
+					this.trigger('preclear:' + container, e);
+
+
+					el.empty();
 					if(el.hasClass('populated')) {
 						el.removeClass('populated');
-
-						var e = {
-							container: container,
-							el: el
-						};
-						this.trigger('clear', e);
-						this.trigger('clear:' + container, e);
 					}
+
+					this.trigger('clear', e);
+					this.trigger('clear:' + container, e);
 				}
 
 				if(container === 'main') this.initialized = true;
