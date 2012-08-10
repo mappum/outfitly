@@ -17,9 +17,10 @@ var summary = [
 
 var outfits = module.exports = {
 	'create': function(req, res) {
+		console.log(req.body.pieces);
 		new Outfit({
 			'caption': req.body.caption,
-			'pieces': [],
+			'pieces': req.body.pieces || [],
 			'image': req.body.image,
 			
 			'author': req.session.user.person,
@@ -55,20 +56,7 @@ var outfits = module.exports = {
 		if(typeof req.body['private'] !== 'undefined') obj['private'] = req.body['private'];
 		if(typeof req.body.caption !== 'undefined') obj.caption = req.body.caption;
 		if(typeof req.body.image !== 'undefined') obj.image = req.body.image;
-		if(typeof req.body.pieces !== 'undefined') {
-			obj.pieces = req.body.pieces.split('@');
-			for(var i = 0; i < obj.pieces; i++) {
-				if(obj.pieces[i]) {
-					obj.pieces[i] = obj.pieces[i].split('#');
-					obj.pieces[i] = {
-						url: obj.pieces[0],
-						image: obj.pieces[1],
-						title: obj.pieces[2],
-						brand: obj.pieces[3]
-					};
-				}
-			}
-		}
+		if(typeof req.body.pieces !== 'undefined') obj.pieces = req.body.pieces || [];
 
 		Outfit.update({
 			'_id': ObjectId(req.param('id')),

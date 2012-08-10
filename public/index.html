@@ -116,11 +116,11 @@
 			</div>
 		</script>
 		<script id="template-piece" type="text/template">
-			<a class="thumbnail thumbnail-medium" href="<%- this.model.get('url') %>"><img src="<%- this.model.get('image') %>"></a>
+			<a class="thumbnail thumbnail-medium" href="<%- this.model.get('url') %>" target="_blank"><img src="<%- this.model.get('image') %>"></a>
 			<div class="meta">
-				<a class="title" href="<%- this.model.get('url') %>"><%- this.model.get('title') %></a>
+				<a class="title" href="<%- this.model.get('url') %>" target="_blank"><%- this.model.get('title') %></a>
 				<br>
-				<a class="company" href="<%- this.model.get('url') %>"><%- this.model.get('brand') %></a>
+				<a class="company" href="<%- this.model.get('url') %>" target="_blank"><%- this.model.get('brand') %></a>
 			</div>
 		</script>
 
@@ -338,11 +338,11 @@
 							<% var piece = pieces[i]; %>
 
 							<li class="piece span6">
-								<a class="thumbnail thumbnail-medium" href="<%- piece.url %>"><img src="<%- piece.image %>"></a>
+								<a class="thumbnail thumbnail-medium" href="<%- piece.url %>" target="_blank"><img src="<%- piece.image %>"></a>
 								<div class="meta">
-									<a class="title" href="<%- piece.url %>"><%- piece.title %></a>
+									<a class="title" href="<%- piece.url %>" target="_blank"><%- piece.title %></a>
 									<br>
-									<a class="company" href="<%- piece.url %>"><%- piece.brand %></a>
+									<a class="company" href="<%- piece.url %>" target="_blank"><%- piece.brand %></a>
 								</div>
 							</li>
 						<% } %>

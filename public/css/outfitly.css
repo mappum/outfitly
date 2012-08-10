@@ -608,10 +608,11 @@ input {
 	margin: 8px;
 }
 
-.piece {
+.form-post .piece {
 	margin-bottom: 32px;
+	height: 200px;
 }
-.piece .thumbnail {
+.form-post .piece .thumbnail {
 	padding: 0;
 	border: 1px solid #c5c5c5;
 	overflow: hidden;

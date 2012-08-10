@@ -77,7 +77,7 @@ function truncate(string, length) {
 						data: { username: $el.find('.username').val() },
 						success: function() {
 							var onLoadUser = function(user) {
-								if(typeof user.get('username') !== 'undefined') window.location = '/#/';
+								if(typeof user.get('username') !== 'undefined') window.location = '';
 								session.off('loaded', onLoadUser);
 							};
 							session.on('loaded', onLoadUser);
@@ -411,17 +411,7 @@ function truncate(string, length) {
 				type: 'POST',
 				data: { user: user, password: password },
 				success: function(data) {
-					data.person = {
-						_id: data._id,
-						name: data.name,
-						username: data.username,
-						avatar: data.avatar
-					};
-
-					that.set('userId', data._id);
-					that.set('user', new User(data));
-
-					if(typeof data.username !== 'undefined') window.location = '/#/';
+					if(typeof data.username !== 'undefined') window.location = '';
 					else window.location = '/#/register';
 					
 					if(success) success(data);
