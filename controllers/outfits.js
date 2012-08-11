@@ -111,7 +111,7 @@ var outfits = module.exports = {
 
 	'unrepost': function(req, res) {
 		var repost = res.doc.reposts.id(req.session.userId);
-		
+
 		if(repost) {
 			Outfit.remove()
 				.where('author._id', req.session.userId)
@@ -138,7 +138,7 @@ var outfits = module.exports = {
 		},
 
 		'update':  function(req, res) {
-			if(res.comment.author._id === req.session.userId) {
+			if(String(res.comment.author._id) === req.session.userId) {
 				res.comment.body = req.body.body;
 				res.doc.save(res.mongo);
 			} else {
@@ -147,7 +147,7 @@ var outfits = module.exports = {
 		},
 		
 		'delete': function(req, res) {
-			if(res.comment.author._id === req.session.userId) {
+			if(String(res.comment.author._id) === req.session.userId) {
 				res.comment.remove();
 				res.doc.stats.comments--;
 				res.doc.save(res.mongo);

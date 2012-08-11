@@ -320,12 +320,15 @@
 					<% for(var i = 0; i < comments.length; i++) { %>
 						<% var comment = comments[i]; %>
 
-						<li class="comment span12">
+						<li class="comment span12 hover-parent form-comment" data-id="<%= comment._id %>">
 							<a class="thumbnail thumbnail-tiny" href="/#/@<%- comment.author.username %>"><img src="<%- comment.author.avatar %>"></a>
 							<a class="author" href="/#/@<%- comment.author.username %>"><%- comment.author.name %></a>
 							<span class="body"><%- comment.body %></span>
 							<span class="dot"></span>
 							<span class="time"><%- since(comment.date) %> ago</span>
+							<% if(comment.author._id === this.session.get('userId')) { %>
+								<a class="delete hover" href="#">delete</a>
+							<% } %>
 						</li>
 					<% } %>
 

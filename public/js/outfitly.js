@@ -252,6 +252,26 @@ function truncate(string, length) {
 					return false;
 				}
 			});
+
+			$el.find('.delete').click(function(e) {
+				var cId = $(this).parent().attr('data-id');
+
+				var comments = _.reject(_.clone(options.model.get('comments')),
+					function(comment) { return comment._id === cId; }
+				);
+				options.model.set('comments', comments);
+
+				$.ajax({
+					url: '/outfits/' + options.model.get('_id') + '/comments/' + cId,
+					success: function(e) {
+						options.model.fetch();
+					}.bind(this),
+					type: 'DELETE'
+				});
+				
+				e.preventDefault();
+				return false;
+			});
 		},
 
 		'post': function($el, options) {
@@ -761,7 +781,7 @@ function truncate(string, length) {
 			_.bindAll(this, 'setup', 'render', 'back', 'forward');
 			this.session = options.session;
 
-			this.page = 1;
+			this.page = -1;
 
 			this.model = new Outfit({
 				author: this.session.get('user').get('person')
