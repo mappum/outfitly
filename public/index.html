@@ -54,7 +54,8 @@
 				<div class="top">
 					<span class="caption"><%- this.model.get('caption') %></span>
 
-					<% if(typeof this.model.get('original')._id !== 'undefined') { %>
+					<% var repost = typeof this.model.get('original') !== 'undefined' && typeof this.model.get('original')._id !== 'undefined' %>
+					<% if(repost) { %>
 						<br>
 						<span class="by"> by </span>
 						<a class="author" href="/#/@<%- this.model.get('original').username %>">
@@ -63,7 +64,7 @@
 					<% } %>
 					
 					<span class="dot"></span>
-					<span class="by"> <%= typeof this.model.get('original')._id !== 'undefined' ? 'via' : 'by' %> </span>
+					<span class="by"> <%= repost ? 'via' : 'by' %> </span>
 					<a class="author" href="/#/@<%- this.model.get('author').username %>"><%- this.model.get('author').name %></a>
 				</div>
 				<div class="bottom">
@@ -78,7 +79,7 @@
 						<%= separate ? '<span class="dot"></span>' : '' %>
 						<% separate = true; %>
 						<a class="comments" href="/#/outfit/<%- this.model.get('_id') %>"><%- stats.comments %> comment<%- stats.comments > 1 ? 's' : '' %></a>
-					<% } %>
+					<% } %>1
 
 					<% if(stats.reposts > 0) { %>
 						<%= separate ? '<span class="dot"></span>' : '' %>

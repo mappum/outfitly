@@ -3,17 +3,17 @@ var models = require(__dirname + '/../models'),
 	ObjectId = require('mongoose').Types.ObjectId,
 	config = require(__dirname + '/../config.js');
 	
-var summary = [
-	'_id',
-	'caption',
-	'image',
-	'author',
-	'original',
-	'date',
-	'stats',
-	'likes._id',
-	'reposts._id'
-];
+var summary = {
+	'_id': 1,
+	'caption': 1,
+	'image': 1,
+	'author': 1,
+	'original': 1,
+	'date': 1,
+	'stats': 1,
+	'likes._id': 1,
+	'reposts._id': 1
+};
 
 var outfits = module.exports = {
 	'create': function(req, res) {
@@ -41,10 +41,10 @@ var outfits = module.exports = {
 			.or([{'author._id': {$in: req.session.user.following}},
 				{'author._id': req.session.userId}]);
 		}
-		
+
 		query
 			.where('private').ne('true')
-			.sort('date', -1)
+			.sort({'date': -1})
 			.limit(Math.min(req.query.limit, 100) || 24)
 			.skip(req.query.skip || 0)
 			.exec(res.mongo);
