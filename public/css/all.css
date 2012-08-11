@@ -5632,8 +5632,6 @@ textarea {
 	max-height: none;
 	max-width: 100%;
 	margin-bottom: 6px;
-	position: relative;
-	top: -26px;
 }
 .outfit.summary .actions {
 	position: absolute;
@@ -5840,6 +5838,7 @@ hr {
 	float: left;
 	padding: 1px;
 	background: #c5c5c5;
+	overflow: hidden;
 }
 
 .thumbnail,
@@ -5967,6 +5966,12 @@ input {
 	color: #666;
 	font-size: 12px;
 }
+.outfit .comment .delete {
+	font-size: 12px;
+}
+.outfit .actions .active {
+	font-weight: bold;
+}
 
 .outfit.summary .actions {
 	font-size: 16px;
@@ -5977,7 +5982,7 @@ input {
 	-webkit-box-shadow: 0 1px 10px -1px rgba(0, 0, 0, 0.4);
 	box-shadow: 0 1px 10px -1px rgba(0, 0, 0, 0.4);
 }
-.outfit.summary .actions .unlike {
+.outfit.summary .actions .active {
 	font-weight: bold;
 }
 
@@ -6037,6 +6042,10 @@ input {
 	display: inline;
 }
 
+.loading {
+	padding: 8px;
+}
+
 .tooltip {
 	font-size: 15px;
 	padding: 4px 8px;
@@ -6065,4 +6074,43 @@ input {
 		height: 300px;
 		top: 0;
 	}
+}
+
+.form-post .outfit-image {
+	margin: 8px;
+}
+
+.form-post .piece {
+	margin-bottom: 32px;
+}
+.form-post .piece .thumbnail {
+	padding: 0;
+	border: 1px solid #c5c5c5;
+	overflow: hidden;
+	background: none;
+}
+
+.btn-info {
+	background-color: #1C9992;
+}
+.btn-info:hover {
+	background-color: #08867F;
+}
+.btn-info:active {
+	background-color: #05766F;
+}
+
+.piece-list .piece {
+	margin-left: 0;
+}
+.piece-list .piece .thumbnail {
+	width: 50px;
+	height: 50px;
+}
+
+.item-list .piece {
+	cursor: pointer;
+}
+.item-list .piece:hover {
+	background: #ddd;
 }
