@@ -2,15 +2,15 @@ var models = require(__dirname + '/../models'),
 	User = models.User,
 	crypto = require('crypto');
 
-var getArrayField = function(array, field) {
+function getArrayField(array, field) {
 	var output = [];
 	for(var i = 0; i < array.length; i++) {
 		output.push(array[i][field]);
 	}
 	return output;
-};
+}
 
-var checkPassword = function(user, pass, success, failure) {
+function checkPassword(user, pass, success, failure) {
 	var query = {};
 	if(user.indexOf('@') !== -1) query.email = user;
 	else query.username = user;
@@ -33,9 +33,9 @@ var checkPassword = function(user, pass, success, failure) {
 			else failure();
 		}
 	});
-};
+}
 
-var tryAuth = function(req, res) {
+function tryAuth(req, res) {
 	req.authenticate([req.param('method')], function(err, authenticated) {
 		if(err) {
 			console.log('auth error - ' + err);
@@ -46,44 +46,46 @@ var tryAuth = function(req, res) {
 			}
 		}
 	});
-};
+}
+
+function setUser(user) {
+	if(user) {
+		this.session.userId = user._id;
+		this.session.user = {
+			_id: user._id,
+			username: user.username,
+			name: user.name,
+			email: user.email,
+			date: user.date,
+			description: user.description,
+			avatar: user.avatar,
+			verified: user.verified,
+			complete: user.complete,
+			scores: user.scores,
+			notifications: user.notifications,
+
+			person: {
+				_id: user._id,
+				username: user.username,
+				name: user.name,
+				avatar: user.avatar
+			},
+
+			following: getArrayField(user.following, '_id'),
+			followers: getArrayField(user.followers, '_id')
+		};
+	} else {
+		this.session.user = undefined;
+		this.session.userId = undefined;
+		this.session.destroy();
+	}
+}
 
 var auth = module.exports = {
 	// middleware for registering auth functions
 	'middleware': function(req, res, next) {
 		// set this session's logged in user to a certain User
-		req.setUser = function(user) {
-			if(user) {
-				req.session.userId = user._id;
-				req.session.user = {
-					_id: user._id,
-					username: user.username,
-					name: user.name,
-					email: user.email,
-					date: user.date,
-					description: user.description,
-					avatar: user.avatar,
-					verified: user.verified,
-					complete: user.complete,
-					scores: user.scores,
-					notifications: user.notifications,
-
-					person: {
-						_id: user._id,
-						username: user.username,
-						name: user.name,
-						avatar: user.avatar
-					},
-
-					following: getArrayField(user.following, '_id'),
-					followers: getArrayField(user.followers, '_id')
-				};
-			} else {
-				req.session.user = undefined;
-				req.session.userId = undefined;
-				req.session.destroy();
-			}
-		};
+		req.setUser = setUser.bind(req);
 		
 		next();
 	},
@@ -125,8 +127,12 @@ var auth = module.exports = {
 	'checkPassword': checkPassword,
 	
 	'link': function(req, res) {
+		console.log(req.getAuthDetails())
+
 		var service = req.param('method'),
-			id = req.getAuthDetails().user.id,
+			details = req.getAuthDetails(),
+			id = details.user.id,
+			token = details.user.access_token,
 			key = 'externals.' + service,
 			query = {};
 		query[key] = id;
@@ -145,7 +151,7 @@ var auth = module.exports = {
 				if(req.session.userId) {
 					
 					// we are logged in and already linked
-					if(linked._id === req.session.userId) {
+					if(String(linked._id) === req.session.userId) {
 						//TODO: send error to client
 						
 					// we are trying to link to an already linked ID! no bueno!
@@ -171,12 +177,17 @@ var auth = module.exports = {
 					User.findById(req.session.userId, function(err, user) {
 						
 						// this user is already linked
-						if(user.externals) {
+						if(user.externals.id(service)) {
 							//TODO: send error to client
 							
 						// this user isn't linked
 						} else {
-							user.externals[service] = id;
+							user.externals.push({
+								_id: service,
+								token: token,
+								id: id
+							});
+							user.save();
 							//TODO: send confimation message to client
 						}
 						
@@ -187,8 +198,9 @@ var auth = module.exports = {
 				} else {
 					// save linked ID in session, add it on registration/login
 					req.session.link = {
-						service: service,
-						id: id
+						_id: service,
+						id: id,
+						token: token
 					};
 					
 					// take them to link form, where user can log in or register

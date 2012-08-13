@@ -6,7 +6,7 @@ function longerThan(n) {
 }
 
 var External = new Schema({
-	'service': {'type': String, 'index': true},
+	'_id': {'type': String, 'index': true},
 	'token': String,
 	'id': {'type': String, 'sparse': true}
 });
