@@ -4609,7 +4609,10 @@ function truncate(string, length) {
 	return output + '...';
 }
 
+var apiDomain = '//api.outfitly.com';
+
 (function(){
+
 	// #### FORM LOGIC ####
 	//TODO: work form logic into torso.js?
 
@@ -4670,7 +4673,7 @@ function truncate(string, length) {
 					$el.find('button').addClass('disabled').text('Submitting...');
 					$.ajax({
 						type: 'PUT',
-						url: '/users/' + session.get('userId'),
+						url: apiDomain + '/users/' + session.get('userId'),
 						data: { username: $el.find('.username').val() },
 						success: function() {
 							var onLoadUser = function(user) {
@@ -4694,7 +4697,7 @@ function truncate(string, length) {
 
 			$el.keyup(function(e) {
 				$.ajax({
-					url: '/users/exists',
+					url: apiDomain + '/users/exists',
 					data: { username: $el.find('.username').val() },
 					type: 'PUT',
 					error: function(data) {
@@ -4722,7 +4725,7 @@ function truncate(string, length) {
 				options.model.set({'stats': stats, 'likes': likes});
 
 				$.ajax({
-					url: '/outfits/' + options.model.get('_id') + '/likes',
+					url: apiDomain + '/outfits/' + options.model.get('_id') + '/likes',
 					success: function(e) {
 						options.model.fetch();
 					}.bind(this),
@@ -4744,7 +4747,7 @@ function truncate(string, length) {
 				options.model.set({'stats': stats, 'likes': likes});
 
 				$.ajax({
-					url: '/outfits/' + options.model.get('_id') + '/likes',
+					url: apiDomain + '/outfits/' + options.model.get('_id') + '/likes',
 					success: function(e) {
 						options.model.fetch();
 					}.bind(this),
@@ -4765,7 +4768,7 @@ function truncate(string, length) {
 				options.model.set({'stats': stats, 'reposts': reposts});
 
 				$.ajax({
-					url: '/outfits/' + options.model.get('_id'),
+					url: apiDomain + '/outfits/' + options.model.get('_id'),
 					success: function(e) {
 						options.model.fetch();
 					}.bind(this),
@@ -4787,7 +4790,7 @@ function truncate(string, length) {
 				options.model.set({'stats': stats, 'reposts': reposts});
 
 				$.ajax({
-					url: '/outfits/' + options.model.get('_id') + '/reposts',
+					url: apiDomain + '/outfits/' + options.model.get('_id') + '/reposts',
 					success: function(e) {
 						options.model.fetch();
 					}.bind(this),
@@ -4802,7 +4805,7 @@ function truncate(string, length) {
 				options.model.destroy();
 
 				$.ajax({
-					url: '/outfits/' + options.model.get('_id'),
+					url: apiDomain + '/outfits/' + options.model.get('_id'),
 					type: 'DELETE'
 				});
 
@@ -4830,7 +4833,7 @@ function truncate(string, length) {
 					options.model.set('comments', comments);
 
 					$.ajax({
-						url: '/outfits/' + options.model.get('_id') + '/comments',
+						url: apiDomain + '/outfits/' + options.model.get('_id') + '/comments',
 						data: {
 							body: body
 						},
@@ -4859,7 +4862,7 @@ function truncate(string, length) {
 				options.model.set('comments', comments);
 
 				$.ajax({
-					url: '/outfits/' + options.model.get('_id') + '/comments/' + cId,
+					url: apiDomain + '/outfits/' + options.model.get('_id') + '/comments/' + cId,
 					success: function(e) {
 						options.model.fetch();
 					}.bind(this),
@@ -4955,7 +4958,7 @@ function truncate(string, length) {
 				setTimeout(function(query) {
 					if($(this).val() === query) {
 						$.ajax({
-							url: '/products',
+							url: apiDomain + '/products',
 							data: {'query': query},
 							type: 'POST'
 						}).success(function(data) {
@@ -5008,7 +5011,7 @@ function truncate(string, length) {
 		idAttribute: '_id',
 		collectionPath: '',
 		
-		url: function() { return '/' + this.collectionPath + '/' + (this.id || ''); }
+		url: function() { return apiDomain + '/' + this.collectionPath + '/' + (this.id || ''); }
 	});
 
 	var User = Base.extend({
@@ -5057,7 +5060,7 @@ function truncate(string, length) {
 			var that = this;
 			
 			$.ajax({
-				url: '/auth/info',
+				url: apiDomain + '/auth/info',
 				success: function(data) {
 					data.person = {
 						_id: data._id,
@@ -5128,7 +5131,7 @@ function truncate(string, length) {
 
 	var OutfitCollection = Backbone.Collection.extend({
 		model: Outfit,
-		url: '/outfits'
+		url: apiDomain + '/outfits'
 	});
 
 	var PieceCollection = Backbone.Collection.extend({
