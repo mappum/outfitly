@@ -101,7 +101,7 @@ var auth = module.exports = {
 			
 			// if we linked to an external account while logged out, add it to user object
 			if(req.session.link) {
-				user.externals[req.session.link.service] = req.session.link.id;
+				user.externals.push(req.session.link);
 				user.save();
 				req.session.link = null;
 			}
@@ -127,18 +127,18 @@ var auth = module.exports = {
 	'checkPassword': checkPassword,
 	
 	'link': function(req, res) {
-		console.log(req.getAuthDetails())
-
-		var service = req.param('method'),
+		var service = req.param('method').toLowerCase(),
 			details = req.getAuthDetails(),
-			id = details.user.id,
-			token = details.user.access_token,
-			key = 'externals.' + service,
-			query = {};
-		query[key] = id;
+			id = details.user.id || details.user.user_id,
+			token = details.access_token || details.twitter_oauth_token;
+
+		console.log(req.getAuthDetails());
 			
 		// check if a user is linked to this ID
-		User.findOne(query, function(err, linked) {
+		User.findOne({
+			'externals.id': id,
+			'externals._id': service
+		}, function(err, linked) {
 			if(err) {
 				console.log('db error - ' + err);
 				res.redirect('/#/');

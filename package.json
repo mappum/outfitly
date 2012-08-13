@@ -1,6 +1,6 @@
 {
   "name": "outfitly",
-  "version": "0.0.3-7",
+  "version": "0.0.3-9",
   "description": "The social network for clothes.",
   "main": "app.js",
   "scripts": {
@@ -11,8 +11,8 @@
   "dependencies": {
     "connect-redis": "*",
     "connect-auth": "*",
-    "express": "*",
-    "connect": "*",
+    "express": "3.0.0rc2",
+    "connect": "2.4.3",
     "nodemailer": "*",
     "mongoose": "*",
     "socket.io": "*",

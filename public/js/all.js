@@ -4649,8 +4649,9 @@ var apiDomain = '//api.outfitly.com';
 							name: $el.find('.name').val(),
 							email: $el.find('.email').val(),
 							password: $el.find('.password').val()
-						},
-						null, function(e) {
+						}, function() {
+							window.location = '/#/register';
+						}, function(e) {
 							$el.find('button').removeClass('disabled').text('Sign up');
 							$el.find('label').html('An error occurred.');
 						});

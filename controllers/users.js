@@ -19,7 +19,6 @@ module.exports = {
 		
 		var user = new User({
 			'name': req.body.name,
-			'username': req.body.username,
 			'email': req.body.email,
 			'verified': !config.auth.requireVerification,
 			

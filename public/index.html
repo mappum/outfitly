@@ -220,7 +220,7 @@
 				</div>
 				<hr>
 				<p>Already have an account? <a href="/#/login">Sign in.</a></p>
-			<% } else if(typeof this.session.get('user').username === 'undefined') { %>
+			<% } else if(typeof this.session.get('user').get('username') === 'undefined') { %>
 				<h2>Pick a username</h2>
 				<div class="row-fluid">
 					<fieldset class="form-register-2 register-2">
@@ -243,7 +243,7 @@
 					<fieldset class="form-register register">
 						<label class="error"></label>
 						<fieldset>
-							<input type="text" placeholder="Full name" class="fname">
+							<input type="text" placeholder="Full name" class="name">
 						</fieldset>
 						<fieldset>
 							<input type="text" placeholder="Email" class="email">

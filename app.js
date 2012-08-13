@@ -14,7 +14,7 @@ var app = express();
 app.configure('development', function() {
 	// if static server is enabled, serve static files, but don't cache them
 	if(config.static.enabled) {
-		app.use(express.static(config.static.path, {maxAge: 0, redirect: 'debug.html'}));
+		app.use(express.static(config.static.path, {maxAge: 0}));
 	}
 	
 	// turn on error dumping
