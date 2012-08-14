@@ -12,7 +12,14 @@ function truncate(string, length) {
 	return output + '...';
 }
 
-var apiDomain = '//api.outfitly.com';
+Backbone._sync = Backbone.sync;
+Backbone.sync = function(method, model, options) {
+	options = options || {};
+	options.xhrFields = { withCredentials: true };
+	return Backbone._sync(method, model, options);
+};
+
+var apiDomain = '';//api.outfitly.com';
 
 (function(){
 

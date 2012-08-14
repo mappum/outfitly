@@ -4609,7 +4609,7 @@ function truncate(string, length) {
 	return output + '...';
 }
 
-var apiDomain = '//api.outfitly.com';
+var apiDomain = '';//api.outfitly.com';
 
 (function(){
 
