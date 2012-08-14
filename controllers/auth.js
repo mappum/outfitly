@@ -75,6 +75,7 @@ function setUser(user) {
 			following: getArrayField(user.following, '_id'),
 			followers: getArrayField(user.followers, '_id')
 		};
+		this.session.save();
 	} else {
 		this.session.user = undefined;
 		this.session.userId = undefined;

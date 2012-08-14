@@ -17,7 +17,6 @@ var summary = {
 
 var outfits = module.exports = {
 	'create': function(req, res) {
-		console.log(req.body.pieces);
 		new Outfit({
 			'caption': req.body.caption,
 			'pieces': req.body.pieces || [],
