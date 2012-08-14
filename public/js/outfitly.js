@@ -486,7 +486,7 @@ var apiDomain = '//api.outfitly.com';
 		},
 		login: function(user, password, success, error) {
 			var that = this;
-			$.ajax('/auth', {
+			$.ajax(apiDomain + '/auth', {
 				type: 'POST',
 				data: { user: user, password: password },
 				success: function(data) {
@@ -504,7 +504,7 @@ var apiDomain = '//api.outfitly.com';
 		},
 		register: function(data, success, error) {
 			var that = this;
-			$.ajax('/users', {
+			$.ajax(apiDomain + '/users', {
 				type: 'POST',
 				data: data
 			})
