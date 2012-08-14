@@ -13,6 +13,7 @@ var app = express();
 app.use(function(req, res, next) {
 	if((/^http:\/\/(.*.)*outfitly.com|localhost$/).test(req.headers.origin)) {
 		res.header('Access-Control-Allow-Origin', req.headers.origin);
+		res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
 		res.header('Access-Control-Allow-Credentials', true);
 	}
 	next();

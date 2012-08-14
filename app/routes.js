@@ -103,7 +103,7 @@ module.exports = function(app) {
 	
 	// redirect get requests to hashpath
 	app.get('*', function(req, res) {
-		res.redirect('/#' + req.path);
+		res.redirect('http://' + config.meta.domain + '/#' + req.path);
 	});
 	
 	// all other requests are no bueno

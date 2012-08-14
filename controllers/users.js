@@ -50,7 +50,7 @@ module.exports = {
 		
 		//TODO: send welcome mail
 		/*mail.send({
-			from: 'info@aptt.me',
+			from: 'info@outfitly.com',
 			to: user.account.email,
 			text: '',
 			html: ''

@@ -1,6 +1,7 @@
 var models = require(__dirname + '/../models'),
 	User = models.User,
-	crypto = require('crypto');
+	crypto = require('crypto'),
+	config = require(__dirname + '/../config.js');
 
 function getArrayField(array, field) {
 	var output = [];
@@ -117,7 +118,7 @@ var auth = module.exports = {
 	
 	'logout': function(req, res) {
 		req.setUser(undefined);
-		res.redirect('/');
+		res.redirect('http://' + config.meta.webHost + '/');
 	},
 	
 	'info': function(req, res) {
@@ -141,7 +142,7 @@ var auth = module.exports = {
 		}, function(err, linked) {
 			if(err) {
 				console.log('db error - ' + err);
-				res.redirect('/#/');
+				res.redirect('http://' + config.meta.webHost + '/#/');
 				//TODO: send error to client
 			
 			// a user is linked to this ID
@@ -159,13 +160,13 @@ var auth = module.exports = {
 						//TODO: send error to client
 					}
 					
-					res.redirect('/#/');
+					res.redirect('http://' + config.meta.webHost + '/#/');
 					
 				// we aren't logged in
 				} else {
 					// set logged in user to this linked account
 					req.setUser(linked);
-					res.redirect('/#/');
+					res.redirect('http://' + config.meta.webHost + '/#/');
 				}
 			
 			// no user is linked to this ID
@@ -191,7 +192,7 @@ var auth = module.exports = {
 							//TODO: send confimation message to client
 						}
 						
-						res.redirect('/#/');
+						res.redirect('http://' + config.meta.webHost + '/#/');
 					});
 					
 				// we aren't logged in
@@ -204,7 +205,7 @@ var auth = module.exports = {
 					};
 					
 					// take them to link form, where user can log in or register
-					res.redirect('/#/link/' + service);
+					res.redirect('http://' + config.meta.webHost + '/#/link/' + service);
 				}
 				
 			}
