@@ -58,7 +58,8 @@ var apiDomain = '';//api.outfitly.com';
 					session.register({
 							name: $el.find('.name').val(),
 							email: $el.find('.email').val(),
-							password: $el.find('.password').val()
+							password: $el.find('.password').val(),
+							code: $el.find('.code').val()
 						}, function() {
 							window.location = '/#/register';
 						}, function(e) {

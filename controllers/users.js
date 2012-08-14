@@ -1,4 +1,6 @@
-var User = require(__dirname + '/../models').User,
+var models = require(__dirname + '/../models'),
+	User = models.User,
+	Code = models.Code,
 	crypto = require('crypto'),
 	gravatar = require('gravatar'),
 	config = require(__dirname + '/../config.js'),
@@ -7,54 +9,71 @@ var User = require(__dirname + '/../models').User,
 
 module.exports = {
 	'create': function(req, res) {
-		if(req.body.password.length < 6) {
-			res.error(400);
-			return;
-		}
-		
-		var hash = crypto.createHash('sha256');
-		var salt = crypto.randomBytes(32);
-		hash.update(req.body.password);
-		hash.update(salt);
-		
-		var user = new User({
-			'name': req.body.name,
-			'email': req.body.email,
-			'verified': !config.auth.requireVerification,
-			
-			'password': {
-				'hash': hash.digest('hex'),
-				'salt': salt.toString('hex')
-			},
-			
-			'date': Date.now(),
-			'description': '',
+		var createUser = function(err, code) {
+			console.log(code)
 
-			'avatar': gravatar.url(req.body.email, {s: 200, d: 'mm'})
-		});
-		
-		// if we saved an external account link while logged out, add it to the new user profile
-		if(req.session.link) {
-			user.externals.push(req.session.link);
-			req.session.link = null;
-		}
-		
-		req.session.regenerate(function(err) {
-			if(err) res.error(500);
-			else {
-				req.setUser(user);
-				user.save(res.mongo);
+			if(err || !code) {
+				res.error(401);
+				return;
 			}
-		});
-		
-		
-		//TODO: send welcome mail
-		/*mail.send({
-			from: 'info@outfitly.com',
-			to: user.account.email,
-			text: '',
-			html: ''
-		});*/
+
+			if(req.body.password.length < 6) {
+				res.error(400);
+				return;
+			}
+			
+			var hash = crypto.createHash('sha256');
+			var salt = crypto.randomBytes(32);
+			hash.update(req.body.password);
+			hash.update(salt);
+			
+			var user = new User({
+				'name': req.body.name,
+				'email': req.body.email,
+				'verified': !config.auth.requireVerification,
+				
+				'password': {
+					'hash': hash.digest('hex'),
+					'salt': salt.toString('hex')
+				},
+				
+				'date': Date.now(),
+				'description': '',
+
+				'avatar': gravatar.url(req.body.email, {s: 200, d: 'mm'})
+			});
+			
+			req.session.regenerate(function(err) {
+				if(err) res.error(500);
+				else {
+					req.setUser(user);
+			
+					// if we saved an external account link while logged out, add it to the new user profile
+					if(req.session.link) {
+						user.externals.push(req.session.link);
+						req.session.link = null;
+					}
+
+					if(config.auth.requireCode) {
+						code.used = true;
+						code.save();
+					}
+
+					user.save(res.mongo);
+				}
+			});
+			
+			//TODO: send welcome mail
+			/*mail.send({
+				from: 'info@outfitly.com',
+				to: user.account.email,
+				text: '',
+				html: ''
+			});*/
+		};
+
+		if(config.auth.requireCode) Code.findOne({'_id': req.body.code || '', 'used': false}, createUser);
+		else createUser(null, true);
 	},
 	
 	'read': function(req, res) {
@@ -115,6 +134,6 @@ module.exports = {
 	},
 
 	'usernameAvailable': function(req, res) {
-		User.findOne({ username: req.param('username') }, ['_id'], res.mongo);
+		User.findOne({ username: req.param('username') }, {'_id': 1}, res.mongo);
 	}
 };

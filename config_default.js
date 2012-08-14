@@ -72,7 +72,8 @@ config.ssl = {
 
 // auth/account settings
 config.auth = {
-	requireVerification: false
+	requireVerification: false,
+	requireCode: true
 };
 a
 // external service settings

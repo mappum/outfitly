@@ -1,14 +1,11 @@
 module.exports = function(app) {
 	// add JSON error response
 	app.use(function(req, res, next) {
-		res.error = function(code) {
-			res.json({'error': code}, code);
+		res.error = function(code, message) {
+			res.json({'error': message || code}, code);
 		};
-		next();
-	});
 	
-	// add mongo callback JSON response
-	app.use(function(req, res, next) {
+		// add mongo callback JSON response
 		res.mongo = function(err, docs) {
 			if(err) {
 				res.error(500);
