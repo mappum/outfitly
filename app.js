@@ -10,6 +10,14 @@ mongoose.connect(config.mongo.uri);
 
 var app = express();
 
+app.use(function(req, res, next) {
+	if((/^http:\/\/(.*.)*outfitly.com|localhost$/).test(req.headers.origin)) {
+		res.header('Access-Control-Allow-Origin', req.headers.origin);
+		res.header('Access-Control-Allow-Credentials', true);
+	}
+	next();
+});
+
 // development mode specific configuration
 app.configure('development', function() {
 	// if static server is enabled, serve static files, but don't cache them
@@ -28,7 +36,6 @@ app.configure('development', function() {
 app.configure('production', function() {
 	// if static server is enabled, serve static files
 	if(config.static.enabled) {
-		app.use(express.staticCache());
 		app.use(express.static(config.static.path, {maxAge: config.static.age}));
 	}
 	

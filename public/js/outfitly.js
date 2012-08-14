@@ -87,7 +87,8 @@ var apiDomain = '//api.outfitly.com';
 							session.on('loaded', onLoadUser);
 
 							session.loadUser();
-						}
+						},
+						xhrFields: { withCredentials: true }
 					});
 				}
 			};
@@ -104,6 +105,7 @@ var apiDomain = '//api.outfitly.com';
 					url: apiDomain + '/users/exists',
 					data: { username: $el.find('.username').val() },
 					type: 'PUT',
+					xhrFields: { withCredentials: true },
 					error: function(data) {
 						$el.find('label').html('');
 						$el.find('button').removeClass('disabled');
@@ -111,7 +113,8 @@ var apiDomain = '//api.outfitly.com';
 					success: function(data) {
 						$el.find('label').html('That username is not available.');
 						$el.find('button').addClass('disabled');
-					}
+					},
+					xhrFields: { withCredentials: true }
 				});
 			});
 
@@ -133,7 +136,8 @@ var apiDomain = '//api.outfitly.com';
 					success: function(e) {
 						options.model.fetch();
 					}.bind(this),
-					type: 'POST'
+					type: 'POST',
+					xhrFields: { withCredentials: true }
 				});
 
 				e.preventDefault();
@@ -155,7 +159,8 @@ var apiDomain = '//api.outfitly.com';
 					success: function(e) {
 						options.model.fetch();
 					}.bind(this),
-					type: 'DELETE'
+					type: 'DELETE',
+					xhrFields: { withCredentials: true }
 				});
 
 				e.preventDefault();
@@ -176,7 +181,8 @@ var apiDomain = '//api.outfitly.com';
 					success: function(e) {
 						options.model.fetch();
 					}.bind(this),
-					type: 'POST'
+					type: 'POST',
+					xhrFields: { withCredentials: true }
 				});
 
 				e.preventDefault();
@@ -198,7 +204,8 @@ var apiDomain = '//api.outfitly.com';
 					success: function(e) {
 						options.model.fetch();
 					}.bind(this),
-					type: 'DELETE'
+					type: 'DELETE',
+					xhrFields: { withCredentials: true }
 				});
 
 				e.preventDefault();
@@ -210,7 +217,8 @@ var apiDomain = '//api.outfitly.com';
 
 				$.ajax({
 					url: apiDomain + '/outfits/' + options.model.get('_id'),
-					type: 'DELETE'
+					type: 'DELETE',
+					xhrFields: { withCredentials: true }
 				});
 
 				e.preventDefault();
@@ -244,7 +252,8 @@ var apiDomain = '//api.outfitly.com';
 						success: function(e) {
 							options.model.fetch();
 						}.bind(this),
-						type: 'POST'
+						type: 'POST',
+						xhrFields: { withCredentials: true }
 					});
 					$el.find('.body').val('');
 				}
@@ -270,7 +279,8 @@ var apiDomain = '//api.outfitly.com';
 					success: function(e) {
 						options.model.fetch();
 					}.bind(this),
-					type: 'DELETE'
+					type: 'DELETE',
+					xhrFields: { withCredentials: true }
 				});
 				
 				e.preventDefault();
@@ -364,7 +374,8 @@ var apiDomain = '//api.outfitly.com';
 						$.ajax({
 							url: apiDomain + '/products',
 							data: {'query': query},
-							type: 'POST'
+							type: 'POST',
+							xhrFields: { withCredentials: true }
 						}).success(function(data) {
 							$el.find('.item-search .loading').addClass('invisible');
 
@@ -481,7 +492,8 @@ var apiDomain = '//api.outfitly.com';
 					that.set('userId', null);
 					that.set('user', null);
 					that.trigger('loaded', null);
-				}
+				},
+				xhrFields: { withCredentials: true }
 			});
 		},
 		login: function(user, password, success, error) {
@@ -499,14 +511,16 @@ var apiDomain = '//api.outfitly.com';
 					that.set('userId', null);
 					that.set('user', null);
 					if(error) error(data);
-				}
+				},
+				xhrFields: { withCredentials: true }
 			});
 		},
 		register: function(data, success, error) {
 			var that = this;
 			$.ajax(apiDomain + '/users', {
 				type: 'POST',
-				data: data
+				data: data,
+				xhrFields: { withCredentials: true }
 			})
 				.success(function(data) {
 					data.person = {
