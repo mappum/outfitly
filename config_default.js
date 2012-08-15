@@ -75,7 +75,7 @@ config.auth = {
 	requireVerification: false,
 	requireCode: true
 };
-a
+
 // external service settings
 config.externals = {
 	'facebook': {
