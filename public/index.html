@@ -57,15 +57,19 @@
 					<% var repost = typeof this.model.get('original') !== 'undefined' && typeof this.model.get('original')._id !== 'undefined' %>
 					<% if(repost) { %>
 						<br>
-						<span class="by"> by </span>
-						<a class="author" href="/#/@<%- this.model.get('original').username %>">
-							<%- this.model.get('original').name %>
-						</a>
+						<span>
+							<span class="by"> by </span>
+							<a class="author" href="/#/@<%- this.model.get('original').username %>">
+								<%- this.model.get('original').name %>
+							</a>
+						</span>
 					<% } %>
 					
 					<span class="dot"></span>
-					<span class="by"> <%= repost ? 'via' : 'by' %> </span>
-					<a class="author" href="/#/@<%- this.model.get('author').username %>"><%- this.model.get('author').name %></a>
+					<span>
+						<span class="by"> <%= repost ? 'via' : 'by' %> </span>
+						<a class="author" href="/#/@<%- this.model.get('author').username %>"><%- this.model.get('author').name %></a>
+					</span>
 				</div>
 				<div class="bottom">
 					<% var stats = this.model.get('stats'); %>

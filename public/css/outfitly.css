@@ -498,6 +498,9 @@ input {
 	padding: 5px;
 	margin-bottom: 0;
 }
+.outfit .comment .thumbnail {
+	bottom: 0;
+}
 .outfit .comment .author {
 	font-weight: bold;
 }
@@ -535,6 +538,9 @@ input {
 .outfit.summary .body {
 	background: white;
 	padding: 6px 0;
+}
+.outfit.summary .body span {
+	display: inline-block;
 }
 
 .user.summary a {
