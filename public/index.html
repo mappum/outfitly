@@ -48,7 +48,7 @@
 			<% } %>
 			
 			<a class="image" href="/#/outfit/<%- this.model.get('_id') %>">
-				<img src="<%- this.model.get('image') || 'http://placehold.it/250x180' %>">
+				<img src="<%- this.model.get('image') %>/convert?w=250">
 			</a>
 			<div class="body">
 				<div class="top">
@@ -301,7 +301,7 @@
 			<hr>
 
 			<div class="image">
-				<img src="<%- this.model.get('image') %>">
+				<img src="<%- this.model.get('image') %>/convert?w=600&h=800">
 			</div>
 			<div class="body form-actions actions">
 				<% var myPost = this.model.get('author')._id === this.options.session.get('userId'); %>
@@ -422,7 +422,7 @@
 							<% if(!hasImage) { %>
 								<iframe class="filepicker-iframe span12" id="filepicker-iframe" src="about:blank"></iframe>
 							<% } else { %>
-								<img class="outfit-image" src="<%- this.model.get('image') %>">
+								<img class="outfit-image" src="<%- this.model.get('image') %>/convert?w=600&h=800">
 								<br>
 								<button class="btn reset">Use a different image</button>
 							<% } %>
