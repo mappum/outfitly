@@ -72,7 +72,9 @@ module.exports = {
 			});*/
 		};
 
-		if(config.auth.requireCode) Code.findOne({'_id': req.body.code.toLowerCase() || '', 'used': false}, createUser);
+		if(config.auth.requireCode) Code.findOne({
+			'_id': req.body.code.toLowerCase().replace(/[^\w]/gi, '') || '',
+			'used': false}, createUser);
 		else createUser(null, true);
 	},
 	
