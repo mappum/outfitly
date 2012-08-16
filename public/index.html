@@ -44,7 +44,7 @@
 						<span class="dot"></span>
 						<a class="delete" href="#">delete</a>
 					<% } %>
-				</div>
+				</div>T
 			<% } %>
 			
 			<a class="image" href="/#/outfit/<%- this.model.get('_id') %>">
@@ -52,7 +52,7 @@
 			</a>
 			<div class="body">
 				<div class="top">
-					<span class="caption"><%- this.model.get('caption') %></span>
+					<span class="caption"><%- truncate(this.model.get('caption'), 64) %></span>
 
 					<% var repost = typeof this.model.get('original') !== 'undefined' && typeof this.model.get('original')._id !== 'undefined' %>
 					<% if(repost) { %>
