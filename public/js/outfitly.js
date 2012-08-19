@@ -19,10 +19,23 @@ Backbone.sync = function(method, model, options) {
 	return Backbone._sync(method, model, options);
 };
 
-var apiDomain = '';//api.outfitly.com';
+var apiDomain = '';
+
+// detect old browsers and IE and display "unsupported" message
+$(function() {
+	var passedTest = false;
+	try {
+		// simple js test that fails on old browsers
+		(function(){}).bind(document);
+		passedTest = true;
+	} catch(e) {}
+
+	if(navigator.appName === 'Microsoft Internet Explorer' || !passedTest) {
+		document.write(document.getElementById('template-unsupported').innerHTML);
+	}
+});
 
 (function(){
-
 	// #### FORM LOGIC ####
 	//TODO: work form logic into torso.js?
 
