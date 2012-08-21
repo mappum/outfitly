@@ -140,18 +140,6 @@ textarea {
 	width: 100%;
 }
 
-.piece > .meta {
-	padding: 6px;
-	float: left;
-}
-.piece > .meta .title {
-	font-size: 16px;
-	color: #000;
-}
-.piece > .meta .company {
-	color: #666;
-}
-
 .outfit .likes h2,
 .outfit .reposts h2 {
 	margin-bottom: 8px;
@@ -214,7 +202,6 @@ textarea {
 	min-width: 270px;
 }
 
-.brand,
 .navbar .brand {
 	padding-bottom: 6px;
 	padding-top: 7px;
@@ -301,6 +288,8 @@ textarea {
 	margin-right: 12px;
 }
 
+
+
 /******************** STYLE ********************/
 ::selection,
 ::-moz-selection,
@@ -351,7 +340,6 @@ hr {
 	margin: 4px;
 }
 
-.brand,
 .navbar .brand {
 	color: #7ACEC6;
 	text-shadow: 0 2px #1C9992;
@@ -441,7 +429,6 @@ input {
 	-moz-box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
 	box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2);
 	border-radius: 2px;
-	overflow: hidden;
 }
 
 .well {
@@ -625,16 +612,6 @@ input {
 	margin: 8px;
 }
 
-.form-post .piece {
-	margin-bottom: 32px;
-}
-.form-post .piece .thumbnail {
-	padding: 0;
-	border: 1px solid #c5c5c5;
-	overflow: hidden;
-	background: none;
-}
-
 .btn-info {
 	background-color: #1C9992;
 }
@@ -645,17 +622,62 @@ input {
 	background-color: #05766F;
 }
 
+.piece-list {
+	margin: 0;
+}
 .piece-list .piece {
 	margin-left: 0;
 }
-.piece-list .piece .thumbnail {
-	width: 50px;
-	height: 50px;
+.piece {
+	margin: 0 0 8px 0;
+	list-style: none;
+}
+.piece .thumbnail {
+	width: 84px;
+	height: 84px;
+	bottom: 0;
+	float: left;
+	margin: 0;
+	padding: 0;
+	border: none;
+	margin-right: 8px;
+}
+.piece .meta {
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+.piece .title,
+.piece a.title {
+	font-size: 20px;
+	margin: 0;
+	color: #000;
+}
+.piece .brand,
+.piece a.brand {
+	font-size: 16px;
+	margin: 0;
+	color: #666;
 }
 
-.item-list .piece {
-	cursor: pointer;
+.piece input.title {
+	height: 52px;
+	line-height: 52px;
 }
-.item-list .piece:hover {
-	background: #ddd;
+.piece input.brand {
+	border-top: none !important;
+	height: 32px;
+	line-height: 32px;
+}
+.autocomplete > .piece {
+	margin-bottom: 1px solid #bbb;
+	cursor: pointer;
+	padding: 4px 0;
+}
+.autocomplete > .piece:hover {
+	background-color: rgba(0, 57, 59, 0.9);
+}
+.autocomplete > .piece:hover .title,
+.autocomplete > .piece:hover .brand {
+	color: #fff;
 }

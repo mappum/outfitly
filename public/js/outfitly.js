@@ -35,360 +35,404 @@ $(function() {
 	}
 });
 
-(function(){
-	// #### FORM LOGIC ####
-	//TODO: work form logic into torso.js?
+// #### FORM LOGIC ####
+//TODO: work form logic into torso.js?
 
-	var formSetups = {
-		'login': function($el, session) {
-			var login = function() {
-				if(!$el.find('button').hasClass('disabled')) {
-					$el.find('button').addClass('disabled').text('Signing in...');
-					session.login($el.find('.user').val(),
-						$el.find('.password').val(),
-						null,
-						function() {
-							$el.find('button').removeClass('disabled').text('Sign in');
-							$el.find('label').html('Invalid login or password.');
-						});
-				}
-			};
-
-			$el.keypress(function(e) {
-				if(e.which === 13) {
-					login();
-					return false;
-				}
-			});
-
-			$el.find('button').click(login);
-		},
-
-		'register': function($el, session) {
-			var register = function() {
-				if(!$el.find('button').hasClass('disabled')) {
-					$el.find('button').addClass('disabled').text('Signing up...');
-					session.register({
-							name: $el.find('.name').val(),
-							email: $el.find('.email').val(),
-							password: $el.find('.password').val(),
-							code: $el.find('.code').val()
-						}, function() {
-							window.location = '/#/register';
-						}, function(e) {
-							$el.find('button').removeClass('disabled').text('Sign up');
-							$el.find('label').html('An error occurred.');
-						});
-				}
-			};
-
-			$el.keypress(function(e) {
-				if(e.which === 13) {
-					register();
-					return false;
-				}
-			});
-
-			$el.find('button').click(register);
-		},
-
-		'register-2': function($el, session) {
-			var submit = function() {
-				if(!$el.find('button').hasClass('disabled')) {
-					$el.find('button').addClass('disabled').text('Submitting...');
-					$.ajax({
-						type: 'PUT',
-						url: apiDomain + '/users/' + session.get('userId'),
-						data: { username: $el.find('.username').val() },
-						success: function() {
-							var onLoadUser = function(user) {
-								if(typeof user.get('username') !== 'undefined') window.location = '';
-								session.off('loaded', onLoadUser);
-							};
-							session.on('loaded', onLoadUser);
-
-							session.loadUser();
-						},
-						xhrFields: { withCredentials: true }
+var formSetups = {
+	'login': function($el, session) {
+		var login = function() {
+			if(!$el.find('button').hasClass('disabled')) {
+				$el.find('button').addClass('disabled').text('Signing in...');
+				session.login($el.find('.user').val(),
+					$el.find('.password').val(),
+					null,
+					function() {
+						$el.find('button').removeClass('disabled').text('Sign in');
+						$el.find('label').html('Invalid login or password.');
 					});
-				}
-			};
+			}
+		};
 
-			$el.keypress(function(e) {
-				if(e.which === 13) {
-					submit();
-					return false;
-				}
-			});
+		$el.keypress(function(e) {
+			if(e.which === 13) {
+				login();
+				return false;
+			}
+		});
 
-			$el.keyup(function(e) {
+		$el.find('button').click(login);
+	},
+
+	'register': function($el, session) {
+		var register = function() {
+			if(!$el.find('button').hasClass('disabled')) {
+				$el.find('button').addClass('disabled').text('Signing up...');
+				session.register({
+						name: $el.find('.name').val(),
+						email: $el.find('.email').val(),
+						password: $el.find('.password').val(),
+						code: $el.find('.code').val()
+					}, function() {
+						window.location = '/#/register';
+					}, function(e) {
+						$el.find('button').removeClass('disabled').text('Sign up');
+						$el.find('label').html('An error occurred.');
+					});
+			}
+		};
+
+		$el.keypress(function(e) {
+			if(e.which === 13) {
+				register();
+				return false;
+			}
+		});
+
+		$el.find('button').click(register);
+	},
+
+	'register-2': function($el, session) {
+		var submit = function() {
+			if(!$el.find('button').hasClass('disabled')) {
+				$el.find('button').addClass('disabled').text('Submitting...');
 				$.ajax({
-					url: apiDomain + '/users/exists',
-					data: { username: $el.find('.username').val() },
 					type: 'PUT',
-					xhrFields: { withCredentials: true },
-					error: function(data) {
-						$el.find('label').html('');
-						$el.find('button').removeClass('disabled');
+					url: apiDomain + '/users/' + session.get('userId'),
+					data: { username: $el.find('.username').val() },
+					success: function() {
+						var onLoadUser = function(user) {
+							if(typeof user.get('username') !== 'undefined') window.location = '';
+							session.off('loaded', onLoadUser);
+						};
+						session.on('loaded', onLoadUser);
+
+						session.loadUser();
 					},
-					success: function(data) {
-						$el.find('label').html('That username is not available.');
-						$el.find('button').addClass('disabled');
-					},
 					xhrFields: { withCredentials: true }
 				});
-			});
+			}
+		};
 
-			$el.find('button').click(submit);
-		},
-
-		'actions': function($el, options) {
-			$el.find('.like').click(function(e) {
-				var stats = _.clone(options.model.get('stats'));
-				stats.likes++;
-
-				var likes = _.clone(options.model.get('likes'));
-				likes.push(options.session.get('user').get('person'));
-
-				options.model.set({'stats': stats, 'likes': likes});
-
-				$.ajax({
-					url: apiDomain + '/outfits/' + options.model.get('_id') + '/likes',
-					success: function(e) {
-						options.model.fetch();
-					}.bind(this),
-					type: 'POST',
-					xhrFields: { withCredentials: true }
-				});
-
-				e.preventDefault();
+		$el.keypress(function(e) {
+			if(e.which === 13) {
+				submit();
 				return false;
-			}.bind(this));
+			}
+		});
 
-			$el.find('.unlike').click(function(e) {
-				var stats = _.clone(options.model.get('stats'));
-				stats.likes--;
+		$el.keyup(function(e) {
+			$.ajax({
+				url: apiDomain + '/users/exists',
+				data: { username: $el.find('.username').val() },
+				type: 'PUT',
+				xhrFields: { withCredentials: true },
+				error: function(data) {
+					$el.find('label').html('');
+					$el.find('button').removeClass('disabled');
+				},
+				success: function(data) {
+					$el.find('label').html('That username is not available.');
+					$el.find('button').addClass('disabled');
+				},
+				xhrFields: { withCredentials: true }
+			});
+		});
 
-				var likes = _.reject(_.clone(options.model.get('likes')),
-					function(like) { return like._id === options.session.get('userId'); }
-				);
-				
-				options.model.set({'stats': stats, 'likes': likes});
+		$el.find('button').click(submit);
+	},
 
-				$.ajax({
-					url: apiDomain + '/outfits/' + options.model.get('_id') + '/likes',
-					success: function(e) {
-						options.model.fetch();
-					}.bind(this),
-					type: 'DELETE',
-					xhrFields: { withCredentials: true }
+	'actions': function($el, options) {
+		$el.find('.like').click(function(e) {
+			var stats = _.clone(options.model.get('stats'));
+			stats.likes++;
+
+			var likes = _.clone(options.model.get('likes'));
+			likes.push(options.session.get('user').get('person'));
+
+			options.model.set({'stats': stats, 'likes': likes});
+
+			$.ajax({
+				url: apiDomain + '/outfits/' + options.model.get('_id') + '/likes',
+				success: function(e) {
+					options.model.fetch();
+				}.bind(this),
+				type: 'POST',
+				xhrFields: { withCredentials: true }
+			});
+
+			e.preventDefault();
+			return false;
+		}.bind(this));
+
+		$el.find('.unlike').click(function(e) {
+			var stats = _.clone(options.model.get('stats'));
+			stats.likes--;
+
+			var likes = _.reject(_.clone(options.model.get('likes')),
+				function(like) { return like._id === options.session.get('userId'); }
+			);
+			
+			options.model.set({'stats': stats, 'likes': likes});
+
+			$.ajax({
+				url: apiDomain + '/outfits/' + options.model.get('_id') + '/likes',
+				success: function(e) {
+					options.model.fetch();
+				}.bind(this),
+				type: 'DELETE',
+				xhrFields: { withCredentials: true }
+			});
+
+			e.preventDefault();
+			return false;
+		}.bind(this));
+
+		$el.find('.repost').click(function(e) {
+			var stats = _.clone(options.model.get('stats'));
+			stats.reposts++;
+
+			var reposts = _.clone(options.model.get('reposts'));
+			reposts.push(options.session.get('user').get('person'));
+
+			options.model.set({'stats': stats, 'reposts': reposts});
+
+			$.ajax({
+				url: apiDomain + '/outfits/' + options.model.get('_id'),
+				success: function(e) {
+					options.model.fetch();
+				}.bind(this),
+				type: 'POST',
+				xhrFields: { withCredentials: true }
+			});
+
+			e.preventDefault();
+			return false;
+		});
+
+		$el.find('.reposted').click(function(e) {
+			var stats = _.clone(options.model.get('stats'));
+			stats.reposts--;
+
+			var reposts = _.reject(_.clone(options.model.get('reposts')),
+				function(repost) { return repost._id === options.session.get('userId'); }
+			);
+
+			options.model.set({'stats': stats, 'reposts': reposts});
+
+			$.ajax({
+				url: apiDomain + '/outfits/' + options.model.get('_id') + '/reposts',
+				success: function(e) {
+					options.model.fetch();
+				}.bind(this),
+				type: 'DELETE',
+				xhrFields: { withCredentials: true }
+			});
+
+			e.preventDefault();
+			return false;
+		});
+
+		$el.find('.delete').click(function(e) {
+			options.model.destroy();
+
+			$.ajax({
+				url: apiDomain + '/outfits/' + options.model.get('_id'),
+				type: 'DELETE',
+				xhrFields: { withCredentials: true }
+			});
+
+			e.preventDefault();
+			return false;
+		});
+	},
+
+	'scroll-up': function($el) {
+		$el.click(function() {
+			$('html, body').animate({scrollTop: '0'}, 800);
+		});
+	},
+
+	'comment': function($el, options) {
+		var comment = function() {
+			var body = $el.find('.body').val();
+			if(body.length > 0) {
+				var comments = _.clone(options.model.get('comments'));
+				comments.push({
+					author: options.session.get('user').get('person'),
+					date: Date.now(),
+					body: body
 				});
-
-				e.preventDefault();
-				return false;
-			}.bind(this));
-
-			$el.find('.repost').click(function(e) {
-				var stats = _.clone(options.model.get('stats'));
-				stats.reposts++;
-
-				var reposts = _.clone(options.model.get('reposts'));
-				reposts.push(options.session.get('user').get('person'));
-
-				options.model.set({'stats': stats, 'reposts': reposts});
-
-				$.ajax({
-					url: apiDomain + '/outfits/' + options.model.get('_id'),
-					success: function(e) {
-						options.model.fetch();
-					}.bind(this),
-					type: 'POST',
-					xhrFields: { withCredentials: true }
-				});
-
-				e.preventDefault();
-				return false;
-			});
-
-			$el.find('.reposted').click(function(e) {
-				var stats = _.clone(options.model.get('stats'));
-				stats.reposts--;
-
-				var reposts = _.reject(_.clone(options.model.get('reposts')),
-					function(repost) { return repost._id === options.session.get('userId'); }
-				);
-
-				options.model.set({'stats': stats, 'reposts': reposts});
-
-				$.ajax({
-					url: apiDomain + '/outfits/' + options.model.get('_id') + '/reposts',
-					success: function(e) {
-						options.model.fetch();
-					}.bind(this),
-					type: 'DELETE',
-					xhrFields: { withCredentials: true }
-				});
-
-				e.preventDefault();
-				return false;
-			});
-
-			$el.find('.delete').click(function(e) {
-				options.model.destroy();
-
-				$.ajax({
-					url: apiDomain + '/outfits/' + options.model.get('_id'),
-					type: 'DELETE',
-					xhrFields: { withCredentials: true }
-				});
-
-				e.preventDefault();
-				return false;
-			});
-		},
-
-		'scroll-up': function($el) {
-			$el.click(function() {
-				$('html, body').animate({scrollTop: '0'}, 800);
-			});
-		},
-
-		'comment': function($el, options) {
-			var comment = function() {
-				var body = $el.find('.body').val();
-				if(body.length > 0) {
-					var comments = _.clone(options.model.get('comments'));
-					comments.push({
-						author: options.session.get('user').get('person'),
-						date: Date.now(),
-						body: body
-					});
-					options.model.set('comments', comments);
-
-					$.ajax({
-						url: apiDomain + '/outfits/' + options.model.get('_id') + '/comments',
-						data: {
-							body: body
-						},
-						success: function(e) {
-							options.model.fetch();
-						}.bind(this),
-						type: 'POST',
-						xhrFields: { withCredentials: true }
-					});
-					$el.find('.body').val('');
-				}
-			};
-			$el.find('button').click(comment);
-			$el.keypress(function(e) {
-				if(e.which === 13 && !e.shiftKey) {
-					comment();
-					return false;
-				}
-			});
-
-			$el.find('.delete').click(function(e) {
-				var cId = $(this).parent().attr('data-id');
-
-				var comments = _.reject(_.clone(options.model.get('comments')),
-					function(comment) { return comment._id === cId; }
-				);
 				options.model.set('comments', comments);
 
 				$.ajax({
-					url: apiDomain + '/outfits/' + options.model.get('_id') + '/comments/' + cId,
+					url: apiDomain + '/outfits/' + options.model.get('_id') + '/comments',
+					data: {
+						body: body
+					},
 					success: function(e) {
 						options.model.fetch();
 					}.bind(this),
-					type: 'DELETE',
+					type: 'POST',
 					xhrFields: { withCredentials: true }
 				});
-				
-				e.preventDefault();
+				$el.find('.body').val('');
+			}
+		};
+		$el.find('button').click(comment);
+		$el.keypress(function(e) {
+			if(e.which === 13 && !e.shiftKey) {
+				comment();
 				return false;
+			}
+		});
+
+		$el.find('.delete').click(function(e) {
+			var cId = $(this).parent().attr('data-id');
+
+			var comments = _.reject(_.clone(options.model.get('comments')),
+				function(comment) { return comment._id === cId; }
+			);
+			options.model.set('comments', comments);
+
+			$.ajax({
+				url: apiDomain + '/outfits/' + options.model.get('_id') + '/comments/' + cId,
+				success: function(e) {
+					options.model.fetch();
+				}.bind(this),
+				type: 'DELETE',
+				xhrFields: { withCredentials: true }
 			});
-		},
+			
+			e.preventDefault();
+			return false;
+		});
+	},
 
-		'post': function($el, options) {
-			$el.find('button.next').click(function() {
-				if(!$(this).hasClass('disabled')) {
-					$(this).addClass('disabled');
-					options.view.forward();
-				}
+	'post': function($el, options) {
+		$el.find('button.next').click(function() {
+			if(!$(this).hasClass('disabled')) {
+				$(this).addClass('disabled');
+				options.view.forward();
+			}
+		});
+
+		$el.find('button.back').click(function() {
+			if(!$(this).hasClass('disabled')) {
+				$(this).addClass('disabled');
+				options.view.back();
+			}
+		});
+
+		$el.find('button.submit').click(function() {
+			if(!$(this).hasClass('disabled')) {
+				$(this).addClass('disabled').text('Posting outfit...');
+
+				options.model.save(null, {success: function() {
+					window.location = '/#/';
+				}});
+			}
+		});
+	},
+
+	'post-0': function($el, options) {
+		setTimeout(function(){
+			filepicker.getFile('image/*', {
+				'multiple': false,
+				'container': 'filepicker-iframe',
+				'services': [
+					filepicker.SERVICES.COMPUTER,
+					filepicker.SERVICES.WEBCAM,
+					filepicker.SERVICES.FACEBOOK,
+					filepicker.SERVICES.INSTAGRAM
+				],
+				'persist': true
+			}, function(response){
+				options.model.set('image', response);
+				$el.find('button.next').removeClass('disabled');
+				options.view.forward();
 			});
+		}, 0);
 
-			$el.find('button.back').click(function() {
-				if(!$(this).hasClass('disabled')) {
-					$(this).addClass('disabled');
-					options.view.back();
-				}
-			});
+		$el.find('button.reset').click(function() {
+			options.model.set('image', null);
+			options.view.render();
+		});
+	},
 
-			$el.find('button.submit').click(function() {
-				if(!$(this).hasClass('disabled')) {
-					$(this).addClass('disabled').text('Posting outfit...');
+	'post-1': function($el, options) {
+		$el.find('button.next, button.back').click(function() {
+			options.model.set('caption', $el.find('textarea').val());
+		});
 
-					options.model.save(null, {success: function() {
-						window.location = '/#/';
-					}});
-				}
-			});
-		},
+		var next = $el.find('button.next');
 
-		'post-0': function($el, options) {
-			setTimeout(function(){
-				filepicker.getFile('image/*', {
-					'multiple': false,
-					'container': 'filepicker-iframe',
-					'services': [
-						filepicker.SERVICES.COMPUTER,
-						filepicker.SERVICES.WEBCAM,
-						filepicker.SERVICES.FACEBOOK,
-						filepicker.SERVICES.INSTAGRAM
-					],
-					'persist': true
-				}, function(response){
-					options.model.set('image', response);
-					$el.find('button.next').removeClass('disabled');
-					options.view.forward();
+		$el.find('textarea').keyup(function(e) {
+			if($(this).val().length > 0) next.removeClass('disabled');
+			else next.addClass('disabled');
+		});
+	},
+
+	'post-2': function($el, options) {
+		var pieces = new PieceCollection(options.model.get('pieces'));
+		var pieceListView = new PieceListView({collection: pieces, link: false});
+		$el.find('.pieces').append(pieceListView.$el);
+
+		var inputPieceView = new PieceView({input: true});
+		inputPieceView.$el.addClass('input');
+		$el.find('.pieces').append(inputPieceView.$el);
+
+		var updatePieces = function() {
+			options.model.set('pieces', pieces.toJSON());
+		};
+		pieces.bind('add', updatePieces);
+		pieces.bind('remove', updatePieces);
+
+		var autocomplete = $el.find('.autocomplete'),
+			dropdown = $el.find('.dropdown');
+
+		var clearDropdown = function() {
+			dropdown.removeClass('open');
+			autocomplete.empty();
+		};
+
+		var clearInput = function() {
+			inputPieceView.model.set(new Piece().toJSON());
+			inputPieceView.render();
+			setupInput();
+			clearDropdown();
+		};
+
+		var addInput = function() {
+			if(inputPieceView.$el.find('.title').val()) {
+				inputPieceView.model.set({
+					title: inputPieceView.$el.find('.title').val(),
+					brand: inputPieceView.$el.find('.brand').val()
 				});
-			}, 0);
+				pieces.push(new Piece(inputPieceView.model.toJSON()));
+				clearInput();
+			}
+		};
 
-			$el.find('button.reset').click(function() {
-				options.model.set('image', null);
-				options.view.render();
+		var onItemClick = function(e) {
+			inputPieceView.model.set(this.model.toJSON());
+			clearDropdown();
+			setupInput();
+			
+			e.preventDefault();
+			return false;
+		};
+
+		var setupInput = function() {
+			$el.find('.piece.input').keyup(function(e) {
+				if(e.which === 13) {
+					addInput();
+					e.preventDefault();
+					return false;
+				}
 			});
-		},
-
-		'post-1': function($el, options) {
-			$el.find('button.next, button.back').click(function() {
-				options.model.set('caption', $el.find('textarea').val());
-			});
-
-			var next = $el.find('button.next');
-
-			$el.find('textarea').keyup(function(e) {
-				if($(this).val().length > 0) next.removeClass('disabled');
-				else next.addClass('disabled');
-			});
-		},
-
-		'post-2': function($el, options) {
-			var pieces = new PieceCollection(options.model.get('pieces'));
-			var pieceListView = new PieceListView({collection: pieces});
-			$el.find('.items').append(pieceListView.$el);
-
-			var updatePieces = function() {
-				options.model.set('pieces', pieces.toJSON());
-			};
-			pieces.bind('add', updatePieces);
-			pieces.bind('remove', updatePieces);
-
-			$el.find('input.item').keyup(function(e) {
-				var itemList = $el.find('.item-list');
-				itemList.empty();
-
-				$el.find('.item-search .loading').removeClass('invisible');
+			$el.find('.piece.input .title').keyup(function(e) {
+				clearDropdown();
+				$el.find('.dropdown .loading').removeClass('invisible');
 
 				setTimeout(function(query) {
 					if($(this).val() === query) {
@@ -398,560 +442,579 @@ $(function() {
 							type: 'POST',
 							xhrFields: { withCredentials: true }
 						}).success(function(data) {
-							$el.find('.item-search .loading').addClass('invisible');
+							$el.find('.dropdown .loading').addClass('invisible');
 
 							var items = data.Items.Item;
-							_.each(items, function(item) {
-								var piece = new Piece({
-									'url': item.DetailPageURL,
-									'image': item.MediumImage.URL,
-									'title': item.ItemAttributes.Title,
-									'brand': item.ItemAttributes.Brand
+							if(items && items.length > 0) {
+								dropdown.addClass('open');
+								_.each(items, function(item) {
+									var piece = new Piece({
+										'url': item.DetailPageURL,
+										'image': item.MediumImage.URL,
+										'title': item.ItemAttributes.Title,
+										'brand': item.ItemAttributes.Brand
+									});
+									var pieceView = new PieceView({model: piece, link: false});
+									pieceView.$el.click(onItemClick.bind(pieceView));
+									autocomplete.append(pieceView.$el);
 								});
-								var pieceView = new PieceView({model: piece});
-								itemList.append(pieceView.$el);
-
-								pieceView.$el.click(function(e) {
-									pieces.add(piece);
-									itemList.empty();
-									e.preventDefault();
-									return false;
-								});
-							});
+							} else {
+								clearDropdown();
+							}
 						});
 					}
-				}.bind(this), 500, $(this).val());
+				}.bind(this), 300, $(this).val());
 			});
-		}
-	};
-	var setupForms = function($el, options) {
-		var forms = $el.find('[class^="form-"], [class*="form-"]');
+			$el.find('.piece.input .title').blur(clearDropdown);
+		}.bind(this);
+		setupInput();
 
-		forms.each(function(i, el) {
-			var $el = $(el);
-			for(var form in formSetups) {
-				if($el.hasClass('form-' + form)) {
-					formSetups[form]($el, options);
-				}
+		$el.find('button.clear').click(clearInput);
+		$el.find('button.add').click(addInput);
+	}
+};
+var setupForms = function($el, options) {
+	var forms = $el.find('[class^="form-"], [class*="form-"]');
+
+	forms.each(function(i, el) {
+		var $el = $(el);
+		for(var form in formSetups) {
+			if($el.hasClass('form-' + form)) {
+				formSetups[form]($el, options);
 			}
+		}
+	});
+};
+
+// #### MODELS ####
+
+var Base = Backbone.Model.extend({
+	initialize: function() {
+		_.bindAll(this, 'url');
+	},
+	
+	idAttribute: '_id',
+	collectionPath: '',
+	
+	url: function() { return apiDomain + '/' + this.collectionPath + '/' + (this.id || ''); }
+});
+
+var User = Base.extend({
+	collectionPath: 'users',
+	defaults: {
+		_id: '',
+		date: Date.now()
+	}
+});
+
+var Piece = Backbone.Model.extend({
+	defaults: {
+		title: '',
+		brand: '',
+		image: '',
+		url: ''
+	}
+});
+
+var Outfit = Base.extend({
+	collectionPath: 'outfits',
+	defaults: {
+		caption: ''
+	},
+
+	likedBy: function(id) {
+		var likes = this.get('likes');
+		return !likes.every(function(like) {
+			if(like._id === id) return false;
+			return true;
 		});
-	};
+	},
 
-	// #### MODELS ####
+	repostedBy: function(id) {
+		var reposts = this.get('reposts');
+		return !reposts.every(function(repost) {
+			if(repost._id === id) return false;
+			return true;
+		});
+	}
+});
 
-	var Base = Backbone.Model.extend({
-		initialize: function() {
-			_.bindAll(this, 'url');
-		},
+var Session = Backbone.Model.extend({
+	initialize: function(options) {
+		_.bindAll(this, 'loggedIn', 'loadUser', 'login', 'register', 'toJSON');
+
+		this.loadUser();
+	},
+	loggedIn: function() {
+		return Boolean(this.get('userId'));
+	},
+	loadUser: function() {
+		var that = this;
 		
-		idAttribute: '_id',
-		collectionPath: '',
-		
-		url: function() { return apiDomain + '/' + this.collectionPath + '/' + (this.id || ''); }
-	});
-
-	var User = Base.extend({
-		collectionPath: 'users',
-		defaults: {
-			_id: '',
-			date: Date.now()
-		}
-	});
-
-	var Piece = Backbone.Model.extend({});
-
-	var Outfit = Base.extend({
-		collectionPath: 'outfits',
-		defaults: {
-			caption: ''
-		},
-
-		likedBy: function(id) {
-			var likes = this.get('likes');
-			return !likes.every(function(like) {
-				if(like._id === id) return false;
-				return true;
-			});
-		},
-
-		repostedBy: function(id) {
-			var reposts = this.get('reposts');
-			return !reposts.every(function(repost) {
-				if(repost._id === id) return false;
-				return true;
-			});
-		}
-	});
-
-	var Session = Backbone.Model.extend({
-		initialize: function(options) {
-			_.bindAll(this, 'loggedIn', 'loadUser', 'login', 'register', 'toJSON');
-
-			this.loadUser();
-		},
-		loggedIn: function() {
-			return Boolean(this.get('userId'));
-		},
-		loadUser: function() {
-			var that = this;
-			
-			$.ajax({
-				url: apiDomain + '/auth/info',
-				success: function(data) {
-					data.person = {
-						_id: data._id,
-						name: data.name,
-						username: data.username,
-						avatar: data.avatar
-					};
-					that.set('userId', data._id);
-					that.set('user', new User(data));
-					that.trigger('loaded', that.get('user'));
-					if(!data.username) window.location = '/#/register';
-				},
-				error: function() {
-					that.set('userId', null);
-					that.set('user', null);
-					that.trigger('loaded', null);
-				},
-				xhrFields: { withCredentials: true }
-			});
-		},
-		login: function(user, password, success, error) {
-			var that = this;
-			$.ajax(apiDomain + '/auth', {
-				type: 'POST',
-				data: { user: user, password: password },
-				success: function(data) {
-					if(typeof data.username !== 'undefined') window.location = '';
-					else window.location = '/#/register';
-					
-					if(success) success(data);
-				},
-				error: function(data) {
-					that.set('userId', null);
-					that.set('user', null);
-					if(error) error(data);
-				},
-				xhrFields: { withCredentials: true }
-			});
-		},
-		register: function(data, success, error) {
-			var that = this;
-			$.ajax(apiDomain + '/users', {
-				type: 'POST',
-				data: data,
-				xhrFields: { withCredentials: true }
+		$.ajax({
+			url: apiDomain + '/auth/info',
+			success: function(data) {
+				data.person = {
+					_id: data._id,
+					name: data.name,
+					username: data.username,
+					avatar: data.avatar
+				};
+				that.set('userId', data._id);
+				that.set('user', new User(data));
+				that.trigger('loaded', that.get('user'));
+				if(!data.username) window.location = '/#/register';
+			},
+			error: function() {
+				that.set('userId', null);
+				that.set('user', null);
+				that.trigger('loaded', null);
+			},
+			xhrFields: { withCredentials: true }
+		});
+	},
+	login: function(user, password, success, error) {
+		var that = this;
+		$.ajax(apiDomain + '/auth', {
+			type: 'POST',
+			data: { user: user, password: password },
+			success: function(data) {
+				if(typeof data.username !== 'undefined') window.location = '';
+				else window.location = '/#/register';
+				
+				if(success) success(data);
+			},
+			error: function(data) {
+				that.set('userId', null);
+				that.set('user', null);
+				if(error) error(data);
+			},
+			xhrFields: { withCredentials: true }
+		});
+	},
+	register: function(data, success, error) {
+		var that = this;
+		$.ajax(apiDomain + '/users', {
+			type: 'POST',
+			data: data,
+			xhrFields: { withCredentials: true }
+		})
+			.success(function(data) {
+				data.person = {
+					_id: data._id,
+					name: data.name,
+					username: data.username,
+					avatar: data.avatar
+				};
+				that.set('userId', data._id);
+				that.set('user', new User(data));
+				if(success) success(data);
 			})
-				.success(function(data) {
-					data.person = {
-						_id: data._id,
-						name: data.name,
-						username: data.username,
-						avatar: data.avatar
-					};
-					that.set('userId', data._id);
-					that.set('user', new User(data));
-					if(success) success(data);
-				})
-				.error(function(data) {
-					if(error) error(data);
-				});
-		},
-		toJSON: function() {
-			var obj = _.clone(this.attributes);
-			obj.loggedIn = this.loggedIn;
-			if(obj.user) obj.user = obj.user.toJSON();
-			return obj;
-		}
-	});
+			.error(function(data) {
+				if(error) error(data);
+			});
+	},
+	toJSON: function() {
+		var obj = _.clone(this.attributes);
+		obj.loggedIn = this.loggedIn;
+		if(obj.user) obj.user = obj.user.toJSON();
+		return obj;
+	}
+});
 
-	// #### COLLECTIONS ####
+// #### COLLECTIONS ####
 
-	var OutfitCollection = Backbone.Collection.extend({
-		model: Outfit,
-		url: apiDomain + '/outfits'
-	});
+var OutfitCollection = Backbone.Collection.extend({
+	model: Outfit,
+	url: apiDomain + '/outfits'
+});
 
-	var PieceCollection = Backbone.Collection.extend({
-		model: Piece
-	});
+var PieceCollection = Backbone.Collection.extend({
+	model: Piece
+});
 
-	// #### VIEWS ####
+// #### VIEWS ####
 
-	var OutfitSummaryView = Torso.View.extend({
-		tagName: 'li',
-		className: 'box outfit summary hover-parent',
-		template: _.template($('#template-outfit-summary').html()),
+var OutfitSummaryView = Torso.View.extend({
+	tagName: 'li',
+	className: 'box outfit summary hover-parent',
+	template: _.template($('#template-outfit-summary').html()),
 
-		initialize: function(options) {
-			_.bindAll(this, 'setup', 'render', 'remove');
-			this.model.on('change', this.render);
-			this.model.on('destroy', this.remove);
-			this.session = options.session;
-			this.render();
-		},
+	initialize: function(options) {
+		_.bindAll(this, 'setup', 'render', 'remove');
+		this.model.on('change', this.render);
+		this.model.on('destroy', this.remove);
+		this.session = options.session;
+		this.render();
+	},
 
-		setup: function() {
-			setupForms(this.$el, {model: this.model, session: this.session});
-		}
-	});
+	setup: function() {
+		setupForms(this.$el, {model: this.model, session: this.session});
+	}
+});
 
-	var UserSummaryView = Torso.View.extend({
-		tagName: 'li',
-		className: 'box user summary hover-parent span4',
-		template: _.template($('#template-user-summary').html()),
+var UserSummaryView = Torso.View.extend({
+	tagName: 'li',
+	className: 'box user summary hover-parent span4',
+	template: _.template($('#template-user-summary').html()),
 
-		initialize: function() {
-			_.bindAll(this, 'setup', 'render');
-			this.model.on('change', this.render);
-			this.render();
-		}
-	});
+	initialize: function() {
+		_.bindAll(this, 'setup', 'render');
+		this.model.on('change', this.render);
+		this.render();
+	}
+});
 
-	var PieceView = Torso.View.extend({
-		tagName: 'li',
-		className: 'piece span3',
-		template: _.template($('#template-piece').html()),
+var PieceView = Torso.View.extend({
+	tagName: 'li',
+	className: 'piece',
+	template: _.template($('#template-piece').html()),
 
-		initialize: function() {
-			_.bindAll(this, 'setup', 'render');
-			this.model.on('change', this.render);
-			this.render();
-		}
-	});
+	initialize: function(options) {
+		if(typeof this.model === 'undefined') this.model = new Piece();
 
-	var PieceListView = Torso.View.extend({
-		tagName: 'ul',
-		className: 'piece-list',
+		_.bindAll(this, 'setup', 'render');
+		this.model.on('change', this.render);
+		this.options = options;
+		this.render();
+	}
+});
 
-		initialize: function() {
-			_.bindAll(this, 'setup', 'render');
-			this.collection.on('change', this.render);
-			this.collection.on('add', this.render);
-			this.collection.on('remove', this.render);
-			this.render();
-		},
+var PieceListView = Torso.View.extend({
+	tagName: 'ul',
+	className: 'piece-list',
 
-		render: function() {
-			this.$el.empty();
-			this.collection.each(function(piece) {
-				var pieceView = new PieceView({model: piece});
-				pieceView.$el.removeClass('span3').addClass('span12');
-				this.$el.append(pieceView.$el);
-			}.bind(this));
-		}
-	});
+	initialize: function(options) {
+		_.bindAll(this, 'setup', 'render');
+		this.options = options;
+		this.collection.on('change', this.render);
+		this.collection.on('add', this.render);
+		this.collection.on('remove', this.render);
+		this.render();
+	},
 
-	// #### SCREENS #####
+	render: function() {
+		this.$el.empty();
+		this.collection.each(function(piece) {
+			var pieceView = new PieceView({
+				model: piece,
+				link: this.options.link,
+				input: this.options.input
+			});
+			this.$el.append(pieceView.$el);
+		}.bind(this));
+	}
+});
 
-	var LoginScreen = Torso.Screen.extend({
-		className: 'box span5 centered',
-		template: _.template($('#template-login').html()),
+// #### SCREENS #####
 
-		initialize: function(options) {
-			_.bindAll(this, 'setup', 'render');
-			this.session = options.session;
+var LoginScreen = Torso.Screen.extend({
+	className: 'box span5 centered',
+	template: _.template($('#template-login').html()),
 
-			this.render(options);
-		},
+	initialize: function(options) {
+		_.bindAll(this, 'setup', 'render');
+		this.session = options.session;
 
-		setup: function() {
-			setupForms(this.$el, this.session);
-		}
-	});
+		this.render(options);
+	},
 
-	var NavbarScreen = Torso.Screen.extend({
-		className: 'container-fluid',
-		template: _.template($('#template-navbar').html()),
+	setup: function() {
+		setupForms(this.$el, this.session);
+	}
+});
+
+var NavbarScreen = Torso.Screen.extend({
+	className: 'container-fluid',
+	template: _.template($('#template-navbar').html()),
+	
+	initialize: function(options) {
+		_.bindAll(this, 'setup', 'render');
+		this.session = options.session;
+		this.session.on('change:user', this.render);
+
+		this.render(options);
+	},
+	
+	setup: function() {
+		this.$el.find('.login').click(function() {
+			return false;
+		});
+
+		setupForms(this.$el, this.session);
 		
-		initialize: function(options) {
-			_.bindAll(this, 'setup', 'render');
-			this.session = options.session;
-			this.session.on('change:user', this.render);
+		return this;
+	}
+});
 
-			this.render(options);
-		},
-		
-		setup: function() {
-			this.$el.find('.login').click(function() {
-				return false;
+var RegisterScreen = Torso.Screen.extend({
+	className: 'box span6 centered',
+	template: _.template($('#template-register').html()),
+
+	initialize: function(options) {
+		_.bindAll(this, 'setup', 'render');
+		this.session = options.session;
+		this.session.on('change:user', this.render);
+
+		this.render(options);
+	},
+
+	setup: function() {
+		setupForms(this.$el, this.session);
+	}
+});
+
+var LinkScreen = Torso.Screen.extend({
+	className: 'box span6 centered',
+	template: _.template($('#template-link').html()),
+
+	setup: function() {
+		setupForms(this.$el, this.session);
+	}
+});
+
+var OutfitScreen = Torso.Screen.extend({
+	className: 'box centered outfit span6',
+	template: _.template($('#template-outfit').html()),
+	modal: true,
+
+	initialize: function(options) {
+		_.bindAll(this, 'setup', 'render');
+		this.session = options.session;
+
+		this.model = new Outfit({'_id': options.args[0]});
+		this.model.bind('change', this.render);
+		this.model.on('destroy', this.remove);
+		this.model.fetch();
+	},
+
+	setup: function() {
+		setupForms(this.$el, {session: this.session, model: this.model});
+		this.$el.find('[rel="tooltip"]').tooltip();
+		var pieceListView = new PieceListView({collection: new PieceCollection(this.model.get('pieces'))});
+		this.$el.find('.list').append(pieceListView.$el);
+	}
+});
+
+var FeedScreen = Torso.Screen.extend({
+	className: '',
+	template: _.template($('#template-feed').html()),
+
+	initialize: function(options) {
+		_.bindAll(this, 'setup', 'render', 'loadNextPage');
+		this.session = options.session;
+
+		this.page = -1;
+		this.pageSize = 12;
+		this.initialized = false;
+
+		this.collection = new OutfitCollection();
+
+		this.loadNextPage();
+	},
+
+	render: function() {
+		if(!this.initialized) {
+			this.$el.html(this.template());
+		}
+
+		this.collection.each(function(outfit, i) {
+			if(i < this.page * this.pageSize) return;
+
+			var view = new OutfitSummaryView({
+				model: outfit,
+				session: this.session
 			});
+			this.$el.find('.outfits').append(view.$el);
+		}.bind(this));
 
-			setupForms(this.$el, this.session);
-			
-			return this;
+		this.$el.find('div.more')
+			.removeClass('loading')
+			.find('span')
+			.html('Load more posts');
+
+		if(!this.initialized) {
+			this.initialized = true;
+			this.setup();
 		}
-	});
+	},
 
-	var RegisterScreen = Torso.Screen.extend({
-		className: 'box span6 centered',
-		template: _.template($('#template-register').html()),
+	setup: function() {
+		setupForms(this.$el, this.session);
 
-		initialize: function(options) {
-			_.bindAll(this, 'setup', 'render');
-			this.session = options.session;
-			this.session.on('change:user', this.render);
+		$(window)
+			.on('scrollBottom', function(e) {
+				this.loadNextPage();
+			}.bind(this))
 
-			this.render(options);
-		},
+			.on('scrollDown', function(e) {
+				this.$el.find('.scroll-up').removeClass('collapsed-horizontal');
+			}.bind(this))
 
-		setup: function() {
-			setupForms(this.$el, this.session);
-		}
-	});
-
-	var LinkScreen = Torso.Screen.extend({
-		className: 'box span6 centered',
-		template: _.template($('#template-link').html()),
-
-		setup: function() {
-			setupForms(this.$el, this.session);
-		}
-	});
-
-	var OutfitScreen = Torso.Screen.extend({
-		className: 'box centered outfit span6',
-		template: _.template($('#template-outfit').html()),
-		modal: true,
-
-		initialize: function(options) {
-			_.bindAll(this, 'setup', 'render');
-			this.session = options.session;
-
-			this.model = new Outfit({'_id': options.args[0]});
-			this.model.bind('change', this.render);
-			this.model.on('destroy', this.remove);
-			this.model.fetch();
-		},
-
-		setup: function() {
-			setupForms(this.$el, {session: this.session, model: this.model});
-
-			this.$el.find('[rel="tooltip"]').tooltip();
-		}
-	});
-
-	var FeedScreen = Torso.Screen.extend({
-		className: '',
-		template: _.template($('#template-feed').html()),
-
-		initialize: function(options) {
-			_.bindAll(this, 'setup', 'render', 'loadNextPage');
-			this.session = options.session;
-
-			this.page = -1;
-			this.pageSize = 12;
-			this.initialized = false;
-
-			this.collection = new OutfitCollection();
-
-			this.loadNextPage();
-		},
-
-		render: function() {
-			if(!this.initialized) {
-				this.$el.html(this.template());
-			}
-
-			this.collection.each(function(outfit, i) {
-				if(i < this.page * this.pageSize) return;
-
-				var view = new OutfitSummaryView({
-					model: outfit,
-					session: this.session
-				});
-				this.$el.find('.outfits').append(view.$el);
+			.on('scrollTop', function(e) {
+				this.$el.find('.scroll-up').addClass('collapsed-horizontal');
 			}.bind(this));
 
-			this.$el.find('div.more')
-				.removeClass('loading')
-				.find('span')
-				.html('Load more posts');
+		var more = this.$el.find('div.more');
+		more.click(function(e) {
+			if(!more.hasClass('loading')) this.loadNextPage();
+		}.bind(this));
+	},
 
-			if(!this.initialized) {
-				this.initialized = true;
-				this.setup();
+	loadNextPage: function() {
+		this.page++;
+		this.collection.fetch({
+			add: true,
+			success: this.render,
+			data: {limit: this.pageSize, skip: this.page * this.pageSize}
+		});
+
+		this.$el.find('div.more')
+			.addClass('loading')
+			.find('span')
+			.html('Loading more posts...');
+	}
+});
+
+var PostScreen = Torso.Screen.extend({
+	className: 'box centered span10 post',
+	template: _.template($('#template-post').html()),
+
+	initialize: function(options) {
+		_.bindAll(this, 'setup', 'render', 'back', 'forward');
+		this.session = options.session;
+
+		this.page = 1;
+
+		this.model = new Outfit({
+			author: this.session.get('user').get('person')
+		});
+
+		this.forward();
+	},
+
+	setup: function() {
+		setupForms(this.$el, {session: this.session, model: this.model, view: this});
+	},
+
+	back: function() {
+		this.page--;
+		this.render();
+	},
+
+	forward: function() {
+		this.page++;
+		this.render();
+	}
+});
+
+$(function() {
+	filepicker.setKey('A6D_8Iy0zQe2YTFBlSOA5z');
+
+	var scrollBottomLock = false,
+		scrollTopLock = false,
+		scrollDownLock = false,
+		scrollThreshold = 250;
+
+	$(window).scroll(function(e) {
+		var target = $(window);
+
+		if(target.scrollTop() + target.innerHeight() + 200 > e.target.height) {
+			if(!scrollBottomLock) {
+				scrollBottomLock = true;
+				target.trigger('scrollBottom', e);
 			}
-		},
+		} else {
+			scrollBottomLock = false;
+		}
 
-		setup: function() {
-			setupForms(this.$el, this.session);
+		if(target.scrollTop() > scrollThreshold) {
+			if(!scrollDownLock) {
+				scrollDownLock = true;
+				target.trigger('scrollDown', e);
+			}
+		} else {
+			scrollDownLock = false;
+		}
 
-			$(window)
-				.on('scrollBottom', function(e) {
-					this.loadNextPage();
-				}.bind(this))
-
-				.on('scrollDown', function(e) {
-					this.$el.find('.scroll-up').removeClass('collapsed-horizontal');
-				}.bind(this))
-
-				.on('scrollTop', function(e) {
-					this.$el.find('.scroll-up').addClass('collapsed-horizontal');
-				}.bind(this));
-
-			var more = this.$el.find('div.more');
-			more.click(function(e) {
-				if(!more.hasClass('loading')) this.loadNextPage();
-			}.bind(this));
-		},
-
-		loadNextPage: function() {
-			this.page++;
-			this.collection.fetch({
-				add: true,
-				success: this.render,
-				data: {limit: this.pageSize, skip: this.page * this.pageSize}
-			});
-
-			this.$el.find('div.more')
-				.addClass('loading')
-				.find('span')
-				.html('Loading more posts...');
+		if(target.scrollTop() < scrollThreshold) {
+			if(!scrollTopLock) {
+				scrollTopLock = true;
+				target.trigger('scrollTop', e);
+			}
+		} else {
+			scrollTopLock = false;
 		}
 	});
 
-	var PostScreen = Torso.Screen.extend({
-		className: 'box centered span10 post',
-		template: _.template($('#template-post').html()),
-
-		initialize: function(options) {
-			_.bindAll(this, 'setup', 'render', 'back', 'forward');
-			this.session = options.session;
-
-			this.page = -1;
-
-			this.model = new Outfit({
-				author: this.session.get('user').get('person')
-			});
-
-			this.forward();
+	var app = new Torso.App({
+		session: new Session(),
+		containers: {
+			navbar: $('#navbar'),
+			main: $('#main'),
+			modal: $('#overlay')
 		},
-
-		setup: function() {
-			setupForms(this.$el, {session: this.session, model: this.model, view: this});
+		screens: {
+			'login': LoginScreen,
+			'register': RegisterScreen,
+			'link': LinkScreen,
+			'outfit': OutfitScreen,
+			'feed': FeedScreen,
+			'post': PostScreen
 		},
-
-		back: function() {
-			this.page--;
-			this.render();
-		},
-
-		forward: function() {
-			this.page++;
-			this.render();
+		defaults: {
+			navbar: NavbarScreen
 		}
 	});
 
-	$(function() {
-		filepicker.setKey('A6D_8Iy0zQe2YTFBlSOA5z');
-
-		var scrollBottomLock = false,
-			scrollTopLock = false,
-			scrollDownLock = false,
-			scrollThreshold = 250;
-
-		$(window).scroll(function(e) {
-			var target = $(window);
-
-			if(target.scrollTop() + target.innerHeight() + 200 > e.target.height) {
-				if(!scrollBottomLock) {
-					scrollBottomLock = true;
-					target.trigger('scrollBottom', e);
-				}
-			} else {
-				scrollBottomLock = false;
-			}
-
-			if(target.scrollTop() > scrollThreshold) {
-				if(!scrollDownLock) {
-					scrollDownLock = true;
-					target.trigger('scrollDown', e);
-				}
-			} else {
-				scrollDownLock = false;
-			}
-
-			if(target.scrollTop() < scrollThreshold) {
-				if(!scrollTopLock) {
-					scrollTopLock = true;
-					target.trigger('scrollTop', e);
-				}
-			} else {
-				scrollTopLock = false;
-			}
-		});
-
-		var app = new Torso.App({
-			session: new Session(),
-			containers: {
-				navbar: $('#navbar'),
-				main: $('#main'),
-				modal: $('#overlay')
-			},
-			screens: {
-				'login': LoginScreen,
-				'register': RegisterScreen,
-				'link': LinkScreen,
-				'outfit': OutfitScreen,
-				'feed': FeedScreen,
-				'post': PostScreen
-			},
-			defaults: {
-				navbar: NavbarScreen
-			}
-		});
-
-		var mainScrollTop = 0;
-		$(window).scroll(function(e) {
-			if(app.container === 'main') {
-				mainScrollTop = $(window).scrollTop();
-			}
-		});
-
-		app.on('display:modal', function(e) {
-			$('#main').css({
-				'position': 'fixed'
-			});
-
-			$('#overlay').click(function(e) {
-				if(e.target == document.getElementById('overlay')) window.history.back();
-			});
-
-			$(window).keydown(function(e) {
-				if(e.which === 27) window.history.back();
-			});
-		});
-
-		app.on('display:main', function(e) {
-			$('#main').css({'position': 'static'});
-			$(window).scrollTop(mainScrollTop);
-		});
-
-		var createRouter = function() {
-			var router = new Torso.Router({
-				app: app,
-				routes: {
-					"login": "login",
-					"register": "register",
-					"link/:service": "link",
-
-					"user/:id": "user",
-					"@:id": "user",
-
-					"outfit/:id": "outfit",
-					
-					"/": "feed",
-					"": "feed",
-
-					"post": "post",
-
-					"*_": "404"
-				}
-			});
-			app.session.off('loaded', createRouter);
-		};
-		app.session.on('loaded', createRouter);
+	var mainScrollTop = 0;
+	$(window).scroll(function(e) {
+		if(app.container === 'main') {
+			mainScrollTop = $(window).scrollTop();
+		}
 	});
-})();
+
+	app.on('display:modal', function(e) {
+		$('#main').css({
+			'position': 'fixed'
+		});
+
+		$('#overlay').click(function(e) {
+			if(e.target == document.getElementById('overlay')) window.history.back();
+		});
+
+		$(window).keydown(function(e) {
+			if(e.which === 27) window.history.back();
+		});
+	});
+
+	app.on('display:main', function(e) {
+		$('#main').css({'position': 'static'});
+		$(window).scrollTop(mainScrollTop);
+	});
+
+	var createRouter = function() {
+		var router = new Torso.Router({
+			app: app,
+			routes: {
+				"login": "login",
+				"register": "register",
+				"link/:service": "link",
+
+				"user/:id": "user",
+				"@:id": "user",
+
+				"outfit/:id": "outfit",
+				
+				"/": "feed",
+				"": "feed",
+
+				"post": "post",
+
+				"*_": "404"
+			}
+		});
+		app.session.off('loaded', createRouter);
+	};
+	app.session.on('loaded', createRouter);
+});

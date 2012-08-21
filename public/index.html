@@ -124,12 +124,20 @@
 			</div>
 		</script>
 		<script id="template-piece" type="text/template">
-			<a class="thumbnail thumbnail-medium" href="<%- this.model.get('url') %>" target="_blank"><img src="<%- this.model.get('image') %>"></a>
-			<div class="meta">
-				<a class="title" href="<%- this.model.get('url') %>" target="_blank"><%- this.model.get('title') %></a>
-				<br>
-				<a class="company" href="<%- this.model.get('url') %>" target="_blank"><%- this.model.get('brand') %></a>
+			<% var link = typeof this.model.get('url') !== 'undefined' && this.options.link !== false && this.options.input !== true; %>
+			<<%= link ? 'a' : 'span' %> class="thumbnail"<%- link ? ' href="' + this.model.get('url') + '"' : '' %>>
+				<img src="<%- this.model.get('image') || '/img/piece.png' %>">
+			</<%= link ? 'a' : 'span' %>>
+			<div class="meta span6">
+				<% if(this.options.input !== true) { %>
+					<<%= link ? 'a' : 'span' %> class="title"<%- link ? ' href="' + this.model.get('url') + '"' : '' %>><%- this.model.get('title') %></<%= link ? 'a' : 'span' %>><br>
+					<<%= link ? 'a' : 'span' %> class="brand"<%- link ? ' href="' + this.model.get('url') + '"' : '' %>><%- this.model.get('brand') %></<%= link ? 'a' : 'span' %>>
+				<% } else { %>
+					<input class="title span12" type="text" placeholder="Type of piece (e.g. 'red shirt')" value="<%- this.model.get('title') %>">
+					<input class="brand span12" type="text" placeholder="Where you got it (optional)" value="<%- this.model.get('brand') %>">
+				<% } %>
 			</div>
+			<div class="clear"></div>
 		</script>
 
 		<script id="template-navbar" type="text/template">
@@ -358,21 +366,7 @@
 				<hr>
 				<div class="pieces">
 					<h2>Pieces</h2>
-					<ul class="collection condensed">
-						<% var pieces = this.model.get('pieces'); %>
-						<% for(var i = 0; i < pieces.length; i++) { %>
-							<% var piece = pieces[i]; %>
-
-							<li class="piece span6">
-								<a class="thumbnail thumbnail-medium" href="<%- piece.url %>" target="_blank"><img src="<%- piece.image %>"></a>
-								<div class="meta">
-									<a class="title" href="<%- piece.url %>" target="_blank"><%- piece.title %></a>
-									<br>
-									<a class="company" href="<%- piece.url %>" target="_blank"><%- piece.brand %></a>
-								</div>
-							</li>
-						<% } %>
-					</ul>
+					<div class="list"></div>
 				</div>
 			<% } %>
 
@@ -447,14 +441,14 @@
 				<% } else if(this.page === 2) { %>
 					<div class="form-post-2 row-fluid">
 						<h1 class="cover">What<%= "'" %>s in this outfit?</h1>
-						<div class="items"></div>
-						<hr>
-						<div class="item-search">
-							<h3>Search for the pieces of this outfit:</h3>
-							<input class="item span3" type="text">
+						<div class="pieces"></div>
+						<div class="clear"></div>
+						<button class="btn clear">Clear</button>
+						<button class="btn btn-warning add">Add</button>
+						<div class="dropdown">
+							<ul class="autocomplete dropdown-menu" role="menu"></ul>
 							<div class="loading invisible"><img src="//cdn.outfitly.com/img/loading.gif"> Loading clothes...</div>
-							<ul class="item-list collection"></ul>
-						<div>
+						</div>
 						<hr>
 						<button class="btn btn-primary pull-left back">Back</button>
 						<button class="btn btn-info pull-right submit">Post outfit</button>
